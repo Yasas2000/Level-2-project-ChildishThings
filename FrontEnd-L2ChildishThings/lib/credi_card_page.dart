@@ -2,7 +2,14 @@ import "package:flutter/material.dart";
 import 'package:flutter_credit_card/credit_card_form.dart';
 import 'package:flutter_credit_card/credit_card_model.dart';
 import 'package:flutter_credit_card/flutter_credit_card.dart';
-
+import 'package:mypart/item_page.dart';
+import 'package:mypart/app_bar.dart';
+enum MenuItem{
+  item1,
+  item2,
+  item3,
+  item4,
+}
 
 class CreditCardPage extends StatefulWidget {
   const CreditCardPage({Key? key}) : super(key: key);
@@ -27,26 +34,11 @@ class _CreditCardPageState extends State<CreditCardPage> {
   final GlobalKey<FormState> formkey =GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.blue,
-        automaticallyImplyLeading: false,
-        title: Text('Visa/Master'),
-        leading:IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {  },
-        ) ,
-        actions: [
-        IconButton(
-          icon:Icon(Icons.notifications),
-          onPressed: (){}),
-          IconButton(
-          icon:Icon(Icons.more_vert),
-
-          onPressed: (){})
-        ],
-
+      appBar: CustomAppBar(
+        title: 'Payment',
       ),
       resizeToAvoidBottomInset: true,
       body: SafeArea(
@@ -93,12 +85,10 @@ class _CreditCardPageState extends State<CreditCardPage> {
                         border: OutlineInputBorder(),
                         labelText: 'CVC',
                         hintText: 'xxx',
-                        icon:IconButton(
-
+                        prefixIcon: IconButton(
                             padding: EdgeInsets.only(bottom: 5),
-                            icon:Icon(Icons.remove_red_eye),
+                            icon: Icon(Icons.remove_red_eye),
                             onPressed: visbility),
-
                       ),
                       cardHolderDecoration: InputDecoration(
                         border: OutlineInputBorder(),
