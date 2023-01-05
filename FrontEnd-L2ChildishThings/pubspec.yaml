@@ -32,7 +32,7 @@ dependencies:
   flutter:
     sdk: flutter
   device_preview: ^1.1.0
-
+  flutter_verification_code:
   flutter_credit_card: ^2.0.0
   reactive_forms: ^14.1.0
   flutter_rating_bar: ^4.0.1
@@ -40,7 +40,10 @@ dependencies:
   flutter_form_builder: ^7.7.0
   form_builder_validators: ^8.4.0
   form_validator: ">=0.1.1 <2.0.0"
-
+  form_field_validator:
+  email_auth:
+  get:
+  animated_background:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
@@ -75,6 +78,7 @@ flutter:
     - Asset/ae.jpg
     - Asset/paypal.jpg
     - Asset/genie.jpg
+    - Asset/email.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

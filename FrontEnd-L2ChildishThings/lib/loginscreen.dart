@@ -1,8 +1,10 @@
-// ignore_for_file: prefer_const_constructors, library_private_types_in_public_api, use_key_in_widget_constructors, prefer_const_literals_to_create_immutables, avoid_print, sized_box_for_whitespace
+// ignore_for_file: prefer_const_constructors, library_private_types_in_public_api, use_key_in_widget_constructors, prefer_const_literals_to_create_immutables, avoid_print, sized_box_for_whitespace, unused_field, unnecessary_new, unused_element, curly_braces_in_flow_control_structures, unused_import
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:frontend/photoalbum.dart';
 import 'package:frontend/signup_screen.dart';
+import 'package:form_field_validator/form_field_validator.dart';
 
 class LoginScreen extends StatefulWidget{
 
@@ -18,6 +20,9 @@ class LoginScreen extends StatefulWidget{
 class _LoginScreenState extends State<LoginScreen> {
 
     bool isRememberMe = false;
+    GlobalKey<FormState> formkey = GlobalKey<FormState>();
+    
+
     Widget buildEmail(){
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
@@ -45,7 +50,7 @@ class _LoginScreenState extends State<LoginScreen> {
           ]
           ),
           height: 60,
-          child: TextField(
+          child: TextFormField(
             keyboardType: TextInputType.emailAddress,
             style: TextStyle(
               color: Colors.black87
@@ -62,6 +67,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 color: Colors.black38
               )
             ),
+            validator: MultiValidator([
+            RequiredValidator(errorText: "* Required"),
+            EmailValidator(errorText: "Enter valid email id"),
+          ]),
           ),
       )
     ],
@@ -95,7 +104,7 @@ class _LoginScreenState extends State<LoginScreen> {
           ]
           ),
           height: 60,
-          child: TextField(
+          child: TextFormField(
             obscureText: true,
             style: TextStyle(
               color: Colors.black87
@@ -112,6 +121,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 color: Colors.black38
               )
             ),
+            validator: MultiValidator([
+              RequiredValidator(errorText: "* Required"),
+              MinLengthValidator(6,errorText: "Password should be atleast 6 characters"),
+              MaxLengthValidator(15,errorText: "Password should not be greater than 15 characters")
+            ]),
           ),
       )
     ],
@@ -168,12 +182,17 @@ class _LoginScreenState extends State<LoginScreen> {
   );
 }
 
+  
+    
     Widget buildLoginBtn(){
       return Container(
           padding: EdgeInsets.symmetric(vertical: 25),
           width: double.infinity,
           child: ElevatedButton(
-                  onPressed: () => print('Login Pressed'),
+                  onPressed: () {                  
+                      Navigator.push(context,
+                      MaterialPageRoute(builder: (_) => PhotoAlbum()));                                 
+                  },
                   style: ElevatedButton.styleFrom(
                     padding: EdgeInsets.all(15),
                     shape: RoundedRectangleBorder(
@@ -227,7 +246,8 @@ class _LoginScreenState extends State<LoginScreen> {
         return Scaffold(
             body: AnnotatedRegion<SystemUiOverlayStyle>(
                 value:SystemUiOverlayStyle.light,
-                child:GestureDetector(
+                child:Form(
+                  autovalidateMode: AutovalidateMode.always, child:GestureDetector(
                     child:Stack(
                         children: <Widget>[
                             Container(
@@ -278,10 +298,23 @@ class _LoginScreenState extends State<LoginScreen> {
                         ],
                     ),
                 ),
+                ),
             ),
         );
     
     }
 
+  String validatePassword(String value) {
+    if (value.isEmpty) {
+      return "* Required";
+    } else if (value.length < 6) {
+      return "Password should be atleast 6 characters";
+    } else if (value.length > 15) {
+      return "Password should not be greater than 15 characters";
+    } else
+      return '';
+  }
+
+  
 
 }

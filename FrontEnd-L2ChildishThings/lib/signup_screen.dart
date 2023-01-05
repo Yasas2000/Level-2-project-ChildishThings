@@ -1,4 +1,4 @@
-// ignore_for_file: unused_import, use_key_in_widget_constructors, prefer_const_constructors, unnecessary_new, prefer_const_literals_to_create_immutables, avoid_print, library_private_types_in_public_api, override_on_non_overriding_member
+// ignore_for_file: unused_import, use_key_in_widget_constructors, prefer_const_constructors, unnecessary_new, prefer_const_literals_to_create_immutables, avoid_print, library_private_types_in_public_api, override_on_non_overriding_member, unused_field, unused_element, curly_braces_in_flow_control_structures, prefer_typing_uninitialized_variables
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -13,16 +13,28 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> {
 
-  @override
+  var confirmPass;
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController _nameController = new TextEditingController();
+  final TextEditingController _phoneNumberController = new TextEditingController();
+  final TextEditingController _emailController = new TextEditingController();
+  
+  void _submit() {
+    if (_formKey.currentState!.validate()) {
+      // TODO SAVE DATA
+    }
+  }
 
+  
+
+  @override
   Widget buildCreateAccBtn(){
       return Container(
           padding: EdgeInsets.symmetric(vertical: 25),
           width: double.infinity,
           child: ElevatedButton(
-                  onPressed: ()  {
-                   Navigator.push(context, MaterialPageRoute(
-                   builder: (context) => Verification()));
+                  onPressed: ()  {   
+                    _submit();                                      
                   },
                   style: ElevatedButton.styleFrom(
                     padding: EdgeInsets.all(15),
@@ -76,11 +88,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: AnnotatedRegion<SystemUiOverlayStyle>(
-                value:SystemUiOverlayStyle.light,
-                child:GestureDetector(
-                    child:Stack(
+        value:SystemUiOverlayStyle.light,
+        child:Form(
+              key: _formKey,
+              child:GestureDetector(
+                    child:Stack(         
                         children: <Widget>[
-                            Container(
+                            Container(                             
                                 height: double.infinity,
                                 width: double.infinity,
                                 decoration: BoxDecoration(
@@ -125,7 +139,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                           )],
                                         ),
                                         alignment: Alignment.center,
-                                        child: TextField(
+                                        child: TextFormField(
                                           cursorColor: Color(0xcc0048ba),
                                           decoration: InputDecoration(
                                             icon: Icon(
@@ -136,6 +150,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                             enabledBorder: InputBorder.none,
                                             focusedBorder: InputBorder.none
                                           ),
+                                          validator: validateName,
                                         ), 
                                       ),
                                       Container(
@@ -151,7 +166,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                           )],
                                         ),
                                         alignment: Alignment.center,
-                                        child: TextField(
+                                        child: TextFormField(
                                           cursorColor: Color(0xcc0048ba),
                                           decoration: InputDecoration(
                                             icon: Icon(
@@ -162,6 +177,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                             enabledBorder: InputBorder.none,
                                             focusedBorder: InputBorder.none
                                           ),
+                                          validator: validateEmail,
                                         ), 
                                       ),
                                       Container(
@@ -177,7 +193,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                           )],
                                         ),
                                         alignment: Alignment.center,
-                                        child: TextField(
+                                        child: TextFormField(
                                           cursorColor: Color(0xcc0048ba),
                                           decoration: InputDecoration(
                                             icon: Icon(
@@ -188,6 +204,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                             enabledBorder: InputBorder.none,
                                             focusedBorder: InputBorder.none
                                           ),
+                                          validator: validateMobile,
                                         ), 
                                       ),
                                       Container(
@@ -203,7 +220,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                           )],
                                         ),
                                         alignment: Alignment.center,
-                                        child: TextField(
+                                        child: TextFormField(
                                           obscureText: true,
                                           cursorColor: Color(0xcc0048ba),
                                           decoration: InputDecoration(
@@ -215,6 +232,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                             enabledBorder: InputBorder.none,
                                             focusedBorder: InputBorder.none
                                           ),
+                                          validator: validatePassword,
                                         ), 
                                       ),
                                       Container(
@@ -230,7 +248,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                           )],
                                         ),
                                         alignment: Alignment.center,
-                                        child: TextField(
+                                        child: TextFormField(
+                                          obscureText: true,
                                           cursorColor: Color(0xcc0048ba),
                                           decoration: InputDecoration(
                                             icon: Icon(
@@ -241,6 +260,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                             enabledBorder: InputBorder.none,
                                             focusedBorder: InputBorder.none
                                           ),
+                                          validator: confirmPassword,
                                         ), 
                                       ),
                                       SizedBox(height: 30),
@@ -252,10 +272,63 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             ),
                         ],
                     ),
-                ),
+                ),),
+                
             ),
         );
     }
+
+    String? validateName(String? value) {
+    if (value!.length < 3)
+      return 'Name must be more than 2 charater';
+    else
+      return null;
+  }
+
+  String? validateEmail(String? value) {
+    String pattern =
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+    RegExp regex = RegExp(pattern);
+    if (!regex.hasMatch(value!))
+      return 'Enter Valid Email';
+    else
+      return null;
+  }
+  String? validateMobile(String? value) {
+
+    if (value!.length != 10)
+      return 'Mobile Number must be of 10 digit';
+    else
+      return null;
+  }
+
+  String? validatePassword(String? value){
+     confirmPass = value;
+      if (value!.isEmpty) {
+                            return "Please Enter New Password";
+                          } 
+      else if (value.length < 8) {
+                                  return "Password must be atleast 8 characters long";
+      } 
+      else {
+              return null;
+      }
+  }
+
+  String? confirmPassword(String? value){
+    if (value!.isEmpty) {
+          return "Please Re-Enter New Password";
+    } 
+    else if (value.length < 8) {
+        return "Password must be atleast 8 characters long";
+    } 
+    else if (value != confirmPass) {
+        return "Password must be same as above";
+    } 
+    else {
+            return null;
+    }
+  }
 }
   
 
