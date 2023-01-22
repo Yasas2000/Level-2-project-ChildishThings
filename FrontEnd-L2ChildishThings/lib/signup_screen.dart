@@ -1,9 +1,12 @@
-// ignore_for_file: unused_import, use_key_in_widget_constructors, prefer_const_constructors, unnecessary_new, prefer_const_literals_to_create_immutables, avoid_print, library_private_types_in_public_api, override_on_non_overriding_member, unused_field, unused_element, curly_braces_in_flow_control_structures, prefer_typing_uninitialized_variables
+// ignore_for_file: unused_import, use_key_in_widget_constructors, prefer_const_constructors, unnecessary_new, prefer_const_literals_to_create_immutables, avoid_print, library_private_types_in_public_api, override_on_non_overriding_member, unused_field, unused_element, curly_braces_in_flow_control_structures, prefer_typing_uninitialized_variables, prefer_final_fields, unused_local_variable, non_constant_identifier_names, import_of_legacy_library_into_null_safe
+
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:email_auth/email_auth.dart';
 import 'package:frontend/verification.dart';
+import 'package:frontend/models/user.dart';
+import 'package:http/http.dart' as http;
 
 class SignUpScreen extends StatefulWidget {
 
@@ -12,18 +15,42 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-
+  
   var confirmPass;
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _nameController = new TextEditingController();
-  final TextEditingController _phoneNumberController = new TextEditingController();
-  final TextEditingController _emailController = new TextEditingController();
+
+  TextEditingController _firstNameController = TextEditingController();
+  TextEditingController _lastNameController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _phoneNumberController = TextEditingController();
+  TextEditingController _passController = TextEditingController();
+  TextEditingController _confirmPassController = TextEditingController();
   
-  void _submit() {
-    if (_formKey.currentState!.validate()) {
-      // TODO SAVE DATA
-    }
+  
+
+  Future<User> userSignUp(
+    String firstName, String lastName,String email,String phoneNumber,String password) async{
+    const url = "http://localhost:1000/api/user/signup";
+    Map<String, dynamic> requestPayload = {
+      "firstName": firstName,
+      "lastName" : lastName,
+      "email" : email,
+      "phoneNumber" : phoneNumber,
+      "password" : password 
+    };
+
+    final http.Response response = await http.post(Uri.parse(url), 
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(requestPayload));
+      
+    if(response.statusCode == 201){
+        return User.fromJson(json.decode(response.body));
+    }else{
+        throw Exception("Fail to sign up user");
+    }  
   }
+
+  
 
   
 
@@ -33,8 +60,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
           padding: EdgeInsets.symmetric(vertical: 25),
           width: double.infinity,
           child: ElevatedButton(
-                  onPressed: ()  {   
-                    _submit();                                      
+                  onPressed: ()  {             
+                      setState(() {
+                      if(_formKey.currentState!.validate()){
+                          userSignUp(
+                            _firstNameController.text,
+                            _lastNameController.text,
+                            _emailController.text,
+                            _phoneNumberController.text,
+                            _passController.text,
+                            );
+                            Navigator.pop(context);
+                          }
+                          
+                      });                                                                           
                   },
                   style: ElevatedButton.styleFrom(
                     padding: EdgeInsets.all(15),
@@ -126,33 +165,52 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                                fontWeight: FontWeight.bold     
                                             ),
                                         ),
-                                      Container(
-                                        margin: EdgeInsets.only(left: 20,right: 20,top: 40),
-                                        padding: EdgeInsets.only(left: 20,right: 20),
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(50),
-                                          color: Colors.grey[200],
-                                          boxShadow: [BoxShadow(
-                                            offset: Offset(0,10),
-                                            blurRadius: 30,
-                                            color: Color(0xB3EEEEEE)
-                                          )],
-                                        ),
-                                        alignment: Alignment.center,
-                                        child: TextFormField(
-                                          cursorColor: Color(0xcc0048ba),
-                                          decoration: InputDecoration(
-                                            icon: Icon(
-                                              Icons.person,
-                                              color: Color(0xff0048ba),
-                                            ),
-                                            hintText: "Full Name",
-                                            enabledBorder: InputBorder.none,
-                                            focusedBorder: InputBorder.none
-                                          ),
-                                          validator: validateName,
-                                        ), 
-                                      ),
+                                        SizedBox(height: 30),
+                                        Row(
+                                          children: [
+                                              Expanded(
+                                                flex: 3,                   
+                                                child: ListTile(
+                                                  subtitle: TextFormField(   
+                                                    controller: _firstNameController,
+                                                    keyboardType: TextInputType.text,      
+                                                    cursorColor: Color(0xcc0048ba),                                                          
+                                                    decoration:  InputDecoration(
+                                                      prefixIcon: Icon(Icons.person,color: Color(0xff0048ba)),
+                                                      filled: true,
+                                                      fillColor: Colors.grey[200],
+                                                      border: OutlineInputBorder(
+                                                        borderSide: BorderSide.none,
+                                                        borderRadius: BorderRadius.circular(50),                      
+                                                      ),                                               
+                                                      hintText: "First Name",                                              
+                                                    ),
+                                                    validator: validateName,
+                                                  ),
+                                                ),
+                                              ),                                         
+                                              Expanded(
+                                                flex: 4,
+                                                child: ListTile(
+                                                  subtitle: TextFormField(
+                                                    controller: _lastNameController,
+                                                    keyboardType: TextInputType.text,
+                                                    cursorColor: Color(0xcc0048ba),
+                                                    decoration: InputDecoration(
+                                                      filled: true,
+                                                      fillColor: Colors.grey[200],
+                                                      border: OutlineInputBorder(
+                                                        borderSide: BorderSide.none,
+                                                        borderRadius: BorderRadius.circular(50),                      
+                                                      ), 
+                                                      hintText: "Last Name",      
+                                                    ),
+                                                    validator: validateName,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                        ),  
                                       Container(
                                         margin: EdgeInsets.only(left: 20,right: 20,top: 40),
                                         padding: EdgeInsets.only(left: 20,right: 20),
@@ -167,6 +225,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                         ),
                                         alignment: Alignment.center,
                                         child: TextFormField(
+                                          controller: _emailController,
+                                          keyboardType: TextInputType.emailAddress ,
                                           cursorColor: Color(0xcc0048ba),
                                           decoration: InputDecoration(
                                             icon: Icon(
@@ -194,6 +254,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                         ),
                                         alignment: Alignment.center,
                                         child: TextFormField(
+                                          controller: _phoneNumberController,
+                                          keyboardType: TextInputType.phone,
                                           cursorColor: Color(0xcc0048ba),
                                           decoration: InputDecoration(
                                             icon: Icon(
@@ -221,6 +283,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                         ),
                                         alignment: Alignment.center,
                                         child: TextFormField(
+                                          controller: _passController,
+                                          keyboardType: TextInputType.text,
                                           obscureText: true,
                                           cursorColor: Color(0xcc0048ba),
                                           decoration: InputDecoration(
@@ -249,6 +313,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                         ),
                                         alignment: Alignment.center,
                                         child: TextFormField(
+                                          controller: _confirmPassController,
+                                          keyboardType: TextInputType.text,
                                           obscureText: true,
                                           cursorColor: Color(0xcc0048ba),
                                           decoration: InputDecoration(
@@ -280,7 +346,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
     String? validateName(String? value) {
     if (value!.length < 3)
-      return 'Name must be more than 2 charater';
+      return 'Name must be more than 2 characters';
     else
       return null;
   }

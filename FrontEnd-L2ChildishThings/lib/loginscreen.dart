@@ -1,10 +1,15 @@
-// ignore_for_file: prefer_const_constructors, library_private_types_in_public_api, use_key_in_widget_constructors, prefer_const_literals_to_create_immutables, avoid_print, sized_box_for_whitespace, unused_field, unnecessary_new, unused_element, curly_braces_in_flow_control_structures, unused_import
+// ignore_for_file: prefer_const_constructors, library_private_types_in_public_api, use_key_in_widget_constructors, prefer_const_literals_to_create_immutables, avoid_print, sized_box_for_whitespace, unused_field, unnecessary_new, unused_element, curly_braces_in_flow_control_structures, unused_import, non_constant_identifier_names, prefer_typing_uninitialized_variables, unused_local_variable, import_of_legacy_library_into_null_safe, use_build_context_synchronously
+
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:frontend/get_delete.dart';
 import 'package:frontend/photoalbum.dart';
 import 'package:frontend/signup_screen.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget{
 
@@ -15,13 +20,50 @@ class LoginScreen extends StatefulWidget{
 
 
 
-
-
 class _LoginScreenState extends State<LoginScreen> {
 
     bool isRememberMe = false;
+    bool _isLoading = false;
     GlobalKey<FormState> formkey = GlobalKey<FormState>();
+
+    TextEditingController emailController = TextEditingController();
+    TextEditingController passwordController = TextEditingController();
     
+    SignIn(String email,String pass) async{
+      String url = "http://localhost:1000/api/user/signin";
+      SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+      
+      Map body = {"email": email, "password": pass};
+
+      var jsonResponse;
+      var res = await http.post(url, body: body);
+      //Need to check api status
+      if(res.statusCode == 200){
+        jsonResponse = json.decode(res.body);
+
+        print("Response status: ${res.statusCode}");
+
+        print("Response status: ${res.body}");
+
+        if(jsonResponse != null){
+          setState(() {
+            _isLoading = false;
+          });
+
+          sharedPreferences.setString("token", jsonResponse['token']);
+
+          Navigator.of(context).pushAndRemoveUntil(
+           MaterialPageRoute(
+            builder: (BuildContext context) => Admin()),
+           (Route<dynamic> route) => false);
+        }else{
+          setState(() {
+            _isLoading = false;
+          });
+        }
+      }
+
+    }
 
     Widget buildEmail(){
   return Column(
@@ -51,6 +93,7 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
           height: 60,
           child: TextFormField(
+            controller: emailController,
             keyboardType: TextInputType.emailAddress,
             style: TextStyle(
               color: Colors.black87
@@ -105,6 +148,8 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
           height: 60,
           child: TextFormField(
+            controller: passwordController,
+            keyboardType: TextInputType.text,
             obscureText: true,
             style: TextStyle(
               color: Colors.black87
@@ -190,8 +235,7 @@ class _LoginScreenState extends State<LoginScreen> {
           width: double.infinity,
           child: ElevatedButton(
                   onPressed: () {                  
-                      Navigator.push(context,
-                      MaterialPageRoute(builder: (_) => PhotoAlbum()));                                 
+                      SignIn(emailController.text, passwordController.text);                                 
                   },
                   style: ElevatedButton.styleFrom(
                     padding: EdgeInsets.all(15),
