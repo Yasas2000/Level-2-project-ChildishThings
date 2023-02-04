@@ -1,12 +1,13 @@
-// ignore_for_file: unused_import, use_key_in_widget_constructors, prefer_const_constructors, unnecessary_new, prefer_const_literals_to_create_immutables, avoid_print, library_private_types_in_public_api, override_on_non_overriding_member, unused_field, unused_element, curly_braces_in_flow_control_structures, prefer_typing_uninitialized_variables, prefer_final_fields, unused_local_variable, non_constant_identifier_names, import_of_legacy_library_into_null_safe
+// ignore_for_file: unused_import, use_key_in_widget_constructors, prefer_const_constructors, unnecessary_new, prefer_const_literals_to_create_immutables, avoid_print, library_private_types_in_public_api, override_on_non_overriding_member, unused_field, unused_element, curly_braces_in_flow_control_structures, prefer_typing_uninitialized_variables, prefer_final_fields, unused_local_variable, non_constant_identifier_names, import_of_legacy_library_into_null_safe, avoid_unnecessary_containers
 
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:frontend/loginscreen.dart';
 import 'package:frontend/verification.dart';
 import 'package:frontend/models/user.dart';
 import 'package:http/http.dart' as http;
+import 'package:quickalert/quickalert.dart';
 
 class SignUpScreen extends StatefulWidget {
 
@@ -15,12 +16,14 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-  
+
+
+  bool _isAdmin = false;
+  var role = "User";
   var confirmPass;
   final _formKey = GlobalKey<FormState>();
-
-  TextEditingController _firstNameController = TextEditingController();
-  TextEditingController _lastNameController = TextEditingController();
+  
+  TextEditingController _fullNameController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _phoneNumberController = TextEditingController();
   TextEditingController _passController = TextEditingController();
@@ -29,14 +32,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
   
 
   Future<User> userSignUp(
-    String firstName, String lastName,String email,String phoneNumber,String password) async{
-    const url = "http://localhost:1000/api/user/signup";
+    String fullName,String email,String phoneNumber,String password,String role) async{
+    const url = "http://localhost:5000/users/register";
     Map<String, dynamic> requestPayload = {
-      "firstName": firstName,
-      "lastName" : lastName,
+      "fullName": fullName,
       "email" : email,
-      "phoneNumber" : phoneNumber,
-      "password" : password 
+      "phoneNo" : phoneNumber,
+      "password" : password,
+      "role" : role 
     };
 
     final http.Response response = await http.post(Uri.parse(url), 
@@ -50,299 +53,335 @@ class _SignUpScreenState extends State<SignUpScreen> {
     }  
   }
 
-  
 
-  
-
-  @override
-  Widget buildCreateAccBtn(){
-      return Container(
-          padding: EdgeInsets.symmetric(vertical: 25),
-          width: double.infinity,
-          child: ElevatedButton(
-                  onPressed: ()  {             
-                      setState(() {
-                      if(_formKey.currentState!.validate()){
-                          userSignUp(
-                            _firstNameController.text,
-                            _lastNameController.text,
-                            _emailController.text,
-                            _phoneNumberController.text,
-                            _passController.text,
-                            );
-                            Navigator.pop(context);
-                          }
-                          
-                      });                                                                           
-                  },
-                  style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.all(15),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15)
-                    )
-                  ),
-                  child: Text(
-                      'CONTINUE',
-                      style: TextStyle(
-                        color: Color.fromARGB(255, 3, 44, 110),
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold
-                      ),
-                    ),
-                ),
-      );
-    }
-  
-  Widget buildSigninBtn(){
-      return GestureDetector(
-          onTap: () => {
-            Navigator.pop(context)
-          },
-          child: RichText(
-            text: TextSpan(
-              children: [
-                TextSpan(
-                  text: 'Already Member? ',
-                  style: TextStyle(
-                  color: Color.fromARGB(255, 254, 254, 254),
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500
-                ),
-                ),
-                TextSpan(
-                  text: 'Login Now',
-                  style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold
-                  ), 
-                ),
-              ]
-          ),
-        ),
-      );
-    }
   
    @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: AnnotatedRegion<SystemUiOverlayStyle>(
+        body: AnnotatedRegion<SystemUiOverlayStyle>(
         value:SystemUiOverlayStyle.light,
-        child:Form(
-              key: _formKey,
-              child:GestureDetector(
-                    child:Stack(         
-                        children: <Widget>[
-                            Container(                             
-                                height: double.infinity,
-                                width: double.infinity,
-                                decoration: BoxDecoration(
-                                    gradient: LinearGradient(
-                                        begin: Alignment.topCenter,
-                                        end:Alignment.bottomCenter,
-                                        colors:[
-                                            Color(0x660048ba),
-                                            Color(0x990048ba),
-                                            Color(0xcc0048ba),
-                                            Color(0xff0048ba),
-                                        ]
-                                    )
-                                ),
-                               child: SingleChildScrollView(
-                                physics: AlwaysScrollableScrollPhysics(),
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: 25,
-                                  vertical: 120
-                                ),
-                                 child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children:<Widget>[
-                                      Text(
-                                            'Create Account',
-                                            style:TextStyle(
-                                               color: Colors.white,
-                                               fontSize: 40,
-                                               fontWeight: FontWeight.bold     
-                                            ),
-                                        ),
-                                        SizedBox(height: 30),
-                                        Row(
-                                          children: [
-                                              Expanded(
-                                                flex: 3,                   
-                                                child: ListTile(
-                                                  subtitle: TextFormField(   
-                                                    controller: _firstNameController,
-                                                    keyboardType: TextInputType.text,      
-                                                    cursorColor: Color(0xcc0048ba),                                                          
-                                                    decoration:  InputDecoration(
-                                                      prefixIcon: Icon(Icons.person,color: Color(0xff0048ba)),
-                                                      filled: true,
-                                                      fillColor: Colors.grey[200],
-                                                      border: OutlineInputBorder(
-                                                        borderSide: BorderSide.none,
-                                                        borderRadius: BorderRadius.circular(50),                      
-                                                      ),                                               
-                                                      hintText: "First Name",                                              
-                                                    ),
-                                                    validator: validateName,
-                                                  ),
-                                                ),
-                                              ),                                         
-                                              Expanded(
-                                                flex: 4,
-                                                child: ListTile(
-                                                  subtitle: TextFormField(
-                                                    controller: _lastNameController,
-                                                    keyboardType: TextInputType.text,
-                                                    cursorColor: Color(0xcc0048ba),
-                                                    decoration: InputDecoration(
-                                                      filled: true,
-                                                      fillColor: Colors.grey[200],
-                                                      border: OutlineInputBorder(
-                                                        borderSide: BorderSide.none,
-                                                        borderRadius: BorderRadius.circular(50),                      
-                                                      ), 
-                                                      hintText: "Last Name",      
-                                                    ),
-                                                    validator: validateName,
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                        ),  
-                                      Container(
-                                        margin: EdgeInsets.only(left: 20,right: 20,top: 40),
-                                        padding: EdgeInsets.only(left: 20,right: 20),
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(50),
-                                          color: Colors.grey[200],
-                                          boxShadow: [BoxShadow(
-                                            offset: Offset(0,10),
-                                            blurRadius: 50,
-                                            color: Color(0xB3EEEEEE)
-                                          )],
-                                        ),
-                                        alignment: Alignment.center,
-                                        child: TextFormField(
-                                          controller: _emailController,
-                                          keyboardType: TextInputType.emailAddress ,
-                                          cursorColor: Color(0xcc0048ba),
-                                          decoration: InputDecoration(
-                                            icon: Icon(
-                                              Icons.email,
-                                              color: Color(0xff0048ba),
-                                            ),
-                                            hintText: "Enter Email",
-                                            enabledBorder: InputBorder.none,
-                                            focusedBorder: InputBorder.none
-                                          ),
-                                          validator: validateEmail,
-                                        ), 
-                                      ),
-                                      Container(
-                                        margin: EdgeInsets.only(left: 20,right: 20,top: 40),
-                                        padding: EdgeInsets.only(left: 20,right: 20),
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(50),
-                                          color: Colors.grey[200],
-                                          boxShadow: [BoxShadow(
-                                            offset: Offset(0,10),
-                                            blurRadius: 50,
-                                            color: Color(0xB3EEEEEE)
-                                          )],
-                                        ),
-                                        alignment: Alignment.center,
-                                        child: TextFormField(
-                                          controller: _phoneNumberController,
-                                          keyboardType: TextInputType.phone,
-                                          cursorColor: Color(0xcc0048ba),
-                                          decoration: InputDecoration(
-                                            icon: Icon(
-                                              Icons.phone,
-                                              color: Color(0xff0048ba),
-                                            ),
-                                            hintText: "Phone Number",
-                                            enabledBorder: InputBorder.none,
-                                            focusedBorder: InputBorder.none
-                                          ),
-                                          validator: validateMobile,
-                                        ), 
-                                      ),
-                                      Container(
-                                        margin: EdgeInsets.only(left: 20,right: 20,top: 40),
-                                        padding: EdgeInsets.only(left: 20,right: 20),
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(50),
-                                          color: Colors.grey[200],
-                                          boxShadow: [BoxShadow(
-                                            offset: Offset(0,10),
-                                            blurRadius: 50,
-                                            color: Color(0xB3EEEEEE)
-                                          )],
-                                        ),
-                                        alignment: Alignment.center,
-                                        child: TextFormField(
-                                          controller: _passController,
-                                          keyboardType: TextInputType.text,
-                                          obscureText: true,
-                                          cursorColor: Color(0xcc0048ba),
-                                          decoration: InputDecoration(
-                                            icon: Icon(
-                                              Icons.lock,
-                                              color: Color(0xff0048ba),
-                                            ),
-                                            hintText: "Password",
-                                            enabledBorder: InputBorder.none,
-                                            focusedBorder: InputBorder.none
-                                          ),
-                                          validator: validatePassword,
-                                        ), 
-                                      ),
-                                      Container(
-                                        margin: EdgeInsets.only(left: 20,right: 20,top: 40),
-                                        padding: EdgeInsets.only(left: 20,right: 20),
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(50),
-                                          color: Colors.grey[200],
-                                          boxShadow: [BoxShadow(
-                                            offset: Offset(0,10),
-                                            blurRadius: 50,
-                                            color: Color(0xB3EEEEEE)
-                                          )],
-                                        ),
-                                        alignment: Alignment.center,
-                                        child: TextFormField(
-                                          controller: _confirmPassController,
-                                          keyboardType: TextInputType.text,
-                                          obscureText: true,
-                                          cursorColor: Color(0xcc0048ba),
-                                          decoration: InputDecoration(
-                                            icon: Icon(
-                                              Icons.lock,
-                                              color: Color(0xff0048ba),
-                                            ),
-                                            hintText: "Confirm Password",
-                                            enabledBorder: InputBorder.none,
-                                            focusedBorder: InputBorder.none
-                                          ),
-                                          validator: confirmPassword,
-                                        ), 
-                                      ),
-                                      SizedBox(height: 30),
-                                      buildCreateAccBtn(),
-                                      buildSigninBtn(),
-                                    ],
-                                  ),
-                               ),
-                            ),
-                        ],
+        child: Form(
+          key:_formKey,
+          child:SingleChildScrollView(
+            physics: AlwaysScrollableScrollPhysics(),
+            child: Column(
+              children: [
+                Container(
+                  height: 250,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(bottomLeft: Radius.circular(90)),
+                    color: new Color(0xffF5591F),
+                    gradient: LinearGradient(colors: [(new  Color(0xffF5591F)), new Color(0xffF2861E)],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
                     ),
-                ),),
+                  ),
+                  child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          /*Container(
+                            margin: EdgeInsets.only(top: 50),
+                            child: Image.asset(
+                              "assets/photobooth.png",
+                              height: 90,
+                              width: 90,
+                            ),
+                          ),*/
+                          Container(
+                            margin: EdgeInsets.only(right: 20, top: 20),
+                            alignment: Alignment.bottomRight,
+                            child: Text(
+                              "Register",
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.white
+                              ),
+                            ),
+                          )
+                        ],
+                      )
+                  ),
+                ),
                 
-            ),
-        );
+                
+                Container(
+                  alignment: Alignment.center,
+                  margin: EdgeInsets.only(left: 20, right: 20, top: 20),
+                  padding: EdgeInsets.only(left: 20, right: 20),
+                  height: 54,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(50),
+                    color: Colors.grey[200],
+                    boxShadow: [
+                      BoxShadow(
+                          offset: Offset(0, 10),
+                          blurRadius: 50,
+                          color: Color(0xffEEEEEE)
+                      ),
+                    ],
+                  ),
+                  child: TextFormField(
+                    controller: _fullNameController,
+                    cursorColor: Color(0xffF5591F),
+                    decoration: InputDecoration(
+                      icon: Icon(
+                        Icons.person,
+                        color: Color(0xffF5591F),
+                      ),
+                      hintText: "Full Name",
+                      enabledBorder: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                    ),
+                    validator: validateName,
+                  ),
+                ),  
+                Container(
+                  alignment: Alignment.center,
+                  margin: EdgeInsets.only(left: 20, right: 20, top: 20),
+                  padding: EdgeInsets.only(left: 20, right: 20),
+                  height: 54,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(50),
+                    color: Colors.grey[200],
+                    boxShadow: [
+                      BoxShadow(
+                          offset: Offset(0, 10),
+                          blurRadius: 50,
+                          color: Color(0xffEEEEEE)
+                      ),
+                    ],
+                  ),
+                  child: TextFormField(
+                    controller: _emailController,
+                    cursorColor: Color(0xffF5591F),
+                    decoration: InputDecoration(
+                      icon: Icon(
+                        Icons.email,
+                        color: Color(0xffF5591F),
+                      ),
+                      hintText: "Email",
+                      enabledBorder: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                    ),
+                    validator: validateEmail,
+                  ),
+                ),
+
+                Container(
+                  alignment: Alignment.center,
+                  margin: EdgeInsets.only(left: 20, right: 20, top: 20),
+                  padding: EdgeInsets.only(left: 20, right: 20),
+                  height: 54,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(50),
+                    color: Color(0xffEEEEEE),
+                    boxShadow: [
+                      BoxShadow(
+                          offset: Offset(0, 20),
+                          blurRadius: 100,
+                          color: Color(0xffEEEEEE)
+                      ),
+                    ],
+                  ),
+                  child: TextFormField(
+                    controller: _phoneNumberController,
+                    cursorColor: Color(0xffF5591F),
+                    decoration: InputDecoration(
+                      focusColor: Color(0xffF5591F),
+                      icon: Icon(
+                        Icons.phone,
+                        color: Color(0xffF5591F),
+                      ),
+                      hintText: "Phone Number",
+                      enabledBorder: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                    ),
+                    validator: validateMobile,
+                  ),
+                ),
+                Container(
+                  alignment: Alignment.center,
+                  margin: EdgeInsets.only(left: 20, right: 20, top: 20),
+                  padding: EdgeInsets.only(left: 20, right: 20),
+                  height: 54,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(50),
+                    color: Color(0xffEEEEEE),
+                    boxShadow: [
+                      BoxShadow(
+                          offset: Offset(0, 20),
+                          blurRadius: 100,
+                          color: Color(0xffEEEEEE)
+                      ),
+                    ],
+                  ),
+                  child: TextFormField(
+                    controller: _passController,
+                    obscureText: true,
+                    cursorColor: Color(0xffF5591F),
+                    decoration: InputDecoration(
+                      focusColor: Color(0xffF5591F),
+                      icon: Icon(
+                        Icons.vpn_key,
+                        color: Color(0xffF5591F),
+                      ),
+                      hintText: "Enter Password",
+                      enabledBorder: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                    ),
+                    validator: validatePassword,
+                  ),
+                ),
+                Container(
+                  alignment: Alignment.center,
+                  margin: EdgeInsets.only(left: 20, right: 20, top: 20),
+                  padding: EdgeInsets.only(left: 20, right: 20),
+                  height: 54,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(50),
+                    color: Color(0xffEEEEEE),
+                    boxShadow: [
+                      BoxShadow(
+                          offset: Offset(0, 20),
+                          blurRadius: 100,
+                          color: Color(0xffEEEEEE)
+                      ),
+                    ],
+                  ),
+                  child: TextFormField(
+                    controller: _confirmPassController,
+                    obscureText: true,
+                    cursorColor: Color(0xffF5591F),
+                    decoration: InputDecoration(
+                      focusColor: Color(0xffF5591F),
+                      icon: Icon(
+                        Icons.vpn_key,
+                        color: Color(0xffF5591F),
+                      ),
+                      hintText: "Confirm Password",
+                      enabledBorder: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                    ),
+                    validator: confirmPassword,
+                  ),
+                ),
+                SizedBox(height: 5),
+                Container(  
+                  alignment: Alignment.center,
+                  margin: EdgeInsets.only(left: 20, right: 20, top: 20),
+                  padding: EdgeInsets.only(left: 20, right: 20),
+                    child: Column(  
+                      children: <Widget>[  
+                        Row(  
+                          children: <Widget>[  
+                            SizedBox(width: 10,),  
+                            Text('Sign Up as Admin? ',style: TextStyle(fontSize: 15.0,fontStyle: FontStyle.italic, fontWeight: FontWeight.bold ), ),  
+                            Checkbox(  
+                              checkColor: Colors.greenAccent,  
+                              activeColor: Colors.red,  
+                              value: _isAdmin,  
+                              onChanged: (value) {  
+                                setState(() {  
+                                  _isAdmin = value!; 
+                                  
+                                });  
+                              },  
+                            ),   
+                          ],  
+                        ),  
+                      ],  
+                    )  
+                ),  
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      if(_formKey.currentState!.validate()){
+                          if(_isAdmin){
+                                      role = "Admin";
+                                  }else{
+                                    role = "User";
+                                  } 
+                          userSignUp(
+                            _fullNameController.text,
+                            _emailController.text,
+                            _phoneNumberController.text,
+                            _passController.text,
+                            role
+                            );
+                            QuickAlert.show(
+                            context: context, 
+                            text: "Congratulations,Your account has been successfully created.Please login",
+                            type: QuickAlertType.success,
+                            onConfirmBtnTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => LoginScreen()),
+                                );
+                            },
+                          ); 
+                          }
+                          
+                      });  
+                  },
+                  child: Container(
+                    alignment: Alignment.center,
+                    margin: EdgeInsets.only(left: 20, right: 20, top: 70),
+                    padding: EdgeInsets.only(left: 20, right: 20),
+                    height: 54,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(colors: [(new  Color(0xffF5591F)), new Color(0xffF2861E)],
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight
+                      ),
+                      borderRadius: BorderRadius.circular(50),
+                      color: Colors.grey[200],
+                      boxShadow: [
+                        BoxShadow(
+                            offset: Offset(0, 10),
+                            blurRadius: 50,
+                            color: Color(0xffEEEEEE)
+                        ),
+                      ],
+                    ),
+                    child: Text(
+                      "REGISTER",
+                      style: TextStyle(
+                          color: Colors.white
+                      ),
+                    ),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(top: 10, bottom: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("Have Already Member?  "),
+                      GestureDetector(
+                        child: Text(
+                          "Login Now",
+                          style: TextStyle(
+                              color: Color(0xffF5591F)
+                          ),
+                        ),
+                        onTap: () {
+                          // Write Tap Code Here.
+                          Navigator.pop(context);
+                        },
+                      )
+                    ],
+                  ),
+                )
+              ],
+            )
+          )
+        )
+      )
+    );
     }
+
 
     String? validateName(String? value) {
     if (value!.length < 3)

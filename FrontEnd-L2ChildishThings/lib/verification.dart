@@ -1,8 +1,11 @@
-// ignore_for_file: prefer_const_constructors, library_private_types_in_public_api, unnecessary_new, prefer_final_fields, unused_field, non_constant_identifier_names, prefer_interpolation_to_compose_strings, sized_box_for_whitespace
+// ignore_for_file: prefer_const_constructors, library_private_types_in_public_api, unnecessary_new, prefer_final_fields, unused_field, non_constant_identifier_names, prefer_interpolation_to_compose_strings, sized_box_for_whitespace, unused_import, import_of_legacy_library_into_null_safe
 
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:flutter_verification_code/flutter_verification_code.dart';
+import 'package:email_auth/email_auth.dart';
+import 'package:frontend/signup_screen.dart';
+
 
 class Verification extends StatefulWidget {
   const Verification({Key? key}): super(key: key);
@@ -16,6 +19,7 @@ class _VerificationState extends State<Verification> {
   bool _isResendAgain = false;
   bool _isVerified = false;
   bool _isLoading = false;
+  TextEditingController _otpController = TextEditingController();
 
   String _code = '';
   late Timer _timer;
@@ -54,6 +58,11 @@ class _VerificationState extends State<Verification> {
       });
      });
   }
+
+  void verifyOTP() async{
+   // var res = EmailAuth.validate(receiverMail: , userOTP: _code);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

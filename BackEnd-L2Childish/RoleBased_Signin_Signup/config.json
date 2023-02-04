@@ -1,0 +1,4 @@
+{
+  "connectionString": "mongodb+srv://userone:suV5g8jG9TXIrwRr@cluster0.85gnlm3.mongodb.net/signup_db?retryWrites=true&w=majority",
+  "secret": "secret"
+}
