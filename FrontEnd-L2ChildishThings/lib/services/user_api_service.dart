@@ -7,15 +7,12 @@ import 'package:frontend/models/user.dart';
 
 String url = "http://localhost:5000/users/";
 
-class UserApiService{
-
-
-    Future<List<User>> fetchUsers() async {
-    final jwtToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2M2Q5MWJiOTFiMmRhMTMxMDRiNWFlZWMiLCJyb2xlIjoiQWRtaW4iLCJpYXQiOjE2NzU0ODM3OTgsImV4cCI6MTY3NjA4ODU5OH0.S0PjmgMIm41q5wyIqzrQ4i9MFBOedt_4qZlmWglM26Y";  
-    final headers = {HttpHeaders.authorizationHeader: "Bearer $jwtToken"};  
-    final response = await http.get(
-      Uri.parse(url),
-      headers: headers);
+class UserApiService {
+  Future<List<User>> fetchUsers() async {
+    final jwtToken =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2M2Q5MWJiOTFiMmRhMTMxMDRiNWFlZWMiLCJyb2xlIjoiQWRtaW4iLCJpYXQiOjE2NzU0ODM3OTgsImV4cCI6MTY3NjA4ODU5OH0.S0PjmgMIm41q5wyIqzrQ4i9MFBOedt_4qZlmWglM26Y";
+    final headers = {HttpHeaders.authorizationHeader: "Bearer $jwtToken"};
+    final response = await http.get(Uri.parse(url), headers: headers);
     if (response.statusCode == 200) {
       List<dynamic> jsonResponse = json.decode(response.body);
       return jsonResponse.map((user) => User.fromJson(user)).toList();
@@ -24,14 +21,33 @@ class UserApiService{
     }
   }
 
-    Future<User> deleteUser (String id) async{
-      final res = await http.delete(Uri.parse(url + id));
-
-      if(res.statusCode == 200){
-        return User.fromJson(json.decode(res.body));
-      }
-      else{
-        throw Exception('Fail to delete users');
-      }
+  Future<User?> findUserByEmail(String email) async {
+    List<User> users = await fetchUsers();
+    for (User user in users) {
+        if (user.email == email) {
+            return user;
+        }
     }
+    return null;
+  }
+
+  Future<User> deleteUser(String id) async {
+    final res = await http.delete(Uri.parse(url + id));
+
+    if (res.statusCode == 200) {
+      return User.fromJson(json.decode(res.body));
+    } else {
+      throw Exception('Fail to delete users');
+    }
+  }
+
+  Future<User> updateUser(String id, Map<String, dynamic> data) async {
+    final res = await http.put(Uri.parse(url + id), body: json.encode(data));
+
+    if (res.statusCode == 200) {
+      return User.fromJson(json.decode(res.body));
+    } else {
+      throw Exception('Fail to update users');
+    }
+  }
 }

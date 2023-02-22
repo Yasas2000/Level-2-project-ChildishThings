@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:flutter_verification_code/flutter_verification_code.dart';
-import 'package:email_auth/email_auth.dart';
 import 'package:frontend/signup_screen.dart';
 
 
