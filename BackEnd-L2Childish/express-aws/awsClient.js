@@ -1,15 +1,13 @@
 const AWS3 = require('@aws-sdk/client-s3')
-
-const accessKeyId = 'AKIAR574FXEGTQFSYLNE'
-const secretKey = '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'
+require('dotenv').config();
 
 
 //v3 config
 const s3Instance = new AWS3.S3Client({
-    region: 'ap-south-1',
+    region: process.env.AWS_REGION,
     credentials: {
-      accessKeyId,
-      secretAccessKey: secretKey
+      accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
     }
   })
 module.exports = {
