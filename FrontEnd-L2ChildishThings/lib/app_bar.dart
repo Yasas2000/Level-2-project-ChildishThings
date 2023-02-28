@@ -1,5 +1,4 @@
-import 'package:mypart/credi_card_page.dart';
-import 'package:mypart/feedback.dart';
+
 import "package:flutter/material.dart";
 import 'feedback.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -13,23 +12,25 @@ enum MenuItem{
 }
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-final String title;
+late final String title;
 
-  const CustomAppBar({
-    Key? key
-  ,required this.title,
-  }) : super(key: key);
-
+  // const CustomAppBar({
+  //   Key? key
+  // ,required this.title,
+  // }) : super(key: key);
+CustomAppBar(String title){
+  this.title=title;
+}
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: Colors.blue,
+      backgroundColor: Colors.deepOrange,
       automaticallyImplyLeading: false,
       title: Text(title),
       leading:IconButton(
         icon: Icon(Icons.arrow_back),
         onPressed: () {
-          Navigator.pop(context);
+          Navigator.pop(context,true);
         },
       ) ,
       actions: [
@@ -38,7 +39,9 @@ final String title;
             icon:Icon(Icons.notifications),
             onPressed: (){
               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context)=> Homepage()));
+                  builder: (context){
+                    return Homepage();
+                  }));
             }),
         //   IconButton(
         //   icon:Icon(Icons.more_vert),
@@ -47,7 +50,7 @@ final String title;
         PopupMenuButton<MenuItem>(
             shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.0),),
-            color: Colors.blue,
+            color: Colors.deepOrange,
 
 
             onSelected: (value){
@@ -57,8 +60,9 @@ final String title;
               }else if(value==MenuItem.item2){
 
               }else if(value==MenuItem.item3){
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context)=> FeedbackBar()));
+                Navigator.push(context, MaterialPageRoute(builder: (BuildContext context){
+                  return FeedbackBar();
+                }));
 
               }
 
@@ -126,7 +130,7 @@ class _FeedbackBarState extends State<FeedbackBar> {
 
         ),
       ),
-      backgroundColor: Colors.blue,
+      backgroundColor: Colors.deepOrange,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
 
@@ -164,8 +168,9 @@ class _FeedbackBarState extends State<FeedbackBar> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 ElevatedButton(onPressed: (){
-                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context)=> AlertBox()));
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context){
+                    return AlertBox();
+                  }));
 
 
 
@@ -183,7 +188,7 @@ class _FeedbackBarState extends State<FeedbackBar> {
                     child: Text(
                       'Later',
                       style: TextStyle(
-                        color: Colors.blue,
+                        color: Colors.deepOrange,
                         fontFamily: 'halter',
                         fontSize: 14,
                       ),
@@ -193,7 +198,7 @@ class _FeedbackBarState extends State<FeedbackBar> {
                   ),
                 ),
                 ElevatedButton(onPressed: (){
-                  Navigator.of(context).push(MaterialPageRoute(
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(
                       builder: (context)=> AlertBox()));
 
 
@@ -212,7 +217,7 @@ class _FeedbackBarState extends State<FeedbackBar> {
                     child: Text(
                       'Confirm',
                       style: TextStyle(
-                        color: Colors.blue,
+                        color: Colors.deepOrange,
                         fontFamily: 'halter',
                         fontSize: 14,
                       ),
@@ -308,17 +313,14 @@ class _AlertBoxState extends State<AlertBox> {
 
       titlePadding: EdgeInsets.all(12.0),
       contentPadding: EdgeInsets.all(20),
-     backgroundColor: Colors.blue,
+     backgroundColor: Colors.deepOrange,
      content:
       Container(
 
         margin: EdgeInsets.symmetric(vertical: 20),
         child:
         ElevatedButton(onPressed: (){
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context)=> CreditCardPage()));
-
-
+          Navigator.pop(context,true);
 
 
         },
@@ -334,7 +336,7 @@ class _AlertBoxState extends State<AlertBox> {
             child: Text(
               'Contnue',
               style: TextStyle(
-                color: Colors.blue,
+                color: Colors.deepOrange,
                 fontFamily: 'halter',
                 fontSize: 14,
               ),

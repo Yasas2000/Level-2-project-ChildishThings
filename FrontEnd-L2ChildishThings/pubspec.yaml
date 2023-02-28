@@ -1,4 +1,4 @@
-name: mypart
+name: frontend
 description: A new Flutter project.
 
 # The following line prevents the package from being accidentally published to
@@ -32,8 +32,13 @@ dependencies:
   flutter:
     sdk: flutter
   device_preview: ^1.1.0
+  flutter_side_menu: ^0.3.0
+  email_otp: ^1.0.4
+  animated_background: ^2.0.0
+  bcrypt: ^1.1.3
   flutter_verification_code:
   flutter_credit_card: ^2.0.0
+  google_sign_in: ^6.0.1
   reactive_forms: ^14.1.0
   flutter_rating_bar: ^4.0.1
   formz: ^0.4.1
@@ -43,7 +48,8 @@ dependencies:
   form_field_validator:
   email_auth:
   get:
-  http: 
+  http: ^0.13.5
+  payhere_mobilesdk_flutter: ^3.0.1
   shared_preferences: ^2.0.17
   quickalert: ^1.0.1
   font_awesome_flutter: ^10.3.0
