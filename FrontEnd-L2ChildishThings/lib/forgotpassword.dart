@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:frontend/services/user_api_service.dart';
 import 'package:frontend/models/user.dart';
 import 'package:bcrypt/bcrypt.dart';
+import 'package:http/http.dart' as http;
 
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({super.key});
@@ -14,16 +15,20 @@ class ForgotPasswordScreen extends StatefulWidget {
 }
 
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
-  
-  UserApiService apiService = UserApiService();
+  Future<User> updateUser(String id, Map<String, dynamic> data) async {
+    final res = await http.put(Uri.parse(url + id), body: json.encode(data));
 
-  
+    if (res.statusCode == 200) {
+      return User.fromJson(json.decode(res.body));
+    } else {
+      throw Exception('Fail to update users');
+    }
+  }
+
   final _formKey = GlobalKey<FormState>();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passController = TextEditingController();
   bool _obscureText = true;
-
-  
 
   @override
   Widget build(BuildContext context) {
@@ -34,13 +39,39 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Container(
+                width: 200,
+                height: 200,
+                padding: EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.grey.shade200,
+                ),
+                child: Transform.rotate(
+                  angle: 0,
+                  child: Image(
+                    image: AssetImage('assets/passreset.png'),
+                  ),
+                ),
+              ),
+              SizedBox(height: 32.0),
               Text(
-                "Forgot Password",
-                style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+                "Reset Your Password",
+                style: TextStyle(
+                  fontSize: 36.0,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                  fontFamily: 'Montserrat',
+                  shadows: [
+                    Shadow(
+                      blurRadius: 2.0,
+                      color: Colors.grey.withOpacity(0.8),
+                      offset: Offset(0.0, 2.0),
+                    ),
+                  ],
+                ),
               ),
-              SizedBox(
-                height: 32.0,
-              ),
+              SizedBox(height: 32.0),
               Form(
                 child: Column(
                   children: [
@@ -68,7 +99,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       child: Stack(
                         children: [
                           TextFormField(
-                            controller: _passController ,
+                            controller: _passController,
                             decoration: InputDecoration(
                               hintText: "Password",
                               filled: true,
@@ -139,34 +170,27 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       ),
                     ),
                     Container(
-                      margin: EdgeInsets.only(left: 30, right: 30, bottom: 20),
-                      child: ElevatedButton(
-                        child: Text(
-                          "Reset Password",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blue,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(25),
+                        margin:
+                            EdgeInsets.only(left: 30, right: 30, bottom: 20),
+                        child: ElevatedButton(
+                          onPressed: () {},
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.black,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(25.0),
+                            ),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 32.0, vertical: 16.0),
                           ),
-                        ),
-                        onPressed: () async{
-                          String email = _emailController.text;
-                          String password = _passController.text;
-                          final String hashed = BCrypt.hashpw('password', BCrypt.gensalt());
-                          User? user = await apiService.findUserByEmail(email);
-                          if(user != null){ 
-                              String userId = user.id;
-                              Map<String, dynamic> data = {'password': hashed};
-                              apiService.updateUser(userId, data);
-                          }else{
-                            // ignore: avoid_print
-                            print("user not found");
-                          }                
-                        },
-                      ),
-                    ),
+                          child: Text(
+                            "Reset Password",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        )),
                   ],
                 ),
               ),

@@ -6,8 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:frontend/admin_page.dart';
 import 'package:frontend/forgotpassword.dart';
 import 'package:frontend/loginscreen.dart';
+import 'package:frontend/otp_screen.dart';
 import 'package:frontend/send_otp.dart';
-import 'package:frontend/verification.dart';
+
 
 
 void main(){
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
     // ignore: prefer_const_constructors
     return MaterialApp(
       title: 'Flutter Login UI',
-      home: sendOTP(),    //loginscreen()
+      home: LoginScreen(),    //loginscreen()
       debugShowCheckedModeBanner: false,
     );
   }

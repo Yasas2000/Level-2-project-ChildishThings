@@ -31,15 +31,6 @@ class UserApiService {
     return null;
   }
 
-  Future<User> deleteUser(String id) async {
-    final res = await http.delete(Uri.parse(url + id));
-
-    if (res.statusCode == 200) {
-      return User.fromJson(json.decode(res.body));
-    } else {
-      throw Exception('Fail to delete users');
-    }
-  }
 
   Future<User> updateUser(String id, Map<String, dynamic> data) async {
     final res = await http.put(Uri.parse(url + id), body: json.encode(data));

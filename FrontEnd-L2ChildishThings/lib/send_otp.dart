@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, camel_case_types
 
 import 'package:flutter/material.dart';
 import 'package:email_otp/email_otp.dart';
@@ -24,16 +24,31 @@ class _sendOTPState extends State<sendOTP> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Image.network(
-              "https://img.freepik.com/free-vector/emails-concept-illustration_114360-1355.jpg?w=1380&t=st=1673699432~exp=1673700032~hmac=d65454eb5c72e8310209bf8ae770f849ea388f318dc6b9b1300b24b03e8886ca",
+              "https://img.freepik.com/free-vector/mail-sent-concept-illustration_114360-4657.jpg",
               height: 350,
             ),
           ),
           const SizedBox(
             height: 60,
-            child: Text(
-              "Enter your Email to get Code",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
+           child: Text(
+  "Enter your Email to get Code",
+  style: TextStyle(
+    fontSize: 24,
+    fontWeight: FontWeight.bold,
+    color: Colors.black,
+    fontFamily: 'Roboto',
+    letterSpacing: 1.5,
+    wordSpacing: 2,
+    shadows: [
+      Shadow(
+        blurRadius: 2,
+        color: Colors.grey,
+        offset: Offset(1, 1),
+      ),
+    ],
+  ),
+),
+
           ),
           Card(
             child: Column(
@@ -43,6 +58,7 @@ class _sendOTPState extends State<sendOTP> {
                   decoration: InputDecoration(
                     prefixIcon: const Icon(
                       Icons.mail,
+                      color: Colors.orange,
                     ),
                     suffixIcon: IconButton(
                         onPressed: () async {
@@ -60,7 +76,9 @@ class _sendOTPState extends State<sendOTP> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) =>   OTPScreen(myauth: myauth,)));
+                                    builder: (context) => OTPScreen(
+                                          myauth: myauth,
+                                        )));
                           } else {
                             ScaffoldMessenger.of(context)
                                 .showSnackBar(const SnackBar(
@@ -75,6 +93,9 @@ class _sendOTPState extends State<sendOTP> {
                     hintText: "Email Address",
                     border: const OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                      borderSide: BorderSide(
+                        color: Colors.black,
+                      ),
                     ),
                   ),
                 ),

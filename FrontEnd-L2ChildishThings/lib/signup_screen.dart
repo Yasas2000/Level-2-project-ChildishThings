@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:frontend/loginscreen.dart';
-import 'package:frontend/verification.dart';
 import 'package:frontend/models/user.dart';
 import 'package:http/http.dart' as http;
 import 'package:quickalert/quickalert.dart';
@@ -67,7 +66,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             child: Column(
               children: [
                 Container(
-                  height: 250,
+                  height: 280,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.only(bottomLeft: Radius.circular(90)),
                     color: new Color(0xffF5591F),
@@ -81,25 +80,32 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          /*Container(
-                            margin: EdgeInsets.only(top: 50),
+                          Container(             
                             child: Image.asset(
                               "assets/photobooth.png",
-                              height: 90,
-                              width: 90,
+                              height: 200,
+                              width: 200,
                             ),
-                          ),*/
+                          ),
                           Container(
-                            margin: EdgeInsets.only(right: 20, top: 20),
-                            alignment: Alignment.bottomRight,
-                            child: Text(
-                              "Register",
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.white
+                              margin: EdgeInsets.only(right: 20, top: 10),
+                              alignment: Alignment.bottomRight,
+                              child: Text(
+                                "Sign Up!",
+                                style: TextStyle(
+                                  fontSize: 35,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                  shadows: [
+                                    Shadow(
+                                      blurRadius: 2.0,
+                                      color: Colors.black,
+                                      offset: Offset(1.0, 1.0),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
-                          )
                         ],
                       )
                   ),
@@ -327,7 +333,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   },
                   child: Container(
                     alignment: Alignment.center,
-                    margin: EdgeInsets.only(left: 20, right: 20, top: 70),
+                    margin: EdgeInsets.only(left: 20, right: 20, top: 50),
                     padding: EdgeInsets.only(left: 20, right: 20),
                     height: 54,
                     decoration: BoxDecoration(
@@ -358,7 +364,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text("Have Already Member?  "),
+                      Text("Already have an account?  "),
                       GestureDetector(
                         child: Text(
                           "Login Now",
