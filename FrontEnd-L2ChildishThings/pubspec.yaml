@@ -92,7 +92,10 @@ flutter:
     - Asset/paypal.jpg
     - Asset/genie.jpg
     - Asset/email.png
-
+    - Asset/email.png
+    - Asset/photobooth.png
+    - Asset/passreset.png
+    - Asset/sendOTP.jpg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 

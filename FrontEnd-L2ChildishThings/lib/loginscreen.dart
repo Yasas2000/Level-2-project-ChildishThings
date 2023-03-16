@@ -5,7 +5,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:frontend/admin_page.dart';
 import 'package:frontend/forgotpassword.dart';
 import 'package:frontend/home.dart';
 import 'package:frontend/send_otp.dart';
