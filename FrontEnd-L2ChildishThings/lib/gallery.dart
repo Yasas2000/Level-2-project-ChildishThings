@@ -71,27 +71,6 @@ class _ImageGalleryState extends State<ImageGallery>
     }
   }
 
-  /* for mobile platforms
-  Future<void> _pickImage() async {
-    // Use the image_picker package to pick an image from the gallery or camera
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-
-    if (pickedFile != null) {
-      _uploadImage(File(pickedFile.path));
-    }
-  }
-
-  Future<void> _pickImages() async {
-    // Use the image_picker package to pick multiple images from the gallery
-    final pickedFiles = await picker.pickMultiImage();
-
-    if (pickedFiles != null) {
-      for (var pickedFile in pickedFiles) {
-        _uploadImage(File(pickedFile.path));
-      }
-    }
-  }  */
-
   Future<void> _pickImage() async {
     final result = await FilePicker.platform.pickFiles();
 
@@ -167,21 +146,24 @@ class _ImageGalleryState extends State<ImageGallery>
       ),
       body: Column(
         children: [
-          Container(
-            height: 150,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/bg.jpg'),
-                fit: BoxFit.cover,
+          Opacity(
+            opacity: 0.8,
+            child: Container(
+              height: 150,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/bg.jpg'),
+                  fit: BoxFit.cover,
+                ),
               ),
-            ),
-            child: Center(
-              child: Text(
-                'GALLERY',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
+              child: Center(
+                child: Text(
+                  'GALLERY',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ),
