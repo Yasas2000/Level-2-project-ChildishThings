@@ -1,30 +1,40 @@
-
-
-// ignore_for_file: unused_import, use_key_in_widget_constructors, prefer_const_constructors, duplicate_ignore
-
-import 'package:flutter/material.dart';
-import 'package:frontend/admin_page.dart';
-import 'package:frontend/forgotpassword.dart';
-import 'package:frontend/loginscreen.dart';
-import 'package:frontend/send_otp.dart';
-import 'package:frontend/verification.dart';
-
+import 'package:device_preview/device_preview.dart';
+import "package:flutter/material.dart";
+import 'package:mypart/donation_form.dart';
+import "credi_card_page.dart";
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:intl/intl.dart';
+import 'package:form_validator/form_validator.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 
 void main(){
-  
-  runApp(MyApp());
+  runApp(
+      DevicePreview(
+        enabled: true,
+        builder: (context) => MyApp(),
+      ));
 }
-
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application
+class MyApp extends StatelessWidget
+{
   @override
   Widget build(BuildContext context) {
-    // ignore: prefer_const_constructors
+    // TODO: implement build
+    var supportedLocales;
     return MaterialApp(
-      title: 'Flutter Login UI',
-      home: sendOTP(),    //loginscreen()
       debugShowCheckedModeBanner: false,
+      localizationsDelegates: const [
+        FormBuilderLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      theme: ThemeData.light(),
+      home: DonationForm(),
+      // routes: <String,WidgetBuilder>{
+      //   '/second':(context)=>CreditCardPage()
+      // },
     );
   }
 }
+
 
