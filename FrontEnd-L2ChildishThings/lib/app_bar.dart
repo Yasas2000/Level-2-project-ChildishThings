@@ -1,7 +1,12 @@
+import 'dart:convert';
 
+import 'package:mypart/credi_card_page.dart';
+import 'package:mypart/feedback.dart';
 import "package:flutter/material.dart";
+import 'package:mypart/notifications.dart';
 import 'feedback.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:http/http.dart' as http;
 
 import 'item_page.dart';
 enum MenuItem{
@@ -14,33 +19,36 @@ enum MenuItem{
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 late final String title;
 
+late final Widget? leadingIcon;
+
   // const CustomAppBar({
   //   Key? key
   // ,required this.title,
   // }) : super(key: key);
-CustomAppBar(String title){
+CustomAppBar(String title, Widget? lead){
   this.title=title;
+  this.leadingIcon=lead;
 }
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: Colors.deepOrange,
+      elevation: 0.0,
+      backgroundColor: Colors.transparent,
+
+      //shape: OutlineInputBorder(borderRadius: BorderRadius.only(bottomLeft: Radius.circular(25),bottomRight: Radius.circular(25)),borderSide: BorderSide(color: Colors.deepOrange)),
       automaticallyImplyLeading: false,
-      title: Text(title),
-      leading:IconButton(
-        icon: Icon(Icons.arrow_back),
-        onPressed: () {
-          Navigator.pop(context,true);
-        },
-      ) ,
+      title: Text(title,style: TextStyle(color: Colors.deepOrange),),
+      leading:leadingIcon ,
+
       actions: [
 
         IconButton(
-            icon:Icon(Icons.notifications),
+            icon:Icon(Icons.notifications,color: Colors.deepOrange,),
+            iconSize: 40,
             onPressed: (){
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (context){
-                    return Homepage();
+                    return NotificationsPage();
                   }));
             }),
         //   IconButton(
@@ -48,9 +56,12 @@ CustomAppBar(String title){
         //
         //   onPressed: (){})
         PopupMenuButton<MenuItem>(
+            icon: Icon(Icons.drag_indicator,color: Colors.deepOrange,),
+            iconSize: 40,
             shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),),
-            color: Colors.deepOrange,
+            borderRadius: BorderRadius.circular(10.0),side: BorderSide(color: Colors.deepOrange)),
+            color: Colors.white,
+
 
 
             onSelected: (value){
@@ -72,16 +83,57 @@ CustomAppBar(String title){
 
               PopupMenuItem(
                   value: MenuItem.item1,
-                  child: Text('Settings',),
+
+
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+
+                      Container(
+                        padding: EdgeInsets.only(right: 12.0),
+                        decoration: new BoxDecoration(
+                            border: new Border(
+                                right: new BorderSide(width: 1.0, color: Colors.deepOrange))),
+                      child:Icon(Icons.settings,color: Colors.deepOrange,),
+                      ),
+                      Text(' Settings',style: TextStyle(color: Colors.deepOrange),),
+
+                    ],
+                  ),
               ),
               PopupMenuItem(
 
                   value: MenuItem.item2,
-                  child: Text('Help amd Support')),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(
+                        padding: EdgeInsets.only(right: 12.0),
+                        decoration: new BoxDecoration(
+                            border: new Border(
+                                right: new BorderSide(width: 1.0, color: Colors.deepOrange))),
+                        child:Icon(Icons.help,color: Colors.deepOrange,),
+                      ),
+                      Text(' Help amd Support',style: TextStyle(color: Colors.deepOrange)),
+                    ],
+                  )),
               PopupMenuItem(
 
                   value: MenuItem.item3,
-                  child: Text('Feedback'))
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(
+                        padding: EdgeInsets.only(right: 12.0),
+                        decoration: new BoxDecoration(
+                            border: new Border(
+                                right: new BorderSide(width: 1.0, color: Colors.deepOrange))),
+                        child:Icon(Icons.feedback,color: Colors.deepOrange,),
+                      ),
+                      Text(' Feedback',style: TextStyle(color: Colors.deepOrange,)),
+                    ],
+                  )
+              )
             ])
       ],
     );
@@ -102,6 +154,7 @@ class FeedbackBar extends StatefulWidget {
 
 class _FeedbackBarState extends State<FeedbackBar> {
   double _initialRating = 3.0;
+  String ?comment;
 
 
   @override
@@ -115,14 +168,15 @@ class _FeedbackBarState extends State<FeedbackBar> {
     return AlertDialog(
 
       title: Container(
+        decoration: BoxDecoration(borderRadius:BorderRadius.all(Radius.circular(20)),border: Border.all(color: Colors.deepOrange)),
+        height: 60,
+        padding: EdgeInsets.only(top: 10),
         child: Text(
           'Rate Us',
-
           textAlign: TextAlign.center,
           style: TextStyle(
-              fontWeight: FontWeight.bold,
 
-              color: Colors.white,
+              color: Colors.deepOrange,
               fontSize: 30.0
 
 
@@ -130,21 +184,24 @@ class _FeedbackBarState extends State<FeedbackBar> {
 
         ),
       ),
-      backgroundColor: Colors.deepOrange,
+      backgroundColor: Colors.white,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0),
+        borderRadius: BorderRadius.circular(20.0),
+        side: BorderSide(color: Colors.deepOrange,width: 5)
 
       ),
+      scrollable:true,
 
       titlePadding: EdgeInsets.all(12.0),
       contentPadding: EdgeInsets.all(10),
+
       content: Column(
 
         mainAxisSize: MainAxisSize.min,
 
         children:<Widget> [
           SizedBox(
-            height: 40.0,
+            height: 20.0,
           ),
 
           Container(
@@ -156,11 +213,36 @@ class _FeedbackBarState extends State<FeedbackBar> {
 
               child: _ratingBar()
           , ),
-          SizedBox(height: 40.0),
+          SizedBox(height: 20.0),
           Text(
             'Rating: $_rating',
             style: TextStyle(fontWeight: FontWeight.bold ),
 
+          ),
+          Container(
+            padding: EdgeInsets.all(20),
+            child: TextFormField(
+              maxLength: 200,
+               //expands: true,
+               maxLines: null,
+               scrollController: ScrollController(keepScrollOffset:true),
+               cursorColor: Colors.deepOrange,
+              decoration: InputDecoration(
+                
+              floatingLabelAlignment: FloatingLabelAlignment.center,
+              hintText: 'What is your opinion?',
+              label: Text('Comments',style: TextStyle(color: Colors.deepOrange),),
+              border: OutlineInputBorder(borderRadius: BorderRadius.circular(5),borderSide:BorderSide(color: Colors.deepOrange) ),
+
+
+            ),
+            onChanged: (data){
+               setState(() {
+                 comment=data;
+               });
+            },
+            keyboardType: TextInputType.text,
+            ),
           ),
           Container(
             margin: EdgeInsets.symmetric(vertical: 20),
@@ -181,14 +263,14 @@ class _FeedbackBarState extends State<FeedbackBar> {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8.0)
                       ),
-                      primary: Color(0xFFFFFFFF)
+                      backgroundColor: Colors.deepOrange
                   ),
                   child: Container(
                     margin: EdgeInsets.symmetric(horizontal: 20.0,vertical: 10.0),
                     child: Text(
                       'Later',
                       style: TextStyle(
-                        color: Colors.deepOrange,
+                        color: Colors.white,
                         fontFamily: 'halter',
                         fontSize: 14,
                       ),
@@ -197,7 +279,25 @@ class _FeedbackBarState extends State<FeedbackBar> {
 
                   ),
                 ),
-                ElevatedButton(onPressed: (){
+                ElevatedButton(onPressed: () async {
+                  print(comment);
+                  try {
+                    var url='http://192.168.1.6:3000/feed';
+                    final response = await http.post(
+                      Uri.parse(url),
+                      headers: {'Content-Type': 'application/json'},
+                      body: jsonEncode({'uid':'','rating':_rating.toDouble(),'comment':comment,'dt':DateTime.now().toString()}),
+                    );
+                    print('${response.body}');
+                    print('${response.statusCode}');
+                    if (response.statusCode == 200) {
+
+                    } else {
+
+                    }
+                  } catch (e) {
+                   print(e);
+                  }
                   Navigator.of(context).pushReplacement(MaterialPageRoute(
                       builder: (context)=> AlertBox()));
 
@@ -210,14 +310,14 @@ class _FeedbackBarState extends State<FeedbackBar> {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8.0)
                       ),
-                      primary: Color(0xFFFFFFFF)
+                      backgroundColor: Colors.deepOrange
                   ),
                   child: Container(
                     margin: EdgeInsets.all(8.0),
                     child: Text(
                       'Confirm',
                       style: TextStyle(
-                        color: Colors.deepOrange,
+                        color: Colors.white,
                         fontFamily: 'halter',
                         fontSize: 14,
                       ),
@@ -305,15 +405,18 @@ class _AlertBoxState extends State<AlertBox> {
       title:Text(
         'Thank You',
         textAlign: TextAlign.center,
+        style: TextStyle(color: Colors.deepOrange,),
       ),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
+        side: BorderSide(color: Colors.deepOrange,width: 5)
+
 
       ),
 
       titlePadding: EdgeInsets.all(12.0),
       contentPadding: EdgeInsets.all(20),
-     backgroundColor: Colors.deepOrange,
+     backgroundColor: Colors.white,
      content:
       Container(
 
@@ -329,14 +432,14 @@ class _AlertBoxState extends State<AlertBox> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8.0)
               ),
-              primary: Color(0xFFFFFFFF)
+              backgroundColor: Colors.deepOrange
           ),
           child: Container(
             margin: EdgeInsets.all(8.0),
             child: Text(
               'Contnue',
               style: TextStyle(
-                color: Colors.deepOrange,
+                color: Colors.white,
                 fontFamily: 'halter',
                 fontSize: 14,
               ),
