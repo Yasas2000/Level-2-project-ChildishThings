@@ -5,16 +5,19 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:frontend/admin_page.dart';
 import 'package:frontend/forgotpassword.dart';
 import 'package:frontend/home.dart';
+import 'package:frontend/send_otp.dart';
 import 'package:frontend/signup_screen.dart';
 import 'package:form_field_validator/form_field_validator.dart';
-import 'package:frontend/verification.dart';
+import 'package:material_dialogs/material_dialogs.dart';
 import 'package:http/http.dart' as http;
+import 'package:material_dialogs/widgets/buttons/icon_button.dart';
+import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:frontend/google_signin_api.dart';
 import 'package:quickalert/quickalert.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -75,9 +78,35 @@ class _LoginScreenState extends State<LoginScreen> {
         type: quickAlertType,
         onConfirmBtnTap: () {
           if (role == "Admin") {
-            Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (BuildContext context) => Admin()),
-                (Route<dynamic> route) => false);
+            Dialogs.bottomMaterialDialog(
+                msg: 'Which page would you like to navigate to?',
+                title: 'Hi! Admin',
+                context: context,
+                actions: [
+                  IconsOutlineButton(
+                    onPressed: () {
+                    _launchURL('https://pub.dev/');
+                    },
+                    text: 'Dashboard',
+                    iconData: Icons.dashboard_customize_rounded,
+                    color: Colors.green,
+                    textStyle: TextStyle(color: Colors.white),
+                    iconColor: Colors.white,
+                  ),
+                  IconsButton(
+                    onPressed: () {
+                      Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(
+                              builder: (BuildContext context) => Homepage()),
+                          (Route<dynamic> route) => false);
+                    },
+                    text: 'Home',
+                    iconData: Icons.home_filled,
+                    color: Colors.green,
+                    textStyle: TextStyle(color: Colors.white),
+                    iconColor: Colors.white,
+                  ),
+                ]);
           } else if (role == "User") {
             Navigator.of(context).pushAndRemoveUntil(
                 MaterialPageRoute(
@@ -91,26 +120,36 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget buildRememberCb() {
     return Container(
-      height: 20,
-      margin: EdgeInsets.only(right: 20, left: 20),
+      height: 40,
+      margin: EdgeInsets.symmetric(horizontal: 20),
       child: Row(
         children: <Widget>[
           Theme(
-            data: ThemeData(unselectedWidgetColor: Colors.black),
+            data: ThemeData(unselectedWidgetColor: Colors.grey),
             child: Checkbox(
               value: isRememberMe,
-              checkColor: Colors.orange,
-              activeColor: Colors.black,
+              activeColor: Colors.orange,
+              checkColor: Colors.white,
               onChanged: (value) {
                 setState(() {
                   isRememberMe = value!;
                 });
               },
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5),
+                side: BorderSide(color: Colors.grey),
+              ),
+              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
             ),
           ),
+          SizedBox(width: 5),
           Text(
             'Remember me',
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              color: Colors.black87,
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+            ),
           )
         ],
       ),
@@ -128,44 +167,52 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Column(
                   children: [
                     Container(
-                      height: 300,
+                      height: 320,
                       decoration: BoxDecoration(
                         borderRadius:
                             BorderRadius.only(bottomLeft: Radius.circular(90)),
-                        color: new Color(0xffF5591F),
+                        color: Color(0xffF5591F),
                         gradient: LinearGradient(
-                          colors: [
-                            (new Color(0xffF5591F)),
-                            new Color(0xffF2861E)
-                          ],
+                          colors: [Color(0xffF5591F), Color(0xffF2861E)],
                           begin: Alignment.topCenter,
                           end: Alignment.bottomCenter,
                         ),
                       ),
                       child: Center(
-                          child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          /*Container(
-                                            margin: EdgeInsets.only(top: 50),
-                                            child: Image.asset(
-                                              "images/app_logo.png",
-                                              height: 90,
-                                              width: 90,
-                                            ),
-                                          ), */
-                          Container(
-                            margin: EdgeInsets.only(right: 20, top: 20),
-                            alignment: Alignment.bottomRight,
-                            child: Text(
-                              "Login",
-                              style:
-                                  TextStyle(fontSize: 20, color: Colors.white),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              margin: EdgeInsets.only(top: 10),
+                              child: Image.asset(
+                                "assets/photobooth.png",
+                                height: 200,
+                                width: 200,
+                              ),
                             ),
-                          )
-                        ],
-                      )),
+                            Container(
+                              margin: EdgeInsets.only(right: 20, top: 20),
+                              alignment: Alignment.bottomRight,
+                              child: Text(
+                                "Hello there!",
+                                style: TextStyle(
+                                  fontSize: 35,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                  shadows: [
+                                    Shadow(
+                                      blurRadius: 2.0,
+                                      color: Colors.black,
+                                      offset: Offset(1.0, 1.0),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                     Container(
                       alignment: Alignment.center,
@@ -247,23 +294,21 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     buildRememberCb(),
                     Container(
-                      margin:
-                          EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                      margin: EdgeInsets.symmetric(horizontal: 30),
                       alignment: Alignment.centerRight,
                       child: InkWell(
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(
-                                builder: (context) => ForgotPasswordScreen()),
+                            MaterialPageRoute(builder: (context) => sendOTP()),
                           );
                         },
                         child: Text(
                           "Forgot Password?",
                           style: TextStyle(
-                              color: Colors.orange,
-                              fontWeight: FontWeight.bold,
-                              decoration: TextDecoration.underline),
+                            color: Colors.orange,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
@@ -273,7 +318,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       },
                       child: Container(
                         alignment: Alignment.center,
-                        margin: EdgeInsets.only(left: 20, right: 20, top: 30),
+                        margin: EdgeInsets.only(left: 20, right: 20, top: 20),
                         padding: EdgeInsets.only(left: 20, right: 20),
                         height: 54,
                         decoration: BoxDecoration(
@@ -322,28 +367,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         ],
                       ),
                     ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    ElevatedButton.icon(
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.black,
-                        backgroundColor: Colors.white70,
-                        minimumSize: Size(double.infinity, 50),
-                      ),
-                      icon: FaIcon(
-                        FontAwesomeIcons.google,
-                        color: Colors.red,
-                      ),
-                      label: Text('Sign Up with Google'),
-                      onPressed: signIn,
-                    ),
                   ],
                 )))));
-  }
-
-  Future signIn() async {
-    await GoogleSignInApi.login();
   }
 
   String validatePassword(String value) {
@@ -356,4 +381,16 @@ class _LoginScreenState extends State<LoginScreen> {
     } else
       return '';
   }
+
+  Future<void> _launchURL(String url) async {
+    
+    final Uri uri = Uri(scheme: "https", host: url);
+    if(!await launchUrl(
+      uri,
+      mode: LaunchMode.externalApplication,
+      )){
+        throw "Can not launch url";
+      }
+  } 
+
 }
