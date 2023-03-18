@@ -1,45 +1,50 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:frontend/app_bar.dart';
+import 'package:mypart/app_bar.dart';
 import 'package:payhere_mobilesdk_flutter/payhere_mobilesdk_flutter.dart';
 import 'package:http/http.dart' as http;
 
 import 'donation_form.dart';
 
-
-
 class Payment extends StatelessWidget {
-  var id="yazaz2000";
+  var id = "yazaz2000";
   final Details d;
-   Payment(this.d);
+  Payment(this.d);
 
   Future<void> forms(var pid) async {
     try {
-        var url='http://10.0.2.2:3000/submit';
-        final response = await http.post(
-          Uri.parse(url),
-          body: {'id':id,'paymentid':pid,'fname': d.fname,'lname':d.lname, 'email': d.email,'amount':d.amount,'method':d.method,},
-        );
-        print('${response.body}');
-        print('${response.statusCode}');
-        if (response.statusCode == 200) {
-          return;
-        } else {
-
-        }
-      } catch (e) {
-       print(e);
-      }
+      var url = 'http://10.0.2.2:3000/submit';
+      final response = await http.post(
+        Uri.parse(url),
+        body: {
+          'id': id,
+          'paymentid': pid,
+          'fname': d.fname,
+          'lname': d.lname,
+          'email': d.email,
+          'amount': d.amount,
+          'method': d.method,
+        },
+      );
+      print('${response.body}');
+      print('${response.statusCode}');
+      if (response.statusCode == 200) {
+        return;
+      } else {}
+    } catch (e) {
+      print("failed");
+    }
   }
-  void startRecuurantPayment(BuildContext context) async{
-    Map paymentObject={
-      "sandbox":true,
-      "merchant_id":"1222157",
-      "merchant_secret":"MTM4MTA5NzM0MTQ4ODE2MjYzOTEwNjU5MTA5ODUyNTM2OTAzMjEw",
+
+  void startRecuurantPayment(BuildContext context) async {
+    Map paymentObject = {
+      "sandbox": true,
+      "merchant_id": "1222157",
+      "merchant_secret": "MTM4MTA5NzM0MTQ4ODE2MjYzOTEwNjU5MTA5ODUyNTM2OTAzMjEw",
       //"authorize": true,
       "notify_url": "https://ent13zfovoz7d.x.pipedream.net/",
-      "recurrence": d.period,        // Recurring payment frequency
-      "duration": d.duration,           //Recurring period
+      "recurrence": d.period, // Recurring payment frequency
+      "duration": d.duration, //Recurring period
       "items": d.purpose,
       "currency": "LKR",
       "amount": d.amount,
@@ -50,24 +55,22 @@ class Payment extends StatelessWidget {
       "address": "No.1, Galle Road",
       "city": "Colombo",
       "country": "Sri Lanka",
-
     };
 
-    PayHere.startPayment(
-        paymentObject, (paymentId) {
+    PayHere.startPayment(paymentObject, (paymentId) {
       print("Recurring Payment Success. Payment Id: $paymentId");
     }, (error) {
       print("Recurring Payment Failed. Error: $error");
     }, () {
       print("Recurring Payment Dismissed");
-    }
-    );
+    });
   }
-  void startPreAprrovalPayment(BuildContext context) async{
+
+  void startPreAprrovalPayment(BuildContext context) async {
     Map paymentObject = {
-      "sandbox": true,                 // true if using Sandbox Merchant ID
-      "preapprove": true,              // Required
-      "merchant_id": "1211149",        // Replace your Merchant ID
+      "sandbox": true, // true if using Sandbox Merchant ID
+      "preapprove": true, // Required
+      "merchant_id": "1211149", // Replace your Merchant ID
       "notify_url": "http://sample.com/notify",
       "items": d.purpose,
       "currency": "LKR",
@@ -78,24 +81,23 @@ class Payment extends StatelessWidget {
       "address": "No.1, Galle Road",
       "city": "Colombo",
       "country": "Sri Lanka",
-      "amount": d.amount                   // Optional. An amount to pass while pre-approving.
+      "amount": d.amount // Optional. An amount to pass while pre-approving.
     };
 
-    PayHere.startPayment(
-        paymentObject, (paymentId) {
+    PayHere.startPayment(paymentObject, (paymentId) {
       print("Tokenization Payment Success. Payment Id: $paymentId");
     }, (error) {
       print("Tokenization Payment Failed. Error: $error");
     }, () {
       print("Tokenization Payment Dismissed");
-    }
-    );
+    });
   }
-  void savePaymentDetail(BuildContext context){
+
+  void savePaymentDetail(BuildContext context) {
     Map paymentObject = {
-      "sandbox": true,                // true if using Sandbox Merchant ID
-      "authorize": true,              // Required
-      "merchant_id": "1211149",       // Replace your Merchant ID
+      "sandbox": true, // true if using Sandbox Merchant ID
+      "authorize": true, // Required
+      "merchant_id": "1222157", // Replace your Merchant ID
       "notify_url": "https://ent13zfovoz7d.x.pipedream.net/",
       "items": d.purpose,
       "currency": "LKR",
@@ -117,11 +119,12 @@ class Payment extends StatelessWidget {
       print("Hold-on-Card Payment Dismissed");
     });
   }
-  void startOneTimepayment(BuildContext context) async{
-    Map paymentObject={
-      "sandbox":true,
-      "merchant_id":"1222157",
-      "merchant_secret":"MTM4MTA5NzM0MTQ4ODE2MjYzOTEwNjU5MTA5ODUyNTM2OTAzMjEw",
+
+  void startOneTimepayment(BuildContext context) async {
+    Map paymentObject = {
+      "sandbox": true,
+      "merchant_id": "1222157",
+      "merchant_secret": "MTM4MTA5NzM0MTQ4ODE2MjYzOTEwNjU5MTA5ODUyNTM2OTAzMjEw",
       //"authorize": true,
       "notify_url": "https://ent13zfovoz7d.x.pipedream.net/",
       "order_id": "ItemNo12345",
@@ -138,10 +141,13 @@ class Payment extends StatelessWidget {
     };
     PayHere.startPayment(paymentObject, (paymentId) async {
       print("One Time Payment Success. Payment Id: $paymentId");
+
       await forms(paymentId);
 
       showAlert(context, "Payment Success!", "Payment Id: $paymentId");
-      Navigator.pop(context,true);
+      Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+        return DonationForm();
+      }));
     }, (error) {
       print("One Time Payment Failed. Error: $error");
       showAlert(context, "Payment Failed", "$error");
@@ -150,6 +156,7 @@ class Payment extends StatelessWidget {
       showAlert(context, "Payment Dismissed", "");
     });
   }
+
   void showAlert(BuildContext context, String title, String msg) {
     // set up the button
     Widget okButton = TextButton(
@@ -163,9 +170,7 @@ class Payment extends StatelessWidget {
     AlertDialog alert = AlertDialog(
       title: Text(title),
       content: Text(msg),
-      actions: [
-        okButton
-      ],
+      actions: [okButton],
     );
 
     // show the dialog
@@ -176,31 +181,64 @@ class Payment extends StatelessWidget {
       },
     );
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar("Gateway"),
+      appBar: CustomAppBar("Gateway",IconButton(
+          icon: Icon(Icons.arrow_back),
+      onPressed:(){
+        Navigator.of(context).push(MaterialPageRoute(builder: (context)=>
+            DonationForm()
+        ));
+      },
+    )),
       body: Padding(
         padding: const EdgeInsets.all(30.0),
         child: Center(
-
           child: Container(
-
-          decoration: BoxDecoration(border: Border.all(color: Colors.deepOrange,style: BorderStyle.solid,strokeAlign: StrokeAlign.inside),
-              borderRadius:BorderRadius.circular(8) ,gradient:LinearGradient(begin: AlignmentDirectional(3, 10), colors: [Colors.deepOrange,Colors.white] ) ),
+            decoration: BoxDecoration(
+                border: Border.all(
+                    color: Colors.deepOrange,
+                    style: BorderStyle.solid,
+                    strokeAlign: BorderSide.strokeAlignCenter),
+                borderRadius: BorderRadius.circular(8),
+                gradient: LinearGradient(
+                    begin: AlignmentDirectional(3, 10),
+                    colors: [Colors.deepOrange, Colors.white])),
             child: Container(
               //margin: EdgeInsets.only(bottom: 200),
               child: Column(
-               mainAxisSize: MainAxisSize.min,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Row(
                     children: [
-                      SizedBox(width: 100,height: 30,child: ColoredBox(color: Colors.deepOrange,),),
-                      Text(' Donation Details ',style: TextStyle(fontSize: 25.0,backgroundColor: Colors.white,color: Colors.deepOrange),),
-                      SizedBox(width: 30,height: 30,child: ColoredBox(color: Colors.deepOrange,),)
+                      SizedBox(
+                        width: 100,
+                        height: 30,
+                        child: ColoredBox(
+                          color: Colors.deepOrange,
+                        ),
+                      ),
+                      Text(
+                        ' Donation Details ',
+                        style: TextStyle(
+                            fontSize: 25.0,
+                            backgroundColor: Colors.white,
+                            color: Colors.deepOrange),
+                      ),
+                      SizedBox(
+                        width: 30,
+                        height: 30,
+                        child: ColoredBox(
+                          color: Colors.deepOrange,
+                        ),
+                      )
                     ],
                   ),
-                  SizedBox(height: 100,),
+                  SizedBox(
+                    height: 100,
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -208,40 +246,49 @@ class Payment extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.end,
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          Text('Name :',style: TextStyle(fontSize: 18.0,decoration:TextDecoration.underline  ),),
-                          Text('Amount :',style: TextStyle(fontSize: 18.0,decoration:TextDecoration.underline  ),),
-                          Text('Payment Type :',style: TextStyle(fontSize: 18.0,decoration:TextDecoration.underline  ),),
+                          Text(
+                            'Name :',
+                            style: TextStyle(
+                                fontSize: 18.0,
+                                decoration: TextDecoration.underline),
+                          ),
+                          Text(
+                            'Amount :',
+                            style: TextStyle(
+                                fontSize: 18.0,
+                                decoration: TextDecoration.underline),
+                          ),
+                          Text(
+                            'Payment Type :',
+                            style: TextStyle(
+                                fontSize: 18.0,
+                                decoration: TextDecoration.underline),
+                          ),
                         ],
                       ),
                       Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(d.fname+' '+d.lname),
-                          Text(d.amount+'lkr'),
+                          Text(d.fname + ' ' + d.lname),
+                          Text(d.amount + 'lkr'),
                           Text(d.method),
                         ],
                       ),
                     ],
                   ),
-
-
                   Container(
                     margin: EdgeInsets.symmetric(vertical: 90),
-                    child: ElevatedButton(onPressed: (){
-                      if(d.method=="One time Payment"){
-                        startOneTimepayment(context);
-                      }else if(d.method=="Recurrant payment"){
-
-                      }else{
-
-                      }
-
-                    },
+                    child: ElevatedButton(
+                      onPressed: () {
+                        if (d.method == "One time Payment") {
+                          startOneTimepayment(context);
+                        } else if (d.method == "Recurrant payment") {
+                        } else {}
+                      },
                       style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8.0)
-                        ),
+                            borderRadius: BorderRadius.circular(8.0)),
                         // primary: Color(0xFF2196F3),
                         backgroundColor: Colors.deepOrange,
                       ),
@@ -250,23 +297,20 @@ class Payment extends StatelessWidget {
                         child: Text(
                           'Proceed',
                           style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: 'halter',
-                              fontSize: 14,
+                            color: Colors.white,
+                            fontFamily: 'halter',
+                            fontSize: 14,
                           ),
                         ),
-
                       ),
                     ),
                   )
-
                 ],
               ),
             ),
           ),
         ),
       ),
-
     );
   }
 }
