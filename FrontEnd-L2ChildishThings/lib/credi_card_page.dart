@@ -2,9 +2,9 @@ import "package:flutter/material.dart";
 import 'package:flutter_credit_card/credit_card_form.dart';
 import 'package:flutter_credit_card/credit_card_model.dart';
 import 'package:flutter_credit_card/flutter_credit_card.dart';
-import 'package:mypart/donation_form.dart';
-import 'package:mypart/item_page.dart';
-import 'package:mypart/app_bar.dart';
+import 'package:frontend/donation_form.dart';
+import 'package:frontend/item_page.dart';
+import 'package:frontend/app_bar.dart';
 import 'package:payhere_mobilesdk_flutter/payhere_mobilesdk_flutter.dart';
 enum MenuItem{
   item1,

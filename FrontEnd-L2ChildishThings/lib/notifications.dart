@@ -1,9 +1,10 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:mypart/app_bar.dart';
+import 'package:frontend/app_bar.dart';
 
 import 'donation_form.dart';
+import 'homepage.dart';
 
 class NotificationsPage extends StatefulWidget {
   @override
@@ -166,82 +167,84 @@ class _NotificationsPageState extends State<NotificationsPage> {
 
 
 
-    return Scaffold(
-      appBar: CustomAppBar('Notifications',IconButton(
-        icon: Icon(Icons.home),
-        iconSize: 40,
-        color: Colors.deepOrange,
-        onPressed:(){
-          Navigator.of(context).push(MaterialPageRoute(builder: (context)=>
-              DonationForm()
-          ));
-        },
-      )),
-      body: FutureBuilder(
-        future: getNotifi(),
-        builder: (BuildContext context,AsyncSnapshot snapshot){
-          if(snapshot.connectionState==ConnectionState.waiting){
-            return const Center(
-              child: Text('Waiting'),
-            );
-          }else{
-            if(snapshot.hasError){
-              return Text(' ');
+    return SafeArea(
+      child: Scaffold(
+        appBar: CustomAppBar('Notifications',IconButton(
+          icon: Icon(Icons.home),
+          iconSize: 40,
+          color: Colors.deepOrange,
+          onPressed:(){
+            Navigator.of(context).push(MaterialPageRoute(builder: (context)=>
+                HomePage()
+            ));
+          },
+        )),
+        body: FutureBuilder(
+          future: getNotifi(),
+          builder: (BuildContext context,AsyncSnapshot snapshot){
+            if(snapshot.connectionState==ConnectionState.waiting){
+              return const Center(
+                child: Text('Waiting'),
+              );
             }else{
-              return ListView.builder(
-                  shrinkWrap: true,
-                  scrollDirection: Axis.vertical,
-                  itemCount: snapshot.data.length,
-                  itemBuilder: (BuildContext context,int index){
-                    return Card(
-                      shape: OutlineInputBorder(borderRadius: BorderRadius.circular(25),borderSide:BorderSide(color: Colors.deepOrange)),
-                      elevation: 8.0,
-                      //margin: new EdgeInsets.symmetric(horizontal: 10.0,vertical: 6.0),
-                      child: Container(
+              if(snapshot.hasError){
+                return Text(' ');
+              }else{
+                return ListView.builder(
+                    shrinkWrap: true,
+                    scrollDirection: Axis.vertical,
+                    itemCount: snapshot.data.length,
+                    itemBuilder: (BuildContext context,int index){
+                      return Card(
+                        shape: OutlineInputBorder(borderRadius: BorderRadius.circular(25),borderSide:BorderSide(color: Colors.deepOrange)),
+                        elevation: 8.0,
+                        //margin: new EdgeInsets.symmetric(horizontal: 10.0,vertical: 6.0),
+                        child: Container(
 
-                        decoration: BoxDecoration(color: Colors.white,borderRadius:BorderRadius.circular(25)  ),
-                        child:
-                          ListTile(
+                          decoration: BoxDecoration(color: Colors.white,borderRadius:BorderRadius.circular(25)  ),
+                          child:
+                            ListTile(
 
-                            //contentPadding:EdgeInsets.symmetric(horizontal: 20.0,vertical: 10.0) ,
-                            leading: Container(
-                              padding: EdgeInsets.only(right: 12.0),
-                              decoration: new BoxDecoration(
-                                  border: new Border(
-                                      right: new BorderSide(width: 1.0, color: Colors.deepOrange))),
-                              child: CircleAvatar(
-                                backgroundColor: Colors.deepOrange,
-                                child: Text(snapshot.data[index].title[0],style: TextStyle(fontSize: 30.0,color: Colors.white),),
+                              //contentPadding:EdgeInsets.symmetric(horizontal: 20.0,vertical: 10.0) ,
+                              leading: Container(
+                                padding: EdgeInsets.only(right: 12.0),
+                                decoration: new BoxDecoration(
+                                    border: new Border(
+                                        right: new BorderSide(width: 1.0, color: Colors.deepOrange))),
+                                child: CircleAvatar(
+                                  backgroundColor: Colors.deepOrange,
+                                  child: Text(snapshot.data[index].title[0],style: TextStyle(fontSize: 30.0,color: Colors.white),),
+                                ),
                               ),
+
+                              title: Text(snapshot.data[index].title,style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),),
+                              subtitle: Column(
+
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(snapshot.data[index].desc),
+                                  Text(snapshot.data[index].date),
+                                ],
+                              ),
+                              trailing: IconButton(onPressed:() async{
+                              await deleteNotification(snapshot.data[index].oid,snapshot.data[index].id);
+                              }, icon:Icon(Icons.delete_outline,color: Colors.deepOrange,)),
+                              shape: OutlineInputBorder(borderRadius:BorderRadius.all(Radius.circular(25))),
+                              hoverColor: Colors.deepOrange,
+                              minVerticalPadding: 20,
+
+
+
                             ),
-
-                            title: Text(snapshot.data[index].title,style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),),
-                            subtitle: Column(
-
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(snapshot.data[index].desc),
-                                Text(snapshot.data[index].date),
-                              ],
-                            ),
-                            trailing: IconButton(onPressed:() async{
-                            await deleteNotification(snapshot.data[index].oid,snapshot.data[index].id);
-                            }, icon:Icon(Icons.delete_outline,color: Colors.deepOrange,)),
-                            shape: OutlineInputBorder(borderRadius:BorderRadius.all(Radius.circular(25))),
-                            hoverColor: Colors.deepOrange,
-                            minVerticalPadding: 20,
-
-
-
-                          ),
-                      ),
-                    );
-                  });
+                        ),
+                      );
+                    });
+              }
             }
-          }
-        },
-      )
+          },
+        )
 
+      ),
     );
   }
 }

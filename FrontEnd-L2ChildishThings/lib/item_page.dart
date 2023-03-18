@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mypart/app_bar.dart';
-import 'package:mypart/credi_card_page.dart';
+import 'package:frontend/app_bar.dart';
+import 'package:frontend/credi_card_page.dart';
 
 import 'donation_form.dart';
 class Homepage extends StatefulWidget {
