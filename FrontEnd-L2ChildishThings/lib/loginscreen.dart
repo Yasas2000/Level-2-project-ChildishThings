@@ -186,7 +186,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             Container(
                               margin: EdgeInsets.only(top: 10),
                               child: Image.asset(
-                                "Asset/photobooth.png",
+                                "assets/photobooth.png",
                                 height: 200,
                                 width: 200,
                               ),

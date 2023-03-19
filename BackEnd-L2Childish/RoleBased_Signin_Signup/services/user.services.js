@@ -19,15 +19,6 @@ async function authenticate({ email, password }) {
     return { ...user.toJSON(), token };
   }
 }
-//retrieving all users
-async function getAll() {
-  return await User.find();
-}
-//retrieving user using id
-async function getById(id) {
-  console.log("finding id: ", id);
-  return await User.findById(id);
-}
 
 //adding user to db
 async function create(userParam) {
@@ -45,38 +36,27 @@ async function create(userParam) {
   await newUser.save();
 }
 
-async function update(id, userParam) {
-  console.log(id, userParam);
-  const user = await User.findById(id);
-  console.log(user.email, userParam.email);
-  //validate the id and email
-  if (!user) throw "User not found.";
-  if (
-    user.email !== userParam.email &&
-    (await User.findOne({ email: userParam.email }))
-  ) {
-    throw `User with email ${userParam.email} already exist.`;
+async function update(email, newPassword) {
+  // Find the user by email
+  const user = await User.findOne({ email });
+
+  // Validate that the user exists
+  if (!user) {
+    throw new Error(`User with email ${email} not found`);
   }
 
-  //convert the password ot hash
-  if (userParam.password) {
-    userParam.password = bcrypt.hashSync(userParam.password, 10);
-  }
+  // Hash the new password
+  const hashedPassword = bcrypt.hashSync(newPassword, 10);
 
-  //copy the user obj
-  Object.assign(user, userParam);
+  // Update the user's password
+  user.password = hashedPassword;
+
+  // Save the updated user object
   await user.save();
-}
-
-async function _delete(id) {
-  await User.findByIdAndRemove(id);
 }
 
 module.exports = {
   authenticate,
-  getAll,
-  getById,
   create,
-  update,
-  delete: _delete,
+  update
 };

@@ -1,10 +1,7 @@
-// ignore_for_file: prefer_const_constructors, sized_box_for_whitespace, sort_child_properties_last, unused_local_variable, unnecessary_null_comparison
+// ignore_for_file: prefer_const_constructors, sized_box_for_whitespace, sort_child_properties_last, unused_local_variable, unnecessary_null_comparison, prefer_const_declarations, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-import 'dart:convert';
-import 'package:frontend/services/user_api_service.dart';
-import 'package:frontend/models/user.dart';
-import 'package:bcrypt/bcrypt.dart';
+import 'package:frontend/loginscreen.dart';
 import 'package:http/http.dart' as http;
 
 class ForgotPasswordScreen extends StatefulWidget {
@@ -15,19 +12,10 @@ class ForgotPasswordScreen extends StatefulWidget {
 }
 
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
-  Future<User> updateUser(String id, Map<String, dynamic> data) async {
-    final res = await http.put(Uri.parse(url + id), body: json.encode(data));
-
-    if (res.statusCode == 200) {
-      return User.fromJson(json.decode(res.body));
-    } else {
-      throw Exception('Fail to update users');
-    }
-  }
-
   final _formKey = GlobalKey<FormState>();
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _passController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
   bool _obscureText = true;
 
   @override
@@ -73,6 +61,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               ),
               SizedBox(height: 32.0),
               Form(
+                key: _formKey,
                 child: Column(
                   children: [
                     Container(
@@ -92,6 +81,12 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                             borderSide: BorderSide(color: Colors.blue),
                           ),
                         ),
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please enter an email';
+                          }
+                          return null;
+                        },
                       ),
                     ),
                     Container(
@@ -99,7 +94,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       child: Stack(
                         children: [
                           TextFormField(
-                            controller: _passController,
+                            controller: _passwordController,
                             decoration: InputDecoration(
                               hintText: "Password",
                               filled: true,
@@ -113,6 +108,12 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                 borderSide: BorderSide(color: Colors.blue),
                               ),
                             ),
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Please enter a password';
+                              }
+                              return null;
+                            },
                             obscureText: _obscureText,
                           ),
                           Positioned(
@@ -150,6 +151,12 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                 borderSide: BorderSide(color: Colors.blue),
                               ),
                             ),
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Please enter a password';
+                              }
+                              return null;
+                            },
                             obscureText: _obscureText,
                           ),
                           Positioned(
@@ -173,7 +180,37 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         margin:
                             EdgeInsets.only(left: 30, right: 30, bottom: 20),
                         child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () async {
+                            if (_formKey.currentState!.validate()) {
+                              final email = _emailController.text;
+                              final password = _passwordController.text;
+                              final url =
+                                  Uri.parse('http://localhost:5000/users');
+                              final response = await http.put(url,
+                                  body: {'email': email, 'password': password});
+
+                              if (response.statusCode == 200) {
+                                
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      content: Text(
+                                          'Password updated successfully')),
+                                );
+
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => LoginScreen()),
+                                );
+                              } else {
+                                
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      content: Text('Error updating password')),
+                                );
+                              }
+                            }
+                          },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.black,
                             shape: RoundedRectangleBorder(
