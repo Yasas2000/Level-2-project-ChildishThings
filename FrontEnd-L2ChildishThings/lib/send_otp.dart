@@ -52,7 +52,7 @@ class _sendOTPState extends State<sendOTP> {
                   ),
                 ),
               ),
-              SizedBox(height: 30,),
+              const SizedBox(height: 30,),
               Card(
                 child: Column(
                   children: [
