@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 const app = express();
 const cors = require('cors');
 app.use(cors({
-  origin: 'http://localhost:4012',
+  origin: 'http://localhost:10809',
   methods: ['get','post'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
@@ -99,9 +99,6 @@ const notificationSchema = new mongoose.Schema({
   uid: String,
   
 });
-const commonnotSchema=new mongoose.Schema({
-  uid:String
-});
 const deletedNotsSchema=new mongoose.Schema({
   uid:String,
   oid:String
@@ -114,7 +111,6 @@ const feedbackSchema=new mongoose.Schema(
    dt:Date
   }
 );
-const Common=mongoose.model('commonnots',commonnotSchema);
 const DeletedNots=mongoose.model('deletednots',deletedNotsSchema); 
 app.post('/delete',(req,res)=>{
   const deletednots=new DeletedNots({
@@ -141,15 +137,7 @@ app.get('/deletes/:userId', (req, res) => {
     }
   });
 });
-app.get('/commonnots/:userId', (req, res) => {
-  Common.find({uid: req.params.userId }, (err, commons) => {
-    if (err) {
-      res.status(500).send(err);
-    } else {
-      res.send(commons);
-    }
-  });
-});
+
 const Feedback=mongoose.model('feedbacks',feedbackSchema);
 app.post('/feed',(req,res)=>
 {
@@ -197,7 +185,8 @@ app.get('/delete-notification/:oid', function(req, res) {
 
 
 app.get('/notifications/:userId', (req, res) => {
-  Notification.find({uid: req.params.userId }, (err, notifications) => {
+  const userId=req.params.userId;
+  Notification.find({$or: [{uid:userId}, {uid:"null"}]}, (err, notifications) => {
     if (err) {
       res.status(500).send(err);
     } else {

@@ -8,6 +8,8 @@ import 'package:frontend/loginscreen.dart';
 import 'package:frontend/otp_screen.dart';
 import 'package:frontend/send_otp.dart';
 
+import 'homepage.dart';
+
 
 
 void main(){
@@ -22,7 +24,7 @@ class MyApp extends StatelessWidget {
     // ignore: prefer_const_constructors
     return MaterialApp(
       title: 'Flutter Login UI',
-      home: LoginScreen(),    //loginscreen()
+      home: HomePage(),    //loginscreen()
       debugShowCheckedModeBanner: false,
     );
   }
