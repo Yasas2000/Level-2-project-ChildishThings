@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:frontend/donation_form.dart';
 import 'package:frontend/feedbackpage.dart';
+import 'package:frontend/leaderboard.dart';
 import 'package:frontend/loginscreen.dart';
 import 'package:frontend/notifications.dart';
 import 'package:frontend/signup_screen.dart';
@@ -252,6 +253,14 @@ class SlidingBar extends StatelessWidget {
           ListTile(
             title: const Text('Photo Gallery'),
             onTap: (){},
+          ),
+          ListTile(
+            title: const Text('Leaderboard'),
+            onTap: (){
+              Navigator.of(context).push(MaterialPageRoute(builder: (context)=>
+                  LeaderboardPage()
+              ));
+            },
           ),
           ListTile(
             title: const Text('Feedback'),

@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 const app = express();
 const cors = require('cors');
 app.use(cors({
-  origin: 'http://localhost:3240',
+  origin: 'http://localhost:4012',
   methods: ['get','post'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
@@ -17,6 +17,83 @@ app.use(bodyParser.urlencoded({
 
 mongoose.connect('mongodb://localhost:27017/form', {useNewUrlParser: true,
 useUnifiedTopology:true});
+
+const logsSchema = new mongoose.Schema(
+  {
+      id:String,
+      pid:String,
+      amount:String,
+      method:String,
+      lname:String,
+      fname:String,
+      email:String,
+
+  }
+);
+const User =mongoose.model('Donations',logsSchema);
+app.get('/leaderboard',(req,res)=>{
+  User.aggregate([
+    {
+     $match:{
+      id:{$ne:"null"}
+     }
+    } , 
+    {
+          $group:{
+              _id:"$id",
+              totalAmount:{$sum:"$amount"},
+          }
+      },
+      {
+        $project: {
+          _id: 1,
+          totalAmount: 1,
+          points:{$trunc: { $divide: ["$totalAmount", 1000] }}
+        }
+      },
+      {
+        $sort:{
+          totalAmount:-1
+        }
+      }
+  ]).exec((err,result)=>{
+      if(err){
+          console.log(err);
+          res.status(500).send('An error occurred');
+      }else{
+          res.send(result);
+      }
+  });
+});
+
+app.post('/submit',(req,res)=>
+{
+  console.log(req.body);
+  // const userdata=req.body;
+  // const user=new User(userdata);
+  const user= new User({
+      id:req.body.id,
+      pid:req.body.pid,
+      amount:req.body.amount,
+      method:req.body.method,
+      lname:req.body.lname,
+      fname:req.body.fname,
+      email:req.body.email,
+      
+  });
+
+  user.save((err)=>
+{
+  if(err){
+      console.log('Error');
+      res.status(500).send(err);
+  } else{
+      console.log('success');
+      res.send('Form submitted successfully');
+  }
+});
+
+});
 
 const notificationSchema = new mongoose.Schema({
   uid: String,
@@ -117,8 +194,6 @@ app.get('/delete-notification/:oid', function(req, res) {
     }
   });
 });
-
-
 
 
 app.get('/notifications/:userId', (req, res) => {
