@@ -134,6 +134,9 @@ class _typeState extends State<Stripes> {
             Expanded(
               child: LayoutBuilder(
                 builder: (context, constraints) {
+                  return Flexible(
+                  
+                  child:GridView.count(
                   
                   return GridView.count(
                     padding: const EdgeInsets.all(10),
@@ -153,6 +156,8 @@ class _typeState extends State<Stripes> {
                         },
                       );
                     }).toList(),
+                  )
+
                   );
                 },
               ),

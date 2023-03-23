@@ -26,6 +26,7 @@ class PhotoTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
+
     return Column(
       children: <Widget>[
         Container(
@@ -52,6 +53,9 @@ class PhotoTile extends StatelessWidget {
             },
             child: Image.asset(
               imageAsset,
+              width: 250,
+              height: 250,
+
               width: 0.4 * screenWidth,
                                   height: 0.4 * screenWidth,
             ),
@@ -63,6 +67,7 @@ class PhotoTile extends StatelessWidget {
             text,
             style: TextStyle(
               color: Colors.orange,
+              fontSize: 22,
               fontSize: 10,
             ),
             textAlign: TextAlign.center,
