@@ -165,12 +165,11 @@ import 'package:admin/stripes.dart';
 import 'package:admin/portraitEsti.dart';
 
 
-
-
 class type extends StatelessWidget {
   final bool isAdmin;
 
   const type({required this.isAdmin});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -214,11 +213,49 @@ class type extends StatelessWidget {
                       childAspectRatio: 1.0,
                       mainAxisSpacing: 2.0,
                       crossAxisSpacing: 2.0,
+
+
+  @override
+  Widget build(BuildContext context) {
+  final screenWidth = MediaQuery.of(context).size.width;
+
+    return MaterialApp(
+      home: Scaffold(
+        body: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage("new.jpg"),
+              fit: BoxFit.cover,
+            ),
+          ),
+          child: Column(
+            children: <Widget>[
+              Flexible(
+                flex: 1,
+                child: Container(
+                  child: Image.asset(
+                    'logo.png',
+                    width: 0.8 * screenWidth,
+                    height: 0.8 * screenWidth,
+                  ),
+                ),
+              ),
+              Flexible(
+                flex: 2,
+                child: Padding(
+                  padding: EdgeInsets.all(10),
+                  child: Container(
+                    child: GridView.count(
+                      crossAxisCount: 1,
+                      mainAxisSpacing: 10,
+                      childAspectRatio: 1.5,
+
                       children: <Widget>[
                         Column(
                           children: <Widget>[
                             Container(
                               decoration: BoxDecoration(
+
                                 borderRadius: const BorderRadius.only(
                                   topLeft: Radius.circular(25.0),
                                   topRight: Radius.circular(25.0),
@@ -228,11 +265,20 @@ class type extends StatelessWidget {
                                 border: Border.all(
                                   color: Colors.orange,
                                   width: 4,
+
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(25.0),
+                                ),
+                                border: Border.all(
+                                  color: Colors.orange,
+                                  width: 0.01 * screenWidth,
+
                                 ),
                               ),
                               child: InkWell(
                                 onTap: () {
                                   Navigator.push(
+
                               context,
                               MaterialPageRoute(
                                   builder: (context) => Stripes(
@@ -245,16 +291,37 @@ class type extends StatelessWidget {
                                   'stripe1.jpg',
                                   width: 250,
                                   height: 250,
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => Stripes(
+                                        isAdmin: isAdmin,
+                                      ),
+                                    ),
+                                  );
+                                },
+                                child: Image.asset(
+                                  'stripe1.jpg',
+                                  width: 0.4 * screenWidth,
+                                  height: 0.4 * screenWidth,
+
                                 ),
                               ),
                             ),
                             const Padding(
+
                               padding: EdgeInsets.all(16.0),
+
+                              padding: EdgeInsets.all(8.0),
+
                               child: Text(
                                 'STRIPE PHOTO',
                                 style: TextStyle(
                                   color: Colors.orange,
+
                                   fontSize: 22,
+
+                                  fontSize: 10,
+
                                 ),
                                 textAlign: TextAlign.center,
                               ),
@@ -265,6 +332,7 @@ class type extends StatelessWidget {
                           children: <Widget>[
                             Container(
                               decoration: BoxDecoration(
+
                                 borderRadius: const BorderRadius.only(
                                   topLeft: Radius.circular(25.0),
                                   topRight: Radius.circular(25.0),
@@ -274,6 +342,12 @@ class type extends StatelessWidget {
                                 border: Border.all(
                                   color: Colors.orange,
                                   width: 4,
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(25.0),
+                                ),
+                                border: Border.all(
+                                  color: Colors.orange,
+                                  width: 0.01 * screenWidth,
                                 ),
                               ),
                               child: InkWell(
@@ -293,6 +367,19 @@ class type extends StatelessWidget {
                                   'potarit1.jpg',
                                   width: 250,
                                   height: 250,
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => portraitEsti(
+                                        isAdmin: isAdmin,
+                                      ),
+                                    ),
+                                  );
+                                },
+                                child: Image.asset(
+                                  'potarit1.jpg',
+                                  width: 0.4 * screenWidth,
+                                  height: 0.4 * screenWidth,
                                 ),
                               ),
                             ),
@@ -303,6 +390,8 @@ class type extends StatelessWidget {
                                 style: TextStyle(
                                   color: Colors.orange,
                                   fontSize: 22,
+                                  fontSize: 10,
+                                
                                 ),
                                 textAlign: TextAlign.center,
                               ),
@@ -317,6 +406,12 @@ class type extends StatelessWidget {
             ),
           ),
         )
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

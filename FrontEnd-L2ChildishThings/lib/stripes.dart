@@ -137,6 +137,8 @@ class _typeState extends State<Stripes> {
                   return Flexible(
                   
                   child:GridView.count(
+                  
+                  return GridView.count(
                     padding: const EdgeInsets.all(10),
                     shrinkWrap: true,
                     crossAxisCount: 1,
@@ -155,6 +157,7 @@ class _typeState extends State<Stripes> {
                       );
                     }).toList(),
                   )
+
                   );
                 },
               ),

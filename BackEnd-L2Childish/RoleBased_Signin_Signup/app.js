@@ -39,5 +39,6 @@ app.use(function (err, req, res, next) {
   res.render("error");
 });
 
-app.listen(5000, () => console.log(`Server is listening on PORT: 5000`));
+const port = process.env.PORT || 5000;
+app.listen(port, () => console.log(`Server is listening on PORT: ${port}`));
 module.exports = app;

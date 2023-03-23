@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:email_otp/email_otp.dart';
 import 'package:frontend/forgotpassword.dart';
-import 'package:frontend/home.dart';
+
 
 class Otp extends StatelessWidget {
   const Otp({

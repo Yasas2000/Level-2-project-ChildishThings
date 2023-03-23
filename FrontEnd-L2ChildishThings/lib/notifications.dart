@@ -25,48 +25,11 @@ class _NotificationsPageState extends State<NotificationsPage> {
   Future<List<Notification>> getNotifi() async{
     _notifications.clear();
     var url=Uri.parse('http://192.168.1.6:3000/notifications/ymeka2000');
-    var url2=Uri.parse('http://192.168.1.6:3000/commonnots/$all');
-    late http.Response rp;
     late http.Response response;
     late http.Response response1;
-
     try{
-      rp=await http.get(url2);
       response1=await http.get(url3);
       print('Success');
-
-      if(rp.statusCode==200){
-        List notification=jsonDecode(rp.body) as List;
-        for(var item in notification){
-          var title=item['title'];
-          var desc=item['desc'];
-          var date=item['date'];
-          var oid=item['_id'];
-          var id=item['uid'];
-          Notification nots=Notification(title,date,desc,oid,id);
-          _notifications.add(nots);
-          print(_notifications[0].oid);
-        }
-        if(response1.statusCode==200){
-          List deletes=jsonDecode(response1.body) as List;
-          for(var item in deletes){
-            var oid=item['oid'];
-            _notifications.removeWhere((element) => element.oid==oid);
-          }
-        }
-      }
-      else{
-
-        return Future.error('Something wrong,${rp.statusCode}');
-      }
-
-    }catch(e){
-      return Future.error(e.toString());
-
-    }
-
-
-    try{
       response = await http.get(url);
       if (response.statusCode == 200) {
 
@@ -74,15 +37,23 @@ class _NotificationsPageState extends State<NotificationsPage> {
         print(notifi);
         //List not=notifi as List;
         print(notifi[0]['title']);
-        for(var item in notifi){
-          var title=item['title'];
-          var desc=item['desc'];
-          var date=item['date'];
-          var oid=item['_id'];
-          var id =item['uid'];
-          Notification nots=Notification(title,date,desc,oid,id);
+        for(var item in notifi) {
+          var title = item['title'];
+          var desc = item['desc'];
+          var date = item['date'];
+          var oid = item['_id'];
+          var id = item['uid'];
+          Notification nots = Notification(title, date, desc, oid, id);
           _notifications.add(nots);
           print(_notifications[0].title);
+
+          if (response1.statusCode == 200) {
+            List deletes = jsonDecode(response1.body) as List;
+            for (var item in deletes) {
+              var oid = item['oid'];
+              _notifications.removeWhere((element) => element.oid == oid);
+            }
+          }
         }
 
       } else {
