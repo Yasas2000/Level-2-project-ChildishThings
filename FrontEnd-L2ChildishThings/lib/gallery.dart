@@ -150,7 +150,7 @@ class _ImageGalleryState extends State<ImageGallery>
             height: 150,
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('assets/bg.jpg'),
+                image: AssetImage('Asset/bg.jpg'),
                 fit: BoxFit.cover,
               ),
             ),

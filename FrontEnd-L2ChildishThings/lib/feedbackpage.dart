@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:http/http.dart' as http;
 
 class FeedbackBar extends StatefulWidget {
 
@@ -14,7 +15,7 @@ class _FeedbackBarState extends State<FeedbackBar> {
   double _initialRating = 3.0;
   String ?comment;
 
-  get http => null;
+  //get http => null;
 
 
   @override
@@ -142,7 +143,7 @@ class _FeedbackBarState extends State<FeedbackBar> {
                 ElevatedButton(onPressed: () async {
                   print(comment);
                   try {
-                    var url='http://192.168.1.6:3000/feed';
+                    var url='http://localhost:3300/feed';
                     final response = await http.post(
                       Uri.parse(url),
                       headers: {'Content-Type': 'application/json'},

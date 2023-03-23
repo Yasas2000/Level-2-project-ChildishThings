@@ -3,8 +3,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:admin/stripsQuo.dart';
-import 'package:admin/changeValue.dart';
+import 'package:frontend/stripsQuo.dart';
+import 'package:frontend/changeValue.dart';
 import 'package:http/http.dart' as http;
 
 class custom extends StatefulWidget {

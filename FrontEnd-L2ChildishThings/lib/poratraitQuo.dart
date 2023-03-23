@@ -6,10 +6,10 @@ import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
-import 'package:admin/portraitEsti.dart';
+import 'package:frontend/portraitEsti.dart';
 // ignore: depend_on_referenced_packages
 import 'package:http/http.dart' as http;
-import 'package:admin/submition.dart';
+import 'package:frontend/submition.dart';
 
 class poratraitQuo extends StatelessWidget {
   @override

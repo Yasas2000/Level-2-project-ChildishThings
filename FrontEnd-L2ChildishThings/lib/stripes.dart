@@ -1,6 +1,6 @@
 import 'dart:convert';
-import 'package:admin/custom.dart';
-import 'package:admin/type.dart';
+import 'package:frontend/custom.dart';
+import 'package:frontend/type.dart';
 import 'package:flutter/material.dart';
 import './stripesTile.dart';
 import 'addStripestiles.dart';

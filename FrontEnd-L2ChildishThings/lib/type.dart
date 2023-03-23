@@ -161,8 +161,8 @@ class type extends StatelessWidget {
 }*/
 
 import 'package:flutter/material.dart';
-import 'package:admin/stripes.dart';
-import 'package:admin/portraitEsti.dart';
+import 'package:frontend/stripes.dart';
+import 'package:frontend/portraitEsti.dart';
 
 class type extends StatelessWidget {
   final bool isAdmin;

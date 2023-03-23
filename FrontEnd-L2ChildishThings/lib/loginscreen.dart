@@ -18,6 +18,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:quickalert/quickalert.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'app_bar.dart';
+import 'homepage.dart';
+
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -159,6 +162,16 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar:  CustomAppBar('',IconButton(
+          icon: Icon(Icons.home),
+          iconSize: 40,
+          color: Colors.deepOrange,
+          onPressed:(){
+            Navigator.of(context).push(MaterialPageRoute(builder: (context)=>
+                HomePage()
+            ));
+          },
+        )),
         body: AnnotatedRegion<SystemUiOverlayStyle>(
             value: SystemUiOverlayStyle.light,
             child: Form(
@@ -186,7 +199,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             Container(
                               margin: EdgeInsets.only(top: 10),
                               child: Image.asset(
-                                "assets/photobooth.png",
+                                "Asset/photobooth.png",
                                 height: 200,
                                 width: 200,
                               ),

@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 const app = express();
 const cors = require('cors');
 app.use(cors({
-  origin: 'http://localhost:10809',
+  origin: '*',
   methods: ['get','post'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
@@ -15,7 +15,7 @@ app.use(bodyParser.urlencoded({
     extended: true
   }));
 
-mongoose.connect('mongodb://localhost:27017/form', {useNewUrlParser: true,
+mongoose.connect('mongodb+srv://ekanayakaym20:2ilctvjCgYFhYP2W@cluster0.vyyy7ro.mongodb.net/Childish-Backend', {useNewUrlParser: true,
 useUnifiedTopology:true});
 
 const logsSchema = new mongoose.Schema(
@@ -195,6 +195,6 @@ app.get('/notifications/:userId', (req, res) => {
   });
 });
 
-app.listen(3000, () => {
-  console.log('Server started on port 3000');
+app.listen(3300, () => {
+  console.log('Server started on port 3300');
 });

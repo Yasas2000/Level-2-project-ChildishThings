@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:admin/poratraitQuo.dart';
-import 'package:admin/changePortraitValue.dart';
+import 'package:frontend/poratraitQuo.dart';
+import 'package:frontend/changePortraitValue.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 

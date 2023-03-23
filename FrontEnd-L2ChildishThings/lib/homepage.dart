@@ -11,6 +11,8 @@ import 'package:frontend/notifications.dart';
 import 'package:frontend/signup_screen.dart';
 import 'package:http/http.dart' as http;
 
+import 'gallery.dart';
+
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -252,7 +254,11 @@ class SlidingBar extends StatelessWidget {
           ),
           ListTile(
             title: const Text('Photo Gallery'),
-            onTap: (){},
+            onTap: (){
+              Navigator.of(context).push(MaterialPageRoute(builder: (context)=>
+                  ImageGallery()
+              ));
+            },
           ),
           ListTile(
             title: const Text('Leaderboard'),

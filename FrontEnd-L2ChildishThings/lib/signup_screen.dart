@@ -8,6 +8,9 @@ import 'package:frontend/models/user.dart';
 import 'package:http/http.dart' as http;
 import 'package:quickalert/quickalert.dart';
 
+import 'app_bar.dart';
+import 'homepage.dart';
+
 class SignUpScreen extends StatefulWidget {
 
   @override
@@ -55,6 +58,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
    @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar:  CustomAppBar('',IconButton(
+          icon: Icon(Icons.home),
+          iconSize: 40,
+          color: Colors.deepOrange,
+          onPressed:(){
+            Navigator.of(context).push(MaterialPageRoute(builder: (context)=>
+                HomePage()
+            ));
+          },
+        )),
         body: AnnotatedRegion<SystemUiOverlayStyle>(
         value:SystemUiOverlayStyle.light,
         child: Form(

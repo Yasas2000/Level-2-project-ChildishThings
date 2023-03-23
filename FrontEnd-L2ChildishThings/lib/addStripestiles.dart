@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'dart:js';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:admin/type.dart';
-import 'package:admin/stripeEsti.dart';
+import 'package:frontend/type.dart';
+import 'package:frontend/stripeEsti.dart';
 
 class AddPhotoTileScreen extends StatefulWidget {
   

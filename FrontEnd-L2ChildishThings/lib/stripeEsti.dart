@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 // ignore: depend_on_referenced_packages
 import 'package:url_launcher/url_launcher.dart';
-import 'package:admin/stripsQuo.dart';
-import 'package:admin/addStripestiles.dart';
+import 'package:frontend/stripsQuo.dart';
+import 'package:frontend/addStripestiles.dart';
 
 
 class stripeEsti extends StatelessWidget {

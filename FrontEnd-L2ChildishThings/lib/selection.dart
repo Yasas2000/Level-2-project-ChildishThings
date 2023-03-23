@@ -1,4 +1,4 @@
-import 'package:admin/type.dart';
+import 'package:frontend/type.dart';
 import 'package:flutter/material.dart';
 
 class AdminForm extends StatefulWidget {

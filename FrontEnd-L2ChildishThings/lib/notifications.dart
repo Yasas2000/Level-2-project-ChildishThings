@@ -19,12 +19,11 @@ class _NotificationsPageState extends State<NotificationsPage> {
   //   super.initState();
   //   //_fetchNotifications();
   // }
-  var url3=Uri.parse('http://192.168.1.6:3000/deletes/ymeka2000');
-  var url4=Uri.parse('http://192.168.1.6:3000/delete');
-  String all='null';
+  var url3=Uri.parse('http://localhost:3300/deletes/ymeka2000');
+  var url4=Uri.parse('http://localhost:3300/delete');
   Future<List<Notification>> getNotifi() async{
     _notifications.clear();
-    var url=Uri.parse('http://192.168.1.6:3000/notifications/ymeka2000');
+    var url=Uri.parse('http://localhost:3300/notifications/ymeka2000');
     late http.Response response;
     late http.Response response1;
     try{
@@ -69,7 +68,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
 
   Future<void> deleteNotification(String id,String uid) async {
     if(uid=='ymeka2000'){
-      var url = Uri.parse('http://192.168.1.6:3000/delete-notification/$id');
+      var url = Uri.parse('http://localhost:3300/delete-notification/$id');
       var response = await http.get(url);
 
       if (response.statusCode == 200) {
@@ -184,7 +183,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
                                         right: new BorderSide(width: 1.0, color: Colors.deepOrange))),
                                 child: CircleAvatar(
                                   backgroundColor: Colors.deepOrange,
-                                  child: Text(snapshot.data[index].title[0],style: TextStyle(fontSize: 30.0,color: Colors.white),),
+                                  child: Text(snapshot.data[index].title[0],style: TextStyle(fontSize: 30.0,color: Colors.white),textAlign: TextAlign.center),
                                 ),
                               ),
 
