@@ -30,7 +30,7 @@ class _MyAppState extends State<custom> {
   }
 
   Future<void> fetchUpdatedAmount() async {
-    final response = await http.get('http://localhost:3000/api/getCustomValue');
+    final response = await http.get(Uri.parse('http://localhost:3000/api/getCustomValue'));
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
       setState(() {

@@ -13,7 +13,7 @@ class Payment extends StatelessWidget {
   final Details d;
   Payment(this.d);
   Future<void> sendPaymentConfirmationEmail(String recipientEmail, String paymentAmount) async {
-    final smtpServer = gmail('photoboothme499', 'PhotoboothMe499');
+    final smtpServer = gmail('photoboothme499', 'vnkwowpzrxrnbnwk');
 
     final message = Message()
       ..from = Address('photoboothme499', 'PhotoboothMe')
@@ -31,7 +31,7 @@ class Payment extends StatelessWidget {
 
   Future<void> forms(var pid) async {
     try {
-      var url = 'http://192.168.142.133:3300/submit';
+      var url = 'http://192.168.1.2:3300/submit';
       final response = await http.post(
         Uri.parse(url),
         body: {
@@ -47,8 +47,11 @@ class Payment extends StatelessWidget {
       print('${response.body}');
       print('${response.statusCode}');
       if (response.statusCode == 200) {
+        await sendPaymentConfirmationEmail(d.email, d.amount);
         return;
-      } else {}
+      } else {
+        print('failed');
+      }
     } catch (e) {
       print("failed");
     }
@@ -161,7 +164,6 @@ class Payment extends StatelessWidget {
       print("One Time Payment Success. Payment Id: $paymentId");
 
       await forms(paymentId);
-      await sendPaymentConfirmationEmail(d.email, d.amount);
 
       showAlert(context, "Payment Success!", "Payment Id: $paymentId");
       Navigator.of(context).push(MaterialPageRoute(builder: (context) {

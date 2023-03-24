@@ -3,10 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools">
    <application
         tools:replace="android:label"
+        tools:overrideLibrary="com.google.firebase.firebase_analytics"
         android:label="mypart"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
+
             android:name=".MainActivity"
             android:exported="true"
             android:launchMode="singleTop"
