@@ -8,6 +8,9 @@ import 'package:frontend/models/user.dart';
 import 'package:http/http.dart' as http;
 import 'package:quickalert/quickalert.dart';
 
+import 'app_bar.dart';
+import 'homepage.dart';
+
 class SignUpScreen extends StatefulWidget {
 
   @override
@@ -16,8 +19,6 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> {
 
-
-  bool _isAdmin = false;
   var role = "User";
   var confirmPass;
   final _formKey = GlobalKey<FormState>();
@@ -57,6 +58,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
    @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar:  CustomAppBar('',IconButton(
+          icon: Icon(Icons.home),
+          iconSize: 40,
+          color: Colors.deepOrange,
+          onPressed:(){
+            Navigator.of(context).push(MaterialPageRoute(builder: (context)=>
+                HomePage()
+            ));
+          },
+        )),
         body: AnnotatedRegion<SystemUiOverlayStyle>(
         value:SystemUiOverlayStyle.light,
         child: Form(
@@ -110,8 +121,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       )
                   ),
                 ),
-                
-                
+                          
                 Container(
                   alignment: Alignment.center,
                   margin: EdgeInsets.only(left: 20, right: 20, top: 20),
@@ -273,42 +283,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     validator: confirmPassword,
                   ),
                 ),
-                SizedBox(height: 5),
-                Container(  
-                  alignment: Alignment.center,
-                  margin: EdgeInsets.only(left: 20, right: 20, top: 20),
-                  padding: EdgeInsets.only(left: 20, right: 20),
-                    child: Column(  
-                      children: <Widget>[  
-                        Row(  
-                          children: <Widget>[  
-                            SizedBox(width: 10,),  
-                            Text('Sign Up as Admin? ',style: TextStyle(fontSize: 15.0,fontStyle: FontStyle.italic, fontWeight: FontWeight.bold ), ),  
-                            Checkbox(  
-                              checkColor: Colors.greenAccent,  
-                              activeColor: Colors.red,  
-                              value: _isAdmin,  
-                              onChanged: (value) {  
-                                setState(() {  
-                                  _isAdmin = value!; 
-                                  
-                                });  
-                              },  
-                            ),   
-                          ],  
-                        ),  
-                      ],  
-                    )  
-                ),  
                 GestureDetector(
                   onTap: () {
                     setState(() {
                       if(_formKey.currentState!.validate()){
-                          if(_isAdmin){
-                                      role = "Admin";
-                                  }else{
-                                    role = "User";
-                                  } 
                           userSignUp(
                             _fullNameController.text,
                             _emailController.text,

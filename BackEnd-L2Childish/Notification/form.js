@@ -26,10 +26,29 @@ const logsSchema = new mongoose.Schema(
     }
 );
 const User =mongoose.model('Donations',logsSchema);
+app.get('/leaderboard',(req,res)=>{
+    User.aggregate([
+        {
+            $group:{
+                _id:"$id",
+                totalBudget:{$sum:"$amount"}
+            }
+        }
+    ]).exec((err,result)=>{
+        if(err){
+            console.log(err);
+            res.status(500).send('An error occurred');
+        }else{
+            res.send(result);
+        }
+    });
+});
  
 app.post('/submit',(req,res)=>
 {
     console.log(req.body);
+    // const userdata=req.body;
+    // const user=new User(userdata);
     const user= new User({
         id:req.body.id,
         pid:req.body.pid,
@@ -54,6 +73,7 @@ app.post('/submit',(req,res)=>
 
 });
 
-app.listen(3000,()=>{
+app.listen(4000,()=>{
     console.log('Server listening on port 3000')
 });
+module.exports=app;

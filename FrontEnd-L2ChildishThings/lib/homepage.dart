@@ -5,10 +5,13 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:frontend/donation_form.dart';
 import 'package:frontend/feedbackpage.dart';
+import 'package:frontend/leaderboard.dart';
 import 'package:frontend/loginscreen.dart';
 import 'package:frontend/notifications.dart';
 import 'package:frontend/signup_screen.dart';
 import 'package:http/http.dart' as http;
+
+import 'gallery.dart';
 
 
 class HomePage extends StatefulWidget {
@@ -77,7 +80,7 @@ class _HomePageState extends State<HomePage>{
           ),
           actions: [
             Padding(
-              padding: EdgeInsets.all(5),
+              padding: EdgeInsets.all(15),
               child: IconButton(
                 icon: const Icon(Icons.menu,size: 40,color: Colors.deepOrange,),
                 onPressed: (){
@@ -251,7 +254,19 @@ class SlidingBar extends StatelessWidget {
           ),
           ListTile(
             title: const Text('Photo Gallery'),
-            onTap: (){},
+            onTap: (){
+              Navigator.of(context).push(MaterialPageRoute(builder: (context)=>
+                  ImageGallery()
+              ));
+            },
+          ),
+          ListTile(
+            title: const Text('Leaderboard'),
+            onTap: (){
+              Navigator.of(context).push(MaterialPageRoute(builder: (context)=>
+                  LeaderboardPage()
+              ));
+            },
           ),
           ListTile(
             title: const Text('Feedback'),

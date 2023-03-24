@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:frontend/app_bar.dart';
 import 'package:payhere_mobilesdk_flutter/payhere_mobilesdk_flutter.dart';
 import 'package:http/http.dart' as http;
+import 'package:mailer/mailer.dart';
+import 'package:mailer/smtp_server.dart';
 
 import 'donation_form.dart';
 
@@ -10,10 +12,26 @@ class Payment extends StatelessWidget {
   var id = "yazaz2000";
   final Details d;
   Payment(this.d);
+  Future<void> sendPaymentConfirmationEmail(String recipientEmail, String paymentAmount) async {
+    final smtpServer = gmail('photoboothme499', 'PhotoboothMe499');
+
+    final message = Message()
+      ..from = Address('photoboothme499', 'PhotoboothMe')
+      ..recipients.add(recipientEmail)
+      ..subject = 'Payment Confirmation'
+      ..text = 'Thank you for your payment of $paymentAmount.';
+
+    try {
+      final sendReport = await send(message, smtpServer);
+      print('Message sent: ' + sendReport.toString());
+    } catch (e) {
+      print('Error occurred: $e');
+    }
+  }
 
   Future<void> forms(var pid) async {
     try {
-      var url = 'http://10.0.2.2:3000/submit';
+      var url = 'http://192.168.142.133:3300/submit';
       final response = await http.post(
         Uri.parse(url),
         body: {
@@ -143,6 +161,7 @@ class Payment extends StatelessWidget {
       print("One Time Payment Success. Payment Id: $paymentId");
 
       await forms(paymentId);
+      await sendPaymentConfirmationEmail(d.email, d.amount);
 
       showAlert(context, "Payment Success!", "Payment Id: $paymentId");
       Navigator.of(context).push(MaterialPageRoute(builder: (context) {
@@ -205,7 +224,7 @@ class Payment extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8),
                 gradient: LinearGradient(
                     begin: AlignmentDirectional(3, 10),
-                    colors: [Colors.deepOrange, Colors.white])),
+                    colors: [Colors.deepOrange, Colors.orange])),
             child: Container(
               //margin: EdgeInsets.only(bottom: 200),
               child: Column(

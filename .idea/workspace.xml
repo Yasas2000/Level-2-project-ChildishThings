@@ -4,11 +4,7 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3db96d61-2659-47b2-b91f-9fe011dfbd53" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/FrontEnd-L2ChildishThings/android/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd-L2ChildishThings/android/app/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FrontEnd-L2ChildishThings/android/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd-L2ChildishThings/android/build.gradle" afterDir="false" />
-    </list>
+    <list default="true" id="3db96d61-2659-47b2-b91f-9fe011dfbd53" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />

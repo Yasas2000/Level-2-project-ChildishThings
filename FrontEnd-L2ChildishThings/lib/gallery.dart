@@ -71,27 +71,6 @@ class _ImageGalleryState extends State<ImageGallery>
     }
   }
 
-  /* for mobile platforms
-  Future<void> _pickImage() async {
-    // Use the image_picker package to pick an image from the gallery or camera
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-
-    if (pickedFile != null) {
-      _uploadImage(File(pickedFile.path));
-    }
-  }
-
-  Future<void> _pickImages() async {
-    // Use the image_picker package to pick multiple images from the gallery
-    final pickedFiles = await picker.pickMultiImage();
-
-    if (pickedFiles != null) {
-      for (var pickedFile in pickedFiles) {
-        _uploadImage(File(pickedFile.path));
-      }
-    }
-  }  */
-
   Future<void> _pickImage() async {
     final result = await FilePicker.platform.pickFiles();
 
@@ -171,7 +150,7 @@ class _ImageGalleryState extends State<ImageGallery>
             height: 150,
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('assets/bg.jpg'),
+                image: AssetImage('Asset/bg.jpg'),
                 fit: BoxFit.cover,
               ),
             ),

@@ -2,8 +2,10 @@ import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 import 'package:myproject/stripsQuo.dart';
 import 'package:myproject/changeValue.dart';
+
 import 'package:http/http.dart' as http;
 
 class custom extends StatefulWidget {
