@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class submition extends StatelessWidget {
+class successful extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -31,7 +31,7 @@ class submition extends StatelessWidget {
                       ),
                       SizedBox(height: 20),
                       Text(
-                        "Submission Successful!",
+                        "Stripe is added successfully!",
                         style: TextStyle(
                     color: Colors.orange,
                     fontSize: 28,

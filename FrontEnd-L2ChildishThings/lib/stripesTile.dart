@@ -1,6 +1,5 @@
 import 'dart:convert';
-
-import 'package:admin/stripeEsti.dart';
+import 'package:myproject/stripeEsti.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -25,6 +24,7 @@ class PhotoTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
     return Column(
       children: <Widget>[
         Container(
@@ -39,6 +39,14 @@ class PhotoTile extends StatelessWidget {
               color: Colors.orange,
               width: 4,
             ),
+            boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.2),
+                      spreadRadius: 6,
+                      blurRadius: 5,
+                      offset: Offset(0, 3),
+                    ),
+                  ],
           ),
           child: InkWell(
             onTap: () {
@@ -51,8 +59,8 @@ class PhotoTile extends StatelessWidget {
             },
             child: Image.asset(
               imageAsset,
-              width: 250,
-              height: 250,
+              width: 0.4 * screenWidth,
+              height: 0.4 * screenWidth,
             ),
           ),
         ),
@@ -62,7 +70,9 @@ class PhotoTile extends StatelessWidget {
             text,
             style: TextStyle(
               color: Colors.orange,
-              fontSize: 22,
+              fontSize: 10,
+              fontFamily: 'OpenSans',
+              fontWeight: FontWeight.bold,
             ),
             textAlign: TextAlign.center,
           ),
@@ -75,6 +85,7 @@ class PhotoTile extends StatelessWidget {
             onPressed: () async {
               var request = http.Request('DELETE',
                   Uri.parse('http://localhost:3000/api/deleteStripes'));
+                  print("success");
               request.headers['Content-Type'] =
                   'application/json; charset=UTF-8';
               request.body = json.encode({

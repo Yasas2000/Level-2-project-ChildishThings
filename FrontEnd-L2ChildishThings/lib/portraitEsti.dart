@@ -1,8 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:admin/poratraitQuo.dart';
-import 'package:admin/changePortraitValue.dart';
+// ignore: depend_on_referenced_packages
+import 'package:myproject/poratraitQuo.dart';
+import 'package:myproject/changePortraitValue.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
@@ -29,7 +30,7 @@ class _MyAppState extends State<portraitEsti> {
 
   Future<void> fetchUpdatedAmount() async {
     final response =
-        await http.get('http://localhost:3000/api/getPortraitValue');
+        await http.get('http://localhost:3000/api/getPortraitValue' as Uri);
         
     if (response.statusCode == 200) {
       final data = json.decode(response.body);

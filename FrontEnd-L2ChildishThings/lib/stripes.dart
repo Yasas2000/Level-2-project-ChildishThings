@@ -1,13 +1,15 @@
 import 'dart:convert';
-import 'package:admin/custom.dart';
-import 'package:admin/type.dart';
+import 'package:myproject/custom.dart';
+import 'package:myproject/type.dart';
 import 'package:flutter/material.dart';
 import './stripesTile.dart';
-import 'addStripestiles.dart';
+import 'addStripestile.dart';
+import 'addStripestile.dart';
 import 'package:http/http.dart' as http;
 
 Future<List<Map<String, dynamic>>> fetchData() async {
-  final response = await http.get('http://localhost:3000/api/getAllStripes');
+  var url=Uri.parse('http://localhost:3000/api/getAllStripes');
+  final response = await http.get(url);
   if (response.statusCode == 200) {
     List<dynamic> data = json.decode(response.body);
     return data.map((e) => Map<String, dynamic>.from(e)).toList();
@@ -67,35 +69,40 @@ class _typeState extends State<Stripes> {
             fit: BoxFit.cover,
           ),
         ),
+        
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Image.asset(
-              'logo.png',
-              width: 100,
-              height: 100,
+            SizedBox(
+              height: 25,
             ),
+            
             const Text(
               "Stripes Photos",
               textAlign: TextAlign.center,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25,color: Colors.orange,),
             ),
             SizedBox(
-              height: 20,
+              height: 10,
             ),
             Visibility(
               visible: widget.isAdmin,
-              child: InkWell(
-                child: const Text(
-                  'click here to add new stripe type',
-                  style: TextStyle(
-                    decoration: TextDecoration.underline,
-                    color: Colors.orange,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 10,
-                  ),
+              child:ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary: Colors.orange,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5.0),
                 ),
-                onTap: () async {
+              ),
+              child: const Text(
+                'click here to add new stripe type',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 10,
+                ),
+              ),
+              onPressed: () async {
                   final result = await Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -103,7 +110,13 @@ class _typeState extends State<Stripes> {
                     ),
                   );
                 },
+              )
+              
+               
               ),
+        
+            SizedBox(
+              height: 10,
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(

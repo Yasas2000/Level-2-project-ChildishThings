@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-// ignore: depend_on_referenced_packages
 import 'package:intl/intl.dart';
-import 'package:admin/submition.dart';
-// ignore: depend_on_referenced_packages
+import 'package:myproject/submition.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;

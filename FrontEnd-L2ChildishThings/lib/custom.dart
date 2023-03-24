@@ -1,10 +1,9 @@
 import 'dart:convert';
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:admin/stripsQuo.dart';
-import 'package:admin/changeValue.dart';
+import 'package:myproject/stripsQuo.dart';
+import 'package:myproject/changeValue.dart';
 import 'package:http/http.dart' as http;
 
 class custom extends StatefulWidget {
@@ -30,7 +29,7 @@ class _MyAppState extends State<custom> {
   }
 
   Future<void> fetchUpdatedAmount() async {
-    final response = await http.get('http://localhost:3000/api/getCustomValue');
+    final response = await http.get('http://localhost:3000/api/getCustomValue' as Uri);
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
       setState(() {
