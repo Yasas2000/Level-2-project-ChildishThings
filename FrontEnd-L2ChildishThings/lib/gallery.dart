@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'dart:io' as io;
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:frontend/homepage.dart';
 import 'package:http/http.dart' as http;
 import 'package:file_picker/file_picker.dart';
 
@@ -29,50 +30,49 @@ class _ImageGalleryState extends State<ImageGallery>
   }
 
   Future<void> _uploadImage(List<int> bytes) async {
-  try {
-    var request = http.MultipartRequest(
-      'POST',
-      Uri.parse('http://localhost:3000/v3/post/single'),
-    );
-    request.files.add(
-      http.MultipartFile.fromBytes(
-        'file',
-        bytes,
-        filename: 'image.jpg',
-      ),
-    );
-    var response = await request.send();
-    if (response.statusCode == 200) {
-      print('Image uploaded successfully!');
-    }
-  } catch (error) {
-    print('Error uploading image: $error');
-  }
-}
-
-Future<void> _uploadImages(List<io.File> files) async {
-  try {
-    var request = http.MultipartRequest(
-      'POST',
-      Uri.parse('http://localhost:3000/v3/post/multiple'),
-    );
-    for (var i = 0; i < files.length; i++) {
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse('http://localhost:3000/v3/post/single'),
+      );
       request.files.add(
-        await http.MultipartFile.fromPath(
-          'files',
-          files[i].path,
+        http.MultipartFile.fromBytes(
+          'file',
+          bytes,
+          filename: 'image.jpg',
         ),
       );
+      var response = await request.send();
+      if (response.statusCode == 200) {
+        print('Image uploaded successfully!');
+      }
+    } catch (error) {
+      print('Error uploading image: $error');
     }
-    var response = await request.send();
-    if (response.statusCode == 200) {
-      print('Images uploaded successfully!');
-    }
-  } catch (error) {
-    print('Error uploading images: $error');
   }
-}
 
+  Future<void> _uploadImages(List<io.File> files) async {
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse('http://localhost:3000/v3/post/multiple'),
+      );
+      for (var i = 0; i < files.length; i++) {
+        request.files.add(
+          await http.MultipartFile.fromPath(
+            'files',
+            files[i].path,
+          ),
+        );
+      }
+      var response = await request.send();
+      if (response.statusCode == 200) {
+        print('Images uploaded successfully!');
+      }
+    } catch (error) {
+      print('Error uploading images: $error');
+    }
+  }
 
   Future<void> _pickImage() async {
     final result = await FilePicker.platform.pickFiles();
@@ -95,7 +95,7 @@ Future<void> _uploadImages(List<io.File> files) async {
     if (result != null) {
       List<io.File> files = result.paths.map((path) => io.File(path!)).toList();
       for (io.File file in files) {
-       await _uploadImages([file]); // wrap the file object in a list
+        await _uploadImages([file]); // wrap the file object in a list
       }
     } else {
       // User canceled the picker
@@ -119,7 +119,10 @@ Future<void> _uploadImages(List<io.File> files) async {
             color: Colors.black,
           ),
           onPressed: () {
-            //Navigate to Home page
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => HomePage()),
+            );
           },
         ),
         actions: [
@@ -155,7 +158,7 @@ Future<void> _uploadImages(List<io.File> files) async {
               height: 150,
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage('assets/bg.jpg'),
+                  image: AssetImage('Asset/bg.jpg'),
                   fit: BoxFit.cover,
                 ),
               ),

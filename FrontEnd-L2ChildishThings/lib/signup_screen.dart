@@ -93,7 +93,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         children: [
                           Container(             
                             child: Image.asset(
-                              "assets/photobooth.png",
+                              "Asset/photobooth.png",
                               height: 200,
                               width: 200,
                             ),
