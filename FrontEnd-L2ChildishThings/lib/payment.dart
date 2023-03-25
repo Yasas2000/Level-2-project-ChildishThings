@@ -13,10 +13,10 @@ class Payment extends StatelessWidget {
   final Details d;
   Payment(this.d);
   Future<void> sendPaymentConfirmationEmail(String recipientEmail, String paymentAmount) async {
-    final smtpServer = gmail('photoboothme499', 'vnkwowpzrxrnbnwk');
+    final smtpServer = gmail('photoboothme499@gmail.com', 'vnkwowpzrxrnbnwk');
 
     final message = Message()
-      ..from = Address('photoboothme499', 'PhotoboothMe')
+      ..from = Address('photoboothme499@gmail.com', 'PhotoboothMe')
       ..recipients.add(recipientEmail)
       ..subject = 'Payment Confirmation'
       ..text = 'Thank you for your payment of $paymentAmount.';
@@ -24,14 +24,16 @@ class Payment extends StatelessWidget {
     try {
       final sendReport = await send(message, smtpServer);
       print('Message sent: ' + sendReport.toString());
+      return;
     } catch (e) {
       print('Error occurred: $e');
+      return;
     }
   }
 
   Future<void> forms(var pid) async {
     try {
-      var url = 'http://192.168.1.2:3300/submit';
+      var url = 'http://10.0.2.2:3300/submit';
       final response = await http.post(
         Uri.parse(url),
         body: {
@@ -47,13 +49,14 @@ class Payment extends StatelessWidget {
       print('${response.body}');
       print('${response.statusCode}');
       if (response.statusCode == 200) {
-        await sendPaymentConfirmationEmail(d.email, d.amount);
-        return;
+        sendPaymentConfirmationEmail(d.email, d.amount);
       } else {
         print('failed');
+        return;
       }
     } catch (e) {
       print("failed");
+      return;
     }
   }
 
@@ -223,10 +226,10 @@ class Payment extends StatelessWidget {
                     color: Colors.deepOrange,
                     style: BorderStyle.solid,
                     strokeAlign: BorderSide.strokeAlignCenter),
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(25),
                 gradient: LinearGradient(
                     begin: AlignmentDirectional(3, 10),
-                    colors: [Colors.deepOrange, Colors.orange])),
+                    colors: [Colors.deepOrange, Colors.deepOrangeAccent])),
             child: Container(
               //margin: EdgeInsets.only(bottom: 200),
               child: Column(
@@ -234,27 +237,15 @@ class Payment extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      SizedBox(
-                        width: 100,
-                        height: 30,
-                        child: ColoredBox(
-                          color: Colors.deepOrange,
-                        ),
-                      ),
+
                       Text(
                         ' Donation Details ',
                         style: TextStyle(
                             fontSize: 25.0,
-                            backgroundColor: Colors.white,
-                            color: Colors.deepOrange),
+                            wordSpacing: 10,
+                            color: Colors.white),
                       ),
-                      SizedBox(
-                        width: 30,
-                        height: 30,
-                        child: ColoredBox(
-                          color: Colors.deepOrange,
-                        ),
-                      )
+
                     ],
                   ),
                   SizedBox(
@@ -291,9 +282,16 @@ class Payment extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(d.fname + ' ' + d.lname),
-                          Text(d.amount + 'lkr'),
-                          Text(d.method),
+                          Text(d.fname + ' ' + d.lname, style: TextStyle(
+                          fontSize: 18.0,
+                          color: Colors.white),
+                      ),
+                          Text(d.amount + 'lkr',style: TextStyle(
+                              fontSize: 18.0,
+                              color: Colors.white),),
+                          Text(d.method,style: TextStyle(
+                              fontSize: 18.0,
+                              color: Colors.white),),
                         ],
                       ),
                     ],
