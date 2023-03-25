@@ -100,6 +100,7 @@ flutter:
     - Asset/photobooth.png
     - Asset/passreset.png
     - Asset/sendOTP.jpg
+    - Asset/bg.jpg
     - assets/images/1.jpg
     - assets/images/2.jpg
     - assets/images/logo.png
