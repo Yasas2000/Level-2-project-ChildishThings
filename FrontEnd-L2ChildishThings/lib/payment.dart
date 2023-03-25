@@ -236,6 +236,7 @@ class Payment extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
 
                       Text(
