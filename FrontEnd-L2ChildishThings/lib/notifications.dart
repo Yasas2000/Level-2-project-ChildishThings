@@ -19,11 +19,11 @@ class _NotificationsPageState extends State<NotificationsPage> {
   //   super.initState();
   //   //_fetchNotifications();
   // }
-  var url3=Uri.parse('http://localhost:3300/deletes/ymeka2000');
-  var url4=Uri.parse('http://localhost:3300/delete');
+  var url3=Uri.parse('http://10.0.2.2:3300/deletes/ymeka2000');
+  var url4=Uri.parse('http://10.0.2.2:3300/delete');
   Future<List<Notification>> getNotifi() async{
     _notifications.clear();
-    var url=Uri.parse('http://localhost:3300/notifications/ymeka2000');
+    var url=Uri.parse('http://10.0.2.2:3300/notifications/ymeka2000');
     late http.Response response;
     late http.Response response1;
     try{

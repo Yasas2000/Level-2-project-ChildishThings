@@ -31,6 +31,19 @@ class Payment extends StatelessWidget {
     }
   }
 
+  Future<void> sendEmail(String recipient, String message) async {
+    var url = Uri.parse('http://localhost:3300/send-email');
+    var response = await http.post(url, body: {
+      'recipient': recipient,
+      'message': message,
+    });
+    if (response.statusCode == 200) {
+      print('Email sent successfully!');
+    } else {
+      print('Failed to send email. Error code: ${response.statusCode}');
+    }
+  }
+
   Future<void> forms(var pid) async {
     try {
       var url = 'http://10.0.2.2:3300/submit';
@@ -49,7 +62,8 @@ class Payment extends StatelessWidget {
       print('${response.body}');
       print('${response.statusCode}');
       if (response.statusCode == 200) {
-        sendPaymentConfirmationEmail(d.email, d.amount);
+        sendEmail(d.email, 'Thank you for your payment of $d.amount .');
+        //sendPaymentConfirmationEmail(d.email, d.amount);
       } else {
         print('failed');
         return;
@@ -311,6 +325,8 @@ class Payment extends StatelessWidget {
                             borderRadius: BorderRadius.circular(8.0)),
                         // primary: Color(0xFF2196F3),
                         backgroundColor: Colors.deepOrange,
+                        elevation: 20,
+
                       ),
                       child: Container(
                         margin: EdgeInsets.all(8.0),

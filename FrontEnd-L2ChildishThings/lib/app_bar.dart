@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:badges/badges.dart' as badges;
 
 import 'package:frontend/credi_card_page.dart';
 import 'package:frontend/feedback.dart';
@@ -43,16 +44,45 @@ CustomAppBar(String title, Widget? lead){
       leading:leadingIcon ,
 
       actions: [
+        badges.Badge(
+          position: badges.BadgePosition.topEnd(top: 5, end: 0),
+          badgeContent: Text('2',style: TextStyle(color: Colors.white),),
+          badgeAnimation: badges.BadgeAnimation.rotation(
+            animationDuration: Duration(seconds: 1),
+            colorChangeAnimationDuration: Duration(seconds: 1),
+            loopAnimation: false,
+            curve: Curves.fastOutSlowIn,
+            colorChangeAnimationCurve: Curves.easeInCubic,
+          ),
+          badgeStyle: badges.BadgeStyle(
+            shape: badges.BadgeShape.circle,
+            badgeColor: Colors.deepOrange,
+            borderRadius: BorderRadius.circular(4),
 
-        IconButton(
-            icon:Icon(Icons.notifications,color: Colors.deepOrange,),
-            iconSize: 40,
-            onPressed: (){
+            elevation: 0,
+          ),
+
+          child: IconButton(
+            icon: Icon(Icons.notifications,color: Colors.deepOrange,size: 40,),
+            onPressed: () {
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (context){
                     return NotificationsPage();
                   }));
-            }),
+            },
+
+          ),
+        ),
+
+        // IconButton(
+        //     icon:Icon(Icons.notifications,color: Colors.deepOrange,),
+        //     iconSize: 40,
+        //     onPressed: (){
+        //       Navigator.of(context).push(MaterialPageRoute(
+        //           builder: (context){
+        //             return NotificationsPage();
+        //           }));
+        //     }),
         //   IconButton(
         //   icon:Icon(Icons.more_vert),
         //

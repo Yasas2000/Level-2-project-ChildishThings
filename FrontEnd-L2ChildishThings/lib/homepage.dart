@@ -26,6 +26,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage>{
   // ignore: non_constant_identifier_names
   int _SelectIndex =0;
+  int _unreadNotifications=5;
 
   void _onItemTapped(int index) {
     setState(() {
@@ -50,7 +51,35 @@ class _HomePageState extends State<HomePage>{
                     NotificationsPage()
                 ));
               },
-              icon: Icon(Icons.notifications,color: Colors.deepOrange,size: 40,)), //Image.asset('assets/images/logo.png', height: 50,color: Colors.black),,
+              icon: Stack(
+                children: [
+                  Icon(Icons.notifications,size: 40,color: Colors.deepOrange,),
+                  if (_unreadNotifications > 0)
+                    Positioned(
+                      top: 0,
+                      right: 0,
+                      child: Container(
+                        padding: EdgeInsets.all(2),
+                        decoration: BoxDecoration(
+                          color: Colors.deepOrange,
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                        constraints: BoxConstraints(
+                          minWidth: 16,
+                          minHeight: 16,
+                        ),
+                        child: Text(
+                          '$_unreadNotifications',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 10,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              ),), //Image.asset('assets/images/logo.png', height: 50,color: Colors.black),,
           title: SizedBox(
 
             height: 300,

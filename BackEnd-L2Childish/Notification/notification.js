@@ -4,16 +4,27 @@ const bodyParser=require('body-parser');
 const mongoose = require('mongoose');
 const app = express();
 const cors = require('cors');
-app.use(cors({
-  origin: '*',
-  methods: ['get','post'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-}));
+const { sendEmail } = require('./sendEmail');
 app.use(bodyParser.json());
 //app.use(express.json());
 app.use(bodyParser.urlencoded({
     extended: true
   }));
+
+app.post('/send-email', (req, res) => {
+  const recipient = req.body.recipient;
+  const message = req.body.message;
+  sendEmail(recipient, message);
+  res.status(200).send('Email sent successfully!');
+
+  
+});
+app.use(cors({
+  origin: '*',
+  methods: ['get','post'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
+
 
 mongoose.connect('mongodb+srv://ekanayakaym20:2ilctvjCgYFhYP2W@cluster0.vyyy7ro.mongodb.net/Childish-Backend', {useNewUrlParser: true,
 useUnifiedTopology:true});
