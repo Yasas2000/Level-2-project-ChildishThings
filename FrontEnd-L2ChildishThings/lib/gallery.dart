@@ -28,48 +28,51 @@ class _ImageGalleryState extends State<ImageGallery>
     });
   }
 
-  Future<void> uploadImage(Uint8List? imageBytes) async {
-    try {
-      var request = http.MultipartRequest(
-        'POST',
-        Uri.parse('https://localhost:3000/v3/post/single'),
-      );
-      request.files.add(http.MultipartFile.fromBytes(
+  Future<void> _uploadImage(List<int> bytes) async {
+  try {
+    var request = http.MultipartRequest(
+      'POST',
+      Uri.parse('http://localhost:3000/v3/post/single'),
+    );
+    request.files.add(
+      http.MultipartFile.fromBytes(
         'file',
-        imageBytes!.toList(), // convert Uint8List to List<int>
+        bytes,
         filename: 'image.jpg',
-      ));
-      var response = await request.send();
-      if (response.statusCode == 200) {
-        print('Upload successful');
-      } else {
-        print('Upload failed with status: ${response.statusCode}');
-      }
-    } catch (e) {
-      print('Error uploading image: $e');
+      ),
+    );
+    var response = await request.send();
+    if (response.statusCode == 200) {
+      print('Image uploaded successfully!');
     }
+  } catch (error) {
+    print('Error uploading image: $error');
   }
+}
 
-  Future<void> uploadImages(List<io.File> files) async {
-    try {
-      var request = http.MultipartRequest(
-        'POST',
-        Uri.parse('https://localhost:3000/v3/post/multiple'),
+Future<void> _uploadImages(List<io.File> files) async {
+  try {
+    var request = http.MultipartRequest(
+      'POST',
+      Uri.parse('http://localhost:3000/v3/post/multiple'),
+    );
+    for (var i = 0; i < files.length; i++) {
+      request.files.add(
+        await http.MultipartFile.fromPath(
+          'files',
+          files[i].path,
+        ),
       );
-      for (var file in files) {
-        request.files
-            .add(await http.MultipartFile.fromPath('files', file.path));
-      }
-      var response = await request.send();
-      if (response.statusCode == 200) {
-        print('Upload successful');
-      } else {
-        print('Upload failed with status: ${response.statusCode}');
-      }
-    } catch (e) {
-      print('Error uploading images: $e');
     }
+    var response = await request.send();
+    if (response.statusCode == 200) {
+      print('Images uploaded successfully!');
+    }
+  } catch (error) {
+    print('Error uploading images: $error');
   }
+}
+
 
   Future<void> _pickImage() async {
     final result = await FilePicker.platform.pickFiles();
@@ -77,7 +80,7 @@ class _ImageGalleryState extends State<ImageGallery>
     if (result != null) {
       final file = io.File(result.paths.first!);
       final bytes = await file.readAsBytes();
-      uploadImage(bytes);
+      await _uploadImage(bytes);
     } else {
       // User canceled the picker
     }
@@ -92,7 +95,7 @@ class _ImageGalleryState extends State<ImageGallery>
     if (result != null) {
       List<io.File> files = result.paths.map((path) => io.File(path!)).toList();
       for (io.File file in files) {
-        uploadImages([file]); // wrap the file object in a list
+       await _uploadImages([file]); // wrap the file object in a list
       }
     } else {
       // User canceled the picker
@@ -146,21 +149,24 @@ class _ImageGalleryState extends State<ImageGallery>
       ),
       body: Column(
         children: [
-          Container(
-            height: 150,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('Asset/bg.jpg'),
-                fit: BoxFit.cover,
+          Opacity(
+            opacity: 0.8,
+            child: Container(
+              height: 150,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/bg.jpg'),
+                  fit: BoxFit.cover,
+                ),
               ),
-            ),
-            child: Center(
-              child: Text(
-                'GALLERY',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
+              child: Center(
+                child: Text(
+                  'GALLERY',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ),
