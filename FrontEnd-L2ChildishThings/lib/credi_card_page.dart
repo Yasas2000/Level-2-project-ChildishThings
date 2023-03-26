@@ -44,8 +44,8 @@ class _CreditCardPageState extends State<CreditCardPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: CustomAppBar(
-         'Payment',
-        IconButton(
+         title: 'Payment',
+        leadingIcon:IconButton(
           icon: Icon(Icons.home_filled),
           onPressed: (){
 

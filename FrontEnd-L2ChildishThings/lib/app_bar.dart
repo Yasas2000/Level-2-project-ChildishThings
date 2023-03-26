@@ -10,6 +10,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:http/http.dart' as http;
 
 import 'feedbackpage.dart';
+import 'home.dart';
 import 'item_page.dart';
 enum MenuItem{
   item1,
@@ -18,19 +19,43 @@ enum MenuItem{
   item4,
 }
 
-class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-late final String title;
+class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
+  final String title;
 
-late final Widget? leadingIcon;
+  final Widget? leadingIcon;
+  const CustomAppBar({Key? key,required this.title, this.leadingIcon,}) :super(key: key);
 
-  // const CustomAppBar({
-  //   Key? key
-  // ,required this.title,
-  // }) : super(key: key);
-CustomAppBar(String title, Widget? lead){
-  this.title=title;
-  this.leadingIcon=lead;
+
+  @override
+  State<CustomAppBar> createState() => _CustomAppBarState();
+
+  @override
+  // TODO: implement preferredSize
+  Size get preferredSize => Size.fromHeight(60.0);
 }
+
+class _CustomAppBarState extends State<CustomAppBar> {
+  String id='ymeka2000';
+  int _notificationsCount = 0;
+  @override
+  initState()   {
+    super.initState();
+    _loadNotificationsCount();
+  }
+
+  Future<void> _fetchNotificationsCount() async {
+    final url = Uri.parse('http://10.0.2.2:3300/count/$id');
+    final response = await http.get(url);
+    final data = jsonDecode(response.body);
+    setState(() {
+      _notificationsCount = data['count'];
+    });
+
+  }
+  Future<void> _loadNotificationsCount() async {
+    await _fetchNotificationsCount();
+  }
+
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -40,13 +65,14 @@ CustomAppBar(String title, Widget? lead){
 
       //shape: OutlineInputBorder(borderRadius: BorderRadius.only(bottomLeft: Radius.circular(25),bottomRight: Radius.circular(25)),borderSide: BorderSide(color: Colors.deepOrange)),
       automaticallyImplyLeading: false,
-      title: Text(title,style: TextStyle(color: Colors.deepOrange),),
-      leading:leadingIcon ,
+      title: Text(widget.title,style: TextStyle(color: Colors.deepOrange),),
+      leading:widget.leadingIcon ,
 
       actions: [
         badges.Badge(
           position: badges.BadgePosition.topEnd(top: 5, end: 0),
-          badgeContent: Text('2',style: TextStyle(color: Colors.white),),
+          showBadge: (_notificationsCount>0),
+          badgeContent: Text('$_notificationsCount',style: TextStyle(color: Colors.white),),
           badgeAnimation: badges.BadgeAnimation.rotation(
             animationDuration: Duration(seconds: 1),
             colorChangeAnimationDuration: Duration(seconds: 1),
@@ -91,7 +117,7 @@ CustomAppBar(String title, Widget? lead){
             icon: Icon(Icons.drag_indicator,color: Colors.deepOrange,),
             iconSize: 40,
             shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),side: BorderSide(color: Colors.deepOrange)),
+                borderRadius: BorderRadius.circular(10.0),side: BorderSide(color: Colors.deepOrange)),
             color: Colors.white,
 
 
@@ -114,24 +140,24 @@ CustomAppBar(String title, Widget? lead){
             itemBuilder: (context)=>[
 
               PopupMenuItem(
-                  value: MenuItem.item1,
+                value: MenuItem.item1,
 
 
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
 
-                      Container(
-                        padding: EdgeInsets.only(right: 12.0),
-                        decoration: new BoxDecoration(
-                            border: new Border(
-                                right: new BorderSide(width: 1.0, color: Colors.deepOrange))),
+                    Container(
+                      padding: EdgeInsets.only(right: 12.0),
+                      decoration: new BoxDecoration(
+                          border: new Border(
+                              right: new BorderSide(width: 1.0, color: Colors.deepOrange))),
                       child:Icon(Icons.settings,color: Colors.deepOrange,),
-                      ),
-                      Text(' Settings',style: TextStyle(color: Colors.deepOrange),),
+                    ),
+                    Text(' Settings',style: TextStyle(color: Colors.deepOrange),),
 
-                    ],
-                  ),
+                  ],
+                ),
               ),
               PopupMenuItem(
 
@@ -171,12 +197,10 @@ CustomAppBar(String title, Widget? lead){
     );
   }
 
-  @override
-  // TODO: implement preferredSize
-  Size get preferredSize => Size.fromHeight(60.0);
-
-
 }
+
+
+
 
 
 

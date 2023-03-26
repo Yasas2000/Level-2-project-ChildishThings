@@ -71,11 +71,13 @@ class _DonationFormState extends State<DonationForm> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: CustomAppBar('Donation Form',IconButton(
-          icon: Icon(Icons.home),
-          iconSize: 40,
-          color: Colors.deepOrange,
-          onPressed:(){
+        appBar: CustomAppBar(
+            title: 'Donation Form',
+            leadingIcon:IconButton(
+            icon: Icon(Icons.home),
+             iconSize: 40,
+             color: Colors.deepOrange,
+             onPressed:(){
             Navigator.of(context).push(MaterialPageRoute(builder: (context)=>
                 HomePage()
             ));

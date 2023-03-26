@@ -58,7 +58,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
    @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar:  CustomAppBar('',IconButton(
+        appBar:  CustomAppBar(title:'',leadingIcon:IconButton(
           icon: Icon(Icons.home),
           iconSize: 40,
           color: Colors.deepOrange,

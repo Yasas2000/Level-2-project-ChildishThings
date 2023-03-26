@@ -107,7 +107,13 @@ app.post('/submit',(req,res)=>
 });
 
 const notificationSchema = new mongoose.Schema({
+  title: String,
+  desc: String,
   uid: String,
+  status:{type:Boolean,default:false},
+  readBy: [{type:String}],
+  isCommon:{type:Boolean,default:false},
+  date: { type: Date, default: Date.now },
   
 });
 const deletedNotsSchema=new mongoose.Schema({
@@ -122,6 +128,7 @@ const feedbackSchema=new mongoose.Schema(
    dt:Date
   }
 );
+
 const DeletedNots=mongoose.model('deletednots',deletedNotsSchema); 
 app.post('/delete',(req,res)=>{
   const deletednots=new DeletedNots({
@@ -194,7 +201,45 @@ app.get('/delete-notification/:oid', function(req, res) {
   });
 });
 
+app.put('/read/:notificationId,:userId', async (req, res) => {
+  const notificationId = req.params.notificationId;
+  const userId = req.params.userId;
+  try {
+    const notification = await Notification.findById(notificationId);
 
+    // if (!notification) {
+    //   return res.status(404).send('Notification not found');
+    // }
+
+    // if (notification.uid !== null && notification.uid !== userId) {
+    //   return res.status(403).send('Not authorized to mark this notification as read');
+    // }
+
+  if(notification.uid=='null'){
+    console.log('up1');
+    await Notification.updateOne(
+      { _id: notificationId },
+      { $addToSet: { readBy: userId } },
+      { new: true }
+    );
+
+  }
+  else{
+    console.log('up2');
+    await Notification.updateOne(
+      { _id: notificationId ,uid:userId,status:false},
+      { $set: { status:true } },
+      
+    );
+  }
+ //await notification.save();
+}catch(err){
+  console.error(err);
+    res.status(500).send('Internal server error');
+}
+
+  
+});
 app.get('/notifications/:userId', (req, res) => {
   const userId=req.params.userId;
   Notification.find({$or: [{uid:userId}, {uid:"null"}]}, (err, notifications) => {
@@ -204,6 +249,50 @@ app.get('/notifications/:userId', (req, res) => {
       res.send(notifications);
     }
   });
+});
+app.get('/count/:id', (req, res) => {
+  // Use connect method to connect to the server
+  const id =req.params.id;
+ 
+
+      // Get the Notifications and Deletions models
+
+
+      // Define the query for the Notifications collection
+      const notificationsQuery = Notification.aggregate([
+        { $match: { 
+
+          $and: [
+            { $or: [{ uid:id }, { uid: 'null' }] },
+            { status: false },
+            { readBy: { $ne: id } }
+          ]
+         } },
+        { $count: "notificationsCount" }
+      ]);
+
+      // Execute the query on the Notifications collection
+      notificationsQuery.exec((err, notificationsResult) => {
+        if (err) throw err;
+
+        // Define the query for the Deletions collection
+        const deletionsQuery = DeletedNots.countDocuments({ uid: id });
+
+        // Execute the query on the Deletions collection
+        deletionsQuery.exec((err, deletionsCount) => {
+          if (err) throw err;
+          console.log(notificationsResult)
+          if (notificationsResult && notificationsResult.length > 0) {
+            const totalNotifications = notificationsResult[0].notificationsCount;
+            res.json({ count: totalNotifications });
+          } else {
+            res.json({ count: 0 });
+          }
+
+        });
+      });
+    
+    
 });
 
 app.listen(3300, () => {

@@ -162,7 +162,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar:  CustomAppBar('',IconButton(
+        appBar:  CustomAppBar(title: '',leadingIcon:IconButton(
           icon: Icon(Icons.home),
           iconSize: 40,
           color: Colors.deepOrange,

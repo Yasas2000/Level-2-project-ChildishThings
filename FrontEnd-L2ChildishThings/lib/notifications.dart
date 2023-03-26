@@ -21,11 +21,13 @@ class _NotificationsPageState extends State<NotificationsPage> {
   // }
   var url3=Uri.parse('http://10.0.2.2:3300/deletes/ymeka2000');
   var url4=Uri.parse('http://10.0.2.2:3300/delete');
+
   Future<List<Notification>> getNotifi() async{
     _notifications.clear();
     var url=Uri.parse('http://10.0.2.2:3300/notifications/ymeka2000');
     late http.Response response;
     late http.Response response1;
+
     try{
       response1=await http.get(url3);
       print('Success');
@@ -42,6 +44,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
           var date = item['date'];
           var oid = item['_id'];
           var id = item['uid'];
+          updateStatus(oid,'ymeka2000');
           Notification nots = Notification(title, date, desc, oid, id);
           _notifications.add(nots);
           print(_notifications[0].title);
@@ -65,7 +68,13 @@ class _NotificationsPageState extends State<NotificationsPage> {
     }
     return _notifications;
   }
+  Future<void> updateStatus(String id,String uid)async {
+    late http.Response response2;
+    var url2=Uri.parse('http://10.0.2.2:3300/read/$id,$uid');
 
+    response2=await http.put(url2);
+    print(response2.body.toString());
+  }
   Future<void> deleteNotification(String id,String uid) async {
     if(uid=='ymeka2000'){
       var url = Uri.parse('http://localhost:3300/delete-notification/$id');
@@ -85,7 +94,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
 
     }else{
 
-      final response3=await http.post(url4,body: {'uid':'ymeka2000','oid':id});
+      final response3=await http.post(url4,body: {'uid':uid,'oid':id});
       if(response3.statusCode==200){
         print(response3.body);
       }
@@ -139,7 +148,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
 
     return SafeArea(
       child: Scaffold(
-        appBar: CustomAppBar('Notifications',IconButton(
+        appBar: CustomAppBar(title: 'Notifications',leadingIcon:IconButton(
           icon: Icon(Icons.home),
           iconSize: 40,
           color: Colors.deepOrange,

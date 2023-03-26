@@ -7,7 +7,7 @@ import 'addStripestiles.dart';
 import 'package:http/http.dart' as http;
 
 Future<List<Map<String, dynamic>>> fetchData() async {
-  final response = await http.get('http://localhost:3000/api/getAllStripes');
+  final response = await http.get(Uri.parse('http://localhost:3000/api/getAllStripes'));
   if (response.statusCode == 200) {
     List<dynamic> data = json.decode(response.body);
     return data.map((e) => Map<String, dynamic>.from(e)).toList();
@@ -137,8 +137,7 @@ class _typeState extends State<Stripes> {
                   return Flexible(
                   
                   child:GridView.count(
-                  
-                  return GridView.count(
+
                     padding: const EdgeInsets.all(10),
                     shrinkWrap: true,
                     crossAxisCount: 1,
@@ -157,6 +156,7 @@ class _typeState extends State<Stripes> {
                       );
                     }).toList(),
                   )
+
 
                   );
                 },

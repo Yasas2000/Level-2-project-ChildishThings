@@ -29,7 +29,7 @@ class _MyAppState extends State<portraitEsti> {
 
   Future<void> fetchUpdatedAmount() async {
     final response =
-        await http.get('http://localhost:3000/api/getPortraitValue');
+        await http.get(Uri.parse('http://localhost:3000/api/getPortraitValue'));
         
     if (response.statusCode == 200) {
       final data = json.decode(response.body);

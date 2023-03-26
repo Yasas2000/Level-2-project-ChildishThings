@@ -44,7 +44,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: CustomAppBar('Leaderboard',IconButton(
+        appBar: CustomAppBar(title:'Leaderboard',leadingIcon:IconButton(
           icon: Icon(Icons.home),
           iconSize: 40,
           color: Colors.deepOrange,

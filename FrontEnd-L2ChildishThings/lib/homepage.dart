@@ -27,10 +27,31 @@ class _HomePageState extends State<HomePage>{
   // ignore: non_constant_identifier_names
   int _SelectIndex =0;
   int _unreadNotifications=5;
+  String id='ymeka2000';
+  int _notificationsCount = 0;
+  @override
+  initState()   {
+    super.initState();
+    _loadNotificationsCount();
+  }
+
+  Future<void> _fetchNotificationsCount() async {
+    final url = Uri.parse('http://10.0.2.2:3300/count/$id');
+    final response = await http.get(url);
+    final data = jsonDecode(response.body);
+    setState(() {
+      _notificationsCount = data['count'];
+    });
+
+  }
+  Future<void> _loadNotificationsCount() async {
+    await _fetchNotificationsCount();
+  }
 
   void _onItemTapped(int index) {
     setState(() {
       _SelectIndex = index;
+
     });
   }
 
@@ -54,7 +75,7 @@ class _HomePageState extends State<HomePage>{
               icon: Stack(
                 children: [
                   Icon(Icons.notifications,size: 40,color: Colors.deepOrange,),
-                  if (_unreadNotifications > 0)
+                  if ( _notificationsCount> 0)
                     Positioned(
                       top: 0,
                       right: 0,
@@ -69,7 +90,7 @@ class _HomePageState extends State<HomePage>{
                           minHeight: 16,
                         ),
                         child: Text(
-                          '$_unreadNotifications',
+                          '$_notificationsCount',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 10,

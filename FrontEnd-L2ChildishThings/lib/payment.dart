@@ -223,7 +223,7 @@ class Payment extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar("Gateway",IconButton(
+      appBar: CustomAppBar(title: "Gateway",leadingIcon: IconButton(
           icon: Icon(Icons.arrow_back),
       onPressed:(){
         Navigator.of(context).push(MaterialPageRoute(builder: (context)=>
