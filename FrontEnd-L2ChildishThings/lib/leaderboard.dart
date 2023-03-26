@@ -21,7 +21,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
   late Color cl;
 
   Future<void> _fetchLeaderboardData() async {
-    final response = await http.get(Uri.parse('http://192.168.1.6:3000/leaderboard'));
+    final response = await http.get(Uri.parse('http://10.0.2.2:3300/leaderboard'));
     if (response.statusCode == 200) {
       setState(() {
         List<dynamic> leaderbrd  = jsonDecode(response.body) as List;

@@ -301,7 +301,7 @@ class Payment extends StatelessWidget {
                           fontSize: 18.0,
                           color: Colors.white),
                       ),
-                          Text(d.amount + 'lkr',style: TextStyle(
+                          Text(d.amount.toString() + 'lkr',style: TextStyle(
                               fontSize: 18.0,
                               color: Colors.white),),
                           Text(d.method,style: TextStyle(

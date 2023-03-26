@@ -1,5 +1,5 @@
 const express = require('express');
-const { Int32, Decimal128, ObjectId } = require('mongodb');
+const { Int32, Decimal128, ObjectId, Double } = require('mongodb');
 const bodyParser=require('body-parser');
 const mongoose = require('mongoose');
 const app = express();
@@ -33,7 +33,7 @@ const logsSchema = new mongoose.Schema(
   {
       id:String,
       pid:String,
-      amount:String,
+      amount:Double,
       method:String,
       lname:String,
       fname:String,
@@ -41,7 +41,7 @@ const logsSchema = new mongoose.Schema(
 
   }
 );
-const User =mongoose.model('Donations',logsSchema);
+const User =mongoose.model('donations',logsSchema);
 app.get('/leaderboard',(req,res)=>{
   User.aggregate([
     {

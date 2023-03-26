@@ -143,7 +143,7 @@ class _FeedbackBarState extends State<FeedbackBar> {
                 ElevatedButton(onPressed: () async {
                   print(comment);
                   try {
-                    var url='http://localhost:3300/feed';
+                    var url='http://10.0.2.2:3300/feed';
                     final response = await http.post(
                       Uri.parse(url),
                       headers: {'Content-Type': 'application/json'},
