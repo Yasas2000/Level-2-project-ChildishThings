@@ -33,7 +33,7 @@ const logsSchema = new mongoose.Schema(
   {
       id:String,
       pid:String,
-      amount:Double,
+      amount:Number,
       method:String,
       lname:String,
       fname:String,
@@ -242,12 +242,13 @@ app.put('/read/:notificationId,:userId', async (req, res) => {
 });
 app.get('/notifications/:userId', (req, res) => {
   const userId=req.params.userId;
-  Notification.find({$or: [{uid:userId}, {uid:"null"}]}, (err, notifications) => {
-    if (err) {
+  Notification.find({$or: [{uid:userId}, {uid:"null"}]}).sort({date:-1})
+  .exec((err,notifications)=>{
+     if(err){
       res.status(500).send(err);
-    } else {
+     }else{
       res.send(notifications);
-    }
+     }
   });
 });
 app.get('/count/:id', (req, res) => {
