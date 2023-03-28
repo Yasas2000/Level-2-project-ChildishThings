@@ -21,7 +21,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
   late Color cl;
 
   Future<void> _fetchLeaderboardData() async {
-    final response = await http.get(Uri.parse('http://10.0.2.2:3300/leaderboard'));
+    final response = await http.get(Uri.parse('http://10.0.2.2:3300/donation/leaderboard'));
     if (response.statusCode == 200) {
       setState(() {
         List<dynamic> leaderbrd  = jsonDecode(response.body) as List;
@@ -96,6 +96,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
             decoration: BoxDecoration(color: Colors.white),
 
             child: DataTable(
+
               columnSpacing: Checkbox.width,
               decoration: BoxDecoration(borderRadius: BorderRadius.circular(25),
                   border: Border.all(color: Colors.deepOrange)),

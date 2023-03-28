@@ -24,6 +24,15 @@ class MyApp extends StatelessWidget {
     // ignore: prefer_const_constructors
     return MaterialApp(
       title: 'Flutter Login UI',
+      theme: ThemeData(
+        hoverColor: Colors.deepOrange,
+        snackBarTheme: const SnackBarThemeData(
+        backgroundColor: Colors.deepOrange,
+        contentTextStyle: TextStyle(
+        fontSize: 20,
+    ),
+      ),
+      ),
       home: HomePage(),    //loginscreen()
       debugShowCheckedModeBanner: false,
     );

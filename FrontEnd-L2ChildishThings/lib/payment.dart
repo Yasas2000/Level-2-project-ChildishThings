@@ -32,7 +32,7 @@ class Payment extends StatelessWidget {
   }
 
   Future<void> sendEmail(String recipient, String message) async {
-    var url = Uri.parse('http://localhost:3300/send-email');
+    var url = Uri.parse('http://10.0.2.2:3300/send-email');
     var response = await http.post(url, body: {
       'recipient': recipient,
       'message': message,
@@ -43,10 +43,35 @@ class Payment extends StatelessWidget {
       print('Failed to send email. Error code: ${response.statusCode}');
     }
   }
+  Future<void> sendNotification(var pid,String uid) async {
+    try{
+      var url=Uri.parse('http://10.0.2.2:3300/notification/pushNotifications');
+      final http.Response response;
+      String amount=d.amount as String;
+      response=await http.post(url,
+      body: {
+        'uid':uid,
+        'title':'Payment $pid Successful',
+        'desc':'Thank you for the donation. $amount recieved '
+      }
+      );
+
+      if(response.statusCode==200){
+        print(response.body.toString());
+      }
+      else{
+        print('failed');
+      }
+    }catch(error){
+      print(error);
+      return;
+    }
+  }
 
   Future<void> forms(var pid) async {
     try {
-      var url = 'http://10.0.2.2:3300/submit';
+      var url = 'http://10.0.2.2:3300/donation';
+      double amount=double.parse(d.amount as String);
       final response = await http.post(
         Uri.parse(url),
         body: {
@@ -55,21 +80,23 @@ class Payment extends StatelessWidget {
           'fname': d.fname,
           'lname': d.lname,
           'email': d.email,
-          'amount': d.amount,
+          'amount':d.amount,
           'method': d.method,
         },
       );
       print('${response.body}');
       print('${response.statusCode}');
       if (response.statusCode == 200) {
-        sendEmail(d.email, 'Thank you for your payment of $d.amount .');
+        await sendPaymentConfirmationEmail(d.email, d.amount);
+        //await sendEmail(d.email, 'Thank you for your payment of $d.amount .');
+        await sendNotification(pid, id);
         //sendPaymentConfirmationEmail(d.email, d.amount);
       } else {
         print('failed');
         return;
       }
     } catch (e) {
-      print("failed");
+      print("failed + $e");
       return;
     }
   }

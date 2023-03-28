@@ -21,7 +21,7 @@ class Details{
    String fname;
    String lname;
    String email;
-   Double amount;
+   String amount;
    String? comment;
    String purpose;
    String method;
@@ -218,7 +218,7 @@ class _DonationFormState extends State<DonationForm> {
                               });
                             },
                             onSaved: (val){
-                              _amount=val!;
+                              _amount=val!   ;
                             },
                             // valueTransformer: (text) => num.tryParse(text),
                             validator: FormBuilderValidators.compose([
@@ -453,7 +453,7 @@ class _DonationFormState extends State<DonationForm> {
                             onPressed: () async{
                               if (_formKey.currentState?.validate() ?? false) {
                                  _formKey.currentState?.save();
-                                 Details d=Details(_fname,_lname,_email,_amount as Double,_comment,_purpose,_method,_duration,_period);
+                                 Details d=Details(_fname,_lname,_email,_amount ,_comment,_purpose,_method,_duration,_period);
                                  print(d.duration);
                                  print(d.comment);
                                  print(d.period);

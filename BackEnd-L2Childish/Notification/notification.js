@@ -26,8 +26,10 @@ app.use(cors({
 }));
 
 
-mongoose.connect('mongodb+srv://ekanayakaym20:2ilctvjCgYFhYP2W@cluster0.vyyy7ro.mongodb.net/Childish-Backend', {useNewUrlParser: true,
-useUnifiedTopology:true});
+mongoose.connect('mongodb+srv://ekanayakaym20:2ilctvjCgYFhYP2W@cluster0.vyyy7ro.mongodb.net/Childish-Backend', {
+useNewUrlParser: true,
+useUnifiedTopology:true
+});
 
 const logsSchema = new mongoose.Schema(
   {
@@ -43,6 +45,7 @@ const logsSchema = new mongoose.Schema(
 );
 const User =mongoose.model('donations',logsSchema);
 app.get('/leaderboard',(req,res)=>{
+  console.log(User);
   User.aggregate([
     {
      $match:{
@@ -119,7 +122,7 @@ const notificationSchema = new mongoose.Schema({
 const deletedNotsSchema=new mongoose.Schema({
   uid:String,
   oid:String
-})
+});
 const feedbackSchema=new mongoose.Schema(
   {
    uid:String,
@@ -200,7 +203,21 @@ app.get('/delete-notification/:oid', function(req, res) {
     }
   });
 });
+app.post('/pushNotifications',(req,res)=>{
+  console.log(req.body);
+  const not=req.body;
+  const notification=new Notification(not);
+  notification.save((err)=>{
+    if(err){
+      console.log('Error');
+      res.status(500).send(err);
+  } else{
+      console.log('success');
+      res.send('Form submitted successfully');
+  }
+  });
 
+});
 app.put('/read/:notificationId,:userId', async (req, res) => {
   const notificationId = req.params.notificationId;
   const userId = req.params.userId;

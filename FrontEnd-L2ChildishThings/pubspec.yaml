@@ -49,6 +49,7 @@ dependencies:
   get:
   http: ^0.13.5
   badges: ^3.0.3
+  loading_animation_widget: ^1.2.0+4
   payhere_mobilesdk_flutter: ^3.0.1
   shared_preferences: ^2.0.17
   quickalert: ^1.0.1

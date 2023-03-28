@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:frontend/app_bar.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import 'donation_form.dart';
 import 'homepage.dart';
@@ -14,12 +15,13 @@ class NotificationsPage extends StatefulWidget {
 class _NotificationsPageState extends State<NotificationsPage> {
 
   List<Notification> _notifications = [];
+  String id="ymeka2000";
  // @override
   // void initState() {
   //   super.initState();
   //   //_fetchNotifications();
   // }
-  var url3=Uri.parse('http://10.0.2.2:3300/deletes/ymeka2000');
+  var url3=Uri.parse('http://10.0.2.2:3300/delete/ymeka2000');
   var url4=Uri.parse('http://10.0.2.2:3300/delete');
 
   Future<List<Notification>> getNotifi() async{
@@ -44,7 +46,9 @@ class _NotificationsPageState extends State<NotificationsPage> {
           var date = item['date'];
           var oid = item['_id'];
           var id = item['uid'];
-          updateStatus(oid,'ymeka2000');
+          if(id!="null"){
+            updateStatus(oid,id);
+          }
           Notification nots = Notification(title, date, desc, oid, id);
           _notifications.add(nots);
           print(_notifications[0].title);
@@ -70,23 +74,19 @@ class _NotificationsPageState extends State<NotificationsPage> {
   }
   Future<void> updateStatus(String id,String uid)async {
     late http.Response response2;
-    var url2=Uri.parse('http://10.0.2.2:3300/read/$id,$uid');
+    var url2=Uri.parse('http://10.0.2.2:3300/notification/read/$id,$uid');
 
     response2=await http.put(url2);
     print(response2.body.toString());
   }
   Future<void> deleteNotification(String id,String uid) async {
     if(uid=='ymeka2000'){
-      var url = Uri.parse('http://localhost:3300/delete-notification/$id');
+      var url = Uri.parse('http://localhost:3300/notification/delete-notification/$id');
       var response = await http.get(url);
 
       if (response.statusCode == 200) {
         setState(() async {
           _notifications.removeWhere((n) => n.oid == id);
-
-
-
-
         });
       } else {
         throw Exception('Failed to delete notification');
@@ -162,8 +162,11 @@ class _NotificationsPageState extends State<NotificationsPage> {
           future: getNotifi(),
           builder: (BuildContext context,AsyncSnapshot snapshot){
             if(snapshot.connectionState==ConnectionState.waiting){
-              return const Center(
-                child: Text('Waiting'),
+              return  Center(
+                child: LoadingAnimationWidget.staggeredDotsWave(
+                  color: Colors.deepOrange,
+                  size: 200,
+                ),
               );
             }else{
               if(snapshot.hasError){
