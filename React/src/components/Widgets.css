@@ -1,0 +1,32 @@
+.widgets{
+  width: 100%;
+}
+.topWidget{
+  display: flex;
+  margin-bottom: 20px;
+}
+.bottomWidget{
+  display: flex;
+  margin-bottom: 20px;
+}
+.headingTitle{
+  font-size: 20px;
+}
+.widgetItem{
+  flex: 1;
+  margin:0px 20px;
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  -webkit-box-shadow: 0px 0px 15px -10px rgba(0, 0, 0, 0.75);
+  box-shadow: 0px 0px 15px -10px rgba(0, 0, 0, 0.75);
+}
+.widgetTitle{
+  font-size: 15px;
+  font-weight: bold;
+}
+.count{
+  font-size: 30px;
+  font-weight: bold;
+  color: darkorange;
+}
