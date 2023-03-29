@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import 'app_bar.dart';
+import 'configs.dart';
 import 'homepage.dart';
 
 class LeaderboardPage extends StatefulWidget {
@@ -19,18 +21,20 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
     _fetchLeaderboardData();
   }
   late Color cl;
+  String UserId='yazaz2000';
+
 
   Future<void> _fetchLeaderboardData() async {
-    final response = await http.get(Uri.parse('http://10.0.2.2:3300/donation/leaderboard'));
+    final response = await http.get(Uri.parse(localhost+'/donation'));
     if (response.statusCode == 200) {
       setState(() {
-        List<dynamic> leaderbrd  = jsonDecode(response.body) as List;
-        for(var item in leaderbrd){
+        List<dynamic> leaderboard  = jsonDecode(response.body) as List;
+        for(var item in leaderboard){
           var id=item['_id'];
           var amount=item['totalAmount'].toString();
           var points=item['points'].toString();
           Color c=Colors.white;
-          if(id=='yazaz2000'){
+          if(id==UserId){
             c=Colors.deepOrange;
           }
           Leaderboard l=Leaderboard(id, amount, points, c);
@@ -56,39 +60,11 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
         )),
         body: leaderboardData.isEmpty
             ? Center(
-          child: CircularProgressIndicator(),
+        child: LoadingAnimationWidget.staggeredDotsWave(
+        color: Colors.deepOrange,
+          size: 100,
+         ),
         )
-        //     : ListView.builder(
-        //   itemCount: leaderboardData.length,
-        //   itemBuilder: (BuildContext context, int index) {
-        //     return Padding(
-        //       padding: const EdgeInsets.only(left: 30,right: 30),
-        //       child: Card(
-        //         shape: OutlineInputBorder(borderRadius: BorderRadius.circular(25),borderSide:BorderSide(color: Colors.deepOrange)),
-        //         elevation: 8.0,
-        //         child: ListTile(
-        //           leading: Container(
-        //             padding: EdgeInsets.only(right: 12.0),
-        //             decoration: new BoxDecoration(
-        //                 border: new Border(
-        //                     right: new BorderSide(width: 1.0, color: Colors.deepOrange))),
-        //             child: CircleAvatar(
-        //               backgroundImage: NetworkImage("" ),
-        //             ),
-        //           ),
-        //           title: Text('${leaderboardData[index]['_id']}'),
-        //           subtitle: Row(
-        //             children: [
-        //               Text('Total Donation: ${leaderboardData[index]['totalAmount']}'),
-        //               SizedBox(width: 10,),
-        //               Text('Points: ${leaderboardData[index]['points']}')
-        //             ],
-        //           ),
-        //         ),
-        //       ),
-        //     );
-        //   },
-        // ),
         :SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Container(

@@ -1,8 +1,8 @@
-//import 'package:carousel_slider/carousel_slider.dart';
-//import 'dart:html';
+
 
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:frontend/configs.dart';
 import 'package:frontend/donation_form.dart';
 import 'package:frontend/feedbackpage.dart';
 import 'package:frontend/leaderboard.dart';
@@ -13,7 +13,9 @@ import 'package:http/http.dart' as http;
 
 import 'gallery.dart';
 
-
+/**
+ * This the home page widget
+ */
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -26,7 +28,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage>{
   // ignore: non_constant_identifier_names
   int _SelectIndex =0;
-  int _unreadNotifications=5;
   String id='ymeka2000';
   int _notificationsCount = 0;
   @override
@@ -36,9 +37,10 @@ class _HomePageState extends State<HomePage>{
   }
 
   Future<void> _fetchNotificationsCount() async {
-    final url = Uri.parse('http://10.0.2.2:3300/count/$id');
+    final url = Uri.parse(localhost+'/notification/count/$id');
     final response = await http.get(url);
     final data = jsonDecode(response.body);
+    print(data['count']);
     setState(() {
       _notificationsCount = data['count'];
     });
@@ -111,20 +113,6 @@ class _HomePageState extends State<HomePage>{
                 Expanded(
                   child: Image.asset('assets/images/logo.png', height: 300,width: 400,color: Colors.deepOrange,scale:0.5,),
                 ),
-                // const SizedBox(height: 10),
-                // Expanded(child:  Container(
-                //   height: 50,
-                //   child: const Text(
-                //     'PhotoBoothMe',
-                //     style: TextStyle(
-                //       color: Colors.black,
-                //       fontSize: 18.0,
-                //       fontWeight: FontWeight.bold,
-                //     ),
-                //   ),
-                // ),
-                // ),
-
               ],
             ),
           ),

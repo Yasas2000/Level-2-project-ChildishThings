@@ -41,14 +41,6 @@ router.post('/pushNotifications',(req,res)=>{
     try {
       const notification = await Notification.findById(notificationId);
   
-      // if (!notification) {
-      //   return res.status(404).send('Notification not found');
-      // }
-  
-      // if (notification.uid !== null && notification.uid !== userId) {
-      //   return res.status(403).send('Not authorized to mark this notification as read');
-      // }
-  
     if(notification.uid=='null'){
       console.log('up1');
       await Notification.updateOne(
@@ -86,13 +78,8 @@ router.post('/pushNotifications',(req,res)=>{
     });
   });
   router.get('/count/:id', (req, res) => {
-    // Use connect method to connect to the server
     const id =req.params.id;
-   
-  
         // Get the Notifications and Deletions models
-  
-  
         // Define the query for the Notifications collection
         const notificationsQuery = Notification.aggregate([
           { $match: { 
@@ -100,7 +87,7 @@ router.post('/pushNotifications',(req,res)=>{
             $and: [
               { $or: [{ uid:id }, { uid: 'null' }] },
               { status: false },
-              { readBy: { $ne: id } }
+              { readBy: { $ne: id } } //create readby array in documeny to identify viewed users of common notifications
             ]
            } },
           { $count: "notificationsCount" }

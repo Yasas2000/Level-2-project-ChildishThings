@@ -1,5 +1,4 @@
 import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:frontend/app_bar.dart';
 import 'package:frontend/credi_card_page.dart';
@@ -11,12 +10,11 @@ import 'package:form_validator/form_validator.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:http/http.dart' as http;
 import 'package:frontend/payment.dart';
-
 import 'homepage.dart';
 
-// Widget _fnaame(_fnameHasError,_formKey,_state(),var _fname) {
-//
-// }
+/**
+ * This the donation form widget, also this contain class for create details objects
+ */
 class Details{
    String fname;
    String lname;
@@ -413,35 +411,6 @@ class _DonationFormState extends State<DonationForm> {
                             ),
                             //onChanged: _onChanged,
                           ),
-
-                          // FormBuilderChoiceChip<String>(
-                          //   autovalidateMode: AutovalidateMode.onUserInteraction,
-                          //   decoration: const InputDecoration(
-                          //       labelText:
-                          //       'Payment Method:'),
-                          //   name: 'payment_method',
-                          //   initialValue: 'Visa',
-                          //   options: const [
-                          //     FormBuilderChipOption(
-                          //       value: 'Visa',
-                          //       avatar: CircleAvatar(backgroundImage: AssetImage("Asset/visa.jpg"), ),
-                          //     ),
-                          //     FormBuilderChipOption(
-                          //       value: 'Master',
-                          //       avatar: CircleAvatar(backgroundImage:AssetImage("Asset/master.jpg")),
-                          //     ),
-                          //     FormBuilderChipOption(
-                          //       value: 'American Express',
-                          //       avatar: CircleAvatar(backgroundImage:AssetImage("Asset/ae.jpg")),
-                          //     ),
-                          //     FormBuilderChipOption(
-                          //       value: 'Genie',
-                          //       avatar: CircleAvatar(backgroundImage:AssetImage("Asset/genie.jpg")),
-                          //     ),
-                          //
-                          //   ],
-                          //   //onChanged: _onChanged,
-                          // ),
                         ],
                       ),
                     ),
@@ -455,29 +424,7 @@ class _DonationFormState extends State<DonationForm> {
                                  _formKey.currentState?.save();
                                  Details d=Details(_fname,_lname,_email,_amount ,_comment,_purpose,_method,_duration,_period);
                                  print(d.duration);
-                                 print(d.comment);
-                                 print(d.period);
-
-
-                                //debugPrint(_formKey.currentState?.value.toString());
-
-                                // try {
-                                //   var url='http://10.0.2.2:3000/submit';
-                                //   final response = await http.post(
-                                //     Uri.parse(url),
-                                //     body: {'fname': _fname,'lname':_lname, 'email': _email},
-                                //   );
-                                //   print('${response.body}');
-                                //   print('${response.statusCode}');
-                                //   if (response.statusCode == 200) {
-                                //
-                                //   } else {
-                                //
-                                //   }
-                                // } catch (e) {
-                                //  print(e);
-                                // }
-                                  Navigator.of(context).push(MaterialPageRoute(
+                                 Navigator.of(context).push(MaterialPageRoute(
                                       builder: (context)=> Payment(d)));
                               } else {
                                 debugPrint(_formKey.currentState?.value.toString());

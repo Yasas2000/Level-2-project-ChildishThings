@@ -67,7 +67,7 @@ router.get('/', (req,res)=>{
         
     });
   
-    user.save((err)=>
+    donation.save((err)=>
   {
     if(err){
         console.log('Error');

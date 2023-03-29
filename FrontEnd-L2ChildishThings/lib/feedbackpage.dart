@@ -1,9 +1,13 @@
 import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:frontend/configs.dart';
 import 'package:http/http.dart' as http;
+
+/**
+ * This is the feedback page
+ */
 
 class FeedbackBar extends StatefulWidget {
 
@@ -13,11 +17,8 @@ class FeedbackBar extends StatefulWidget {
 
 class _FeedbackBarState extends State<FeedbackBar> {
   double _initialRating = 3.0;
+  String UserId='ymeka2000';
   String ?comment;
-
-  //get http => null;
-
-
   @override
   void initState() {
     super.initState();
@@ -114,13 +115,8 @@ class _FeedbackBarState extends State<FeedbackBar> {
                   Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context){
                     return AlertBox();
                   }));
-
-
-
-
                 },
                   style: ElevatedButton.styleFrom(
-
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8.0)
                       ),
@@ -136,34 +132,28 @@ class _FeedbackBarState extends State<FeedbackBar> {
                         fontSize: 14,
                       ),
                     ),
-
-
                   ),
                 ),
                 ElevatedButton(onPressed: () async {
                   print(comment);
                   try {
-                    var url='http://10.0.2.2:3300/feed';
+                    var url=localhost+'/feed';
                     final response = await http.post(
                       Uri.parse(url),
                       headers: {'Content-Type': 'application/json'},
-                      body: jsonEncode({'uid':'','rating':_rating.toDouble(),'comment':comment,'dt':DateTime.now().toString()}),
+                      body: jsonEncode({'uid':UserId,'rating':_rating.toDouble(),'comment':comment,'dt':DateTime.now().toString()}),
                     );
-                    print('${response.body}');
-                    print('${response.statusCode}');
                     if (response.statusCode == 200) {
-
+                      print('${response.body}');
+                      print('${response.statusCode}');
                     } else {
-
+                      print('${response.body}');
                     }
                   } catch (e) {
                     print(e);
                   }
                   Navigator.of(context).pushReplacement(MaterialPageRoute(
                       builder: (context)=> AlertBox()));
-
-
-
 
                 },
                   style: ElevatedButton.styleFrom(

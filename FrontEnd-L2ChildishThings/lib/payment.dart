@@ -1,12 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/app_bar.dart';
+import 'package:frontend/configs.dart';
 import 'package:payhere_mobilesdk_flutter/payhere_mobilesdk_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server.dart';
-
 import 'donation_form.dart';
+
+/**
+ * This is the page for payment widget
+ */
 
 class Payment extends StatelessWidget {
   var id = "yazaz2000";
@@ -32,7 +36,7 @@ class Payment extends StatelessWidget {
   }
 
   Future<void> sendEmail(String recipient, String message) async {
-    var url = Uri.parse('http://10.0.2.2:3300/send-email');
+    var url = Uri.parse(localhost+'/send-email');
     var response = await http.post(url, body: {
       'recipient': recipient,
       'message': message,
@@ -45,7 +49,7 @@ class Payment extends StatelessWidget {
   }
   Future<void> sendNotification(var pid,String uid) async {
     try{
-      var url=Uri.parse('http://10.0.2.2:3300/notification/pushNotifications');
+      var url=Uri.parse(localhost+'/notification/pushNotifications');
       final http.Response response;
       String amount=d.amount as String;
       response=await http.post(url,
@@ -68,9 +72,9 @@ class Payment extends StatelessWidget {
     }
   }
 
-  Future<void> forms(var pid) async {
+  Future<void> saveDonation(var pid) async {
     try {
-      var url = 'http://10.0.2.2:3300/donation';
+      var url = localhost+'/donation';
       double amount=double.parse(d.amount as String);
       final response = await http.post(
         Uri.parse(url),
@@ -88,9 +92,7 @@ class Payment extends StatelessWidget {
       print('${response.statusCode}');
       if (response.statusCode == 200) {
         await sendPaymentConfirmationEmail(d.email, d.amount);
-        //await sendEmail(d.email, 'Thank you for your payment of $d.amount .');
         await sendNotification(pid, id);
-        //sendPaymentConfirmationEmail(d.email, d.amount);
       } else {
         print('failed');
         return;
@@ -207,7 +209,7 @@ class Payment extends StatelessWidget {
     PayHere.startPayment(paymentObject, (paymentId) async {
       print("One Time Payment Success. Payment Id: $paymentId");
 
-      await forms(paymentId);
+      await saveDonation(paymentId);
 
       showAlert(context, "Payment Success!", "Payment Id: $paymentId");
       Navigator.of(context).push(MaterialPageRoute(builder: (context) {

@@ -1,11 +1,15 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:frontend/configs.dart';
 import 'package:http/http.dart' as http;
 import 'package:frontend/app_bar.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-
 import 'donation_form.dart';
 import 'homepage.dart';
+
+/**
+ * This is the notification page widget
+ */
 
 class NotificationsPage extends StatefulWidget {
   @override
@@ -15,46 +19,41 @@ class NotificationsPage extends StatefulWidget {
 class _NotificationsPageState extends State<NotificationsPage> {
 
   List<Notification> _notifications = [];
-  String id="ymeka2000";
- // @override
-  // void initState() {
-  //   super.initState();
-  //   //_fetchNotifications();
-  // }
-  var url3=Uri.parse('http://10.0.2.2:3300/delete/ymeka2000');
-  var url4=Uri.parse('http://10.0.2.2:3300/delete');
+  String userId="ymeka2000";
+  var urlDeletes=Uri.parse(localhost+'/delete/ymeka2000');
+  var urlDeletion=Uri.parse(localhost+'/delete');
 
-  Future<List<Notification>> getNotifi() async{
+  Future<List<Notification>> getNotification() async{
     _notifications.clear();
-    var url=Uri.parse('http://10.0.2.2:3300/notifications/ymeka2000');
+    var url=Uri.parse(localhost+'/notification/viewnotifications/ymeka2000');
     late http.Response response;
-    late http.Response response1;
+    late http.Response responseDelete;
 
     try{
-      response1=await http.get(url3);
+      responseDelete=await http.get(urlDeletes);
       print('Success');
       response = await http.get(url);
       if (response.statusCode == 200) {
 
-        List notifi=jsonDecode(response.body) as List;
-        print(notifi);
+        List notification=jsonDecode(response.body) as List;
+        print(notification);
         //List not=notifi as List;
-        print(notifi[0]['title']);
-        for(var item in notifi) {
+        print(notification[0]['title']);
+        for(var item in notification) {
           var title = item['title'];
           var desc = item['desc'];
           var date = item['date'];
           var oid = item['_id'];
           var id = item['uid'];
-          if(id!="null"){
-            updateStatus(oid,id);
+          if(userId!="null"){
+            updateStatus(oid,userId);
           }
           Notification nots = Notification(title, date, desc, oid, id);
           _notifications.add(nots);
           print(_notifications[0].title);
 
-          if (response1.statusCode == 200) {
-            List deletes = jsonDecode(response1.body) as List;
+          if (responseDelete.statusCode == 200) {
+            List deletes = jsonDecode(responseDelete.body) as List;
             for (var item in deletes) {
               var oid = item['oid'];
               _notifications.removeWhere((element) => element.oid == oid);
@@ -74,78 +73,46 @@ class _NotificationsPageState extends State<NotificationsPage> {
   }
   Future<void> updateStatus(String id,String uid)async {
     late http.Response response2;
-    var url2=Uri.parse('http://10.0.2.2:3300/notification/read/$id,$uid');
+    var url=Uri.parse(localhost+'/notification/read/$id,$uid');
 
-    response2=await http.put(url2);
+    response2=await http.put(url);
     print(response2.body.toString());
   }
   Future<void> deleteNotification(String id,String uid) async {
-    if(uid=='ymeka2000'){
-      var url = Uri.parse('http://localhost:3300/notification/delete-notification/$id');
-      var response = await http.get(url);
+    try{
+      if(uid==userId){
+        var url = Uri.parse(localhost+'/notification/delete-notification/$id');
+        var response = await http.get(url);
 
-      if (response.statusCode == 200) {
-        setState(() async {
-          _notifications.removeWhere((n) => n.oid == id);
+        if (response.statusCode == 200) {
+          setState(() async {
+            _notifications.removeWhere((n) => n.oid == id);
+          });
+        } else {
+          throw Exception('Failed to delete notification');
+        }
+
+      }else{
+
+        var response=await http.post(urlDeletion,body: {'uid':uid,'oid':id});
+        if(response.statusCode==200){
+          print(response.body);
+        }
+        else{
+          print(response.statusCode);
+        }
+        setState(() {
+
         });
-      } else {
-        throw Exception('Failed to delete notification');
       }
 
-    }else{
-
-      final response3=await http.post(url4,body: {'uid':uid,'oid':id});
-      if(response3.statusCode==200){
-        print(response3.body);
-      }
-      else{
-        print(response3.statusCode);
-      }
-      setState(() {
-
-      });
+    }catch(error){
+      print(error);
     }
-
   }
-
-  // _fetchNotifications() async {
-  //   var url=Uri.parse('http://10.0.2.2:3000/notifications/ymeka200');
-  //   late http.Response response;
-  //
-  //   try{
-  //     response = await http.get(url);
-  //     if (response.statusCode == 200) {
-  //       print('Success');
-  //       List notifi=jsonDecode(response.body) as List;
-  //       print(notifi);
-  //       //List not=notifi as List;
-  //       print(notifi[0]['_not']);
-  //       for(var item in notifi){
-  //         var not=item['_not'];
-  //         var date=item['_date'];
-  //         Notification nots=Notification(not,date);
-  //         _notifications.add(nots);
-  //         print(_notifications[0].not);
-  //       }
-  //
-  //     } else {
-  //       throw Exception('Failed to load notifications');
-  //     }
-  //
-  //   }catch(e){
-  //     print(e);
-  //
-  //   }
-  //
-  // }
 
   @override
   Widget build(BuildContext context) {
-
-
-
-
-
     return SafeArea(
       child: Scaffold(
         appBar: CustomAppBar(title: 'Notifications',leadingIcon:IconButton(
@@ -159,13 +126,13 @@ class _NotificationsPageState extends State<NotificationsPage> {
           },
         )),
         body: FutureBuilder(
-          future: getNotifi(),
+          future: getNotification(),
           builder: (BuildContext context,AsyncSnapshot snapshot){
             if(snapshot.connectionState==ConnectionState.waiting){
               return  Center(
                 child: LoadingAnimationWidget.staggeredDotsWave(
                   color: Colors.deepOrange,
-                  size: 200,
+                  size: 100,
                 ),
               );
             }else{
