@@ -42,7 +42,7 @@ const routes = [
     icon: <AiTwotoneFileExclamation />,
     subRoutes: [
       {
-        path: "/Requets/quotationRequests",
+        path: "/Requests/quotationRequests",
         name: "Quotation Requests",
         icon: <AiTwotoneFileExclamation/>,
       },
@@ -123,7 +123,7 @@ const SideBar = ({ children }) => {
       <div className="main-container">
         <motion.div
           animate={{
-            width: isOpen ? "200px" : "45px",
+            width: isOpen ? "300px" : "45px",
 
             transition: {
               duration: 0.5,
