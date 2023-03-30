@@ -1,5 +1,13 @@
-const helpRequests = () => {
-    return <div className="title"> </div>;
+import RegUserList from "../components/RegUserList";
+
+const HelpRequests = () => {
+    return (
+      <div className="HelpRequestList">
+        <div className="listContainer">
+          <RegUserList/>
+        </div>
+      </div>
+    );
   };
   
-  export default helpRequests;
+  export default HelpRequests;
