@@ -5,7 +5,6 @@ import 'package:frontend/credi_card_page.dart';
 import 'package:frontend/item_page.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
-import 'package:intl/intl.dart';
 import 'package:form_validator/form_validator.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:http/http.dart' as http;
@@ -48,6 +47,7 @@ class _DonationFormState extends State<DonationForm> {
   bool _amountHasError= false;
   bool _recurHasError=false;
   bool _duraHasError=false;
+  bool _numHasError=false;
    void _state(){
     setState(() {
       _fnameHasError = !(_formKey.currentState?.fields['fname']
@@ -91,11 +91,6 @@ class _DonationFormState extends State<DonationForm> {
                   children: <Widget>[
                     FormBuilder(
                       key: _formKey,
-                      // enabled: false,
-                      // onChanged: () {
-                      //   _formKey.currentState!.save();
-                      //   //debugPrint(_formKey.currentState!.value.toString());
-                      // },
                       autovalidateMode: AutovalidateMode.disabled,
 
 
@@ -362,6 +357,7 @@ class _DonationFormState extends State<DonationForm> {
                             keyboardType: TextInputType.text,
                             textInputAction: TextInputAction.next,
                           ),
+
 
                           FormBuilderCheckbox(
                             name: 'accept_terms',

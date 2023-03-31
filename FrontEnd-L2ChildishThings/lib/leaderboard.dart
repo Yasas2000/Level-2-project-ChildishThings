@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-
 import 'app_bar.dart';
 import 'configs.dart';
 import 'homepage.dart';

@@ -19,13 +19,14 @@ class NotificationsPage extends StatefulWidget {
 class _NotificationsPageState extends State<NotificationsPage> {
 
   List<Notification> _notifications = [];
-  String userId="ymeka2000";
-  var urlDeletes=Uri.parse(localhost+'/delete/ymeka2000');
+  String userId="yazaz2000";
+
   var urlDeletion=Uri.parse(localhost+'/delete');
 
   Future<List<Notification>> getNotification() async{
     _notifications.clear();
-    var url=Uri.parse(localhost+'/notification/viewnotifications/ymeka2000');
+    var urlDeletes=Uri.parse(localhost+'/delete/$userId');
+    var url=Uri.parse(localhost+'/notification/viewnotifications/$userId');
     late http.Response response;
     late http.Response responseDelete;
 
@@ -85,7 +86,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
         var response = await http.get(url);
 
         if (response.statusCode == 200) {
-          setState(() async {
+          setState(() {
             _notifications.removeWhere((n) => n.oid == id);
           });
         } else {
@@ -94,7 +95,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
 
       }else{
 
-        var response=await http.post(urlDeletion,body: {'uid':uid,'oid':id});
+        var response=await http.post(urlDeletion,body: {'uid':userId,'oid':id});
         if(response.statusCode==200){
           print(response.body);
         }

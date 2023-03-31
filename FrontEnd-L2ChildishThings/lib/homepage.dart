@@ -1,5 +1,3 @@
-
-
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:frontend/configs.dart';
@@ -28,7 +26,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage>{
   // ignore: non_constant_identifier_names
   int _SelectIndex =0;
-  String id='ymeka2000';
+  String id='yazaz2000';
   int _notificationsCount = 0;
   @override
   initState()   {
@@ -79,8 +77,8 @@ class _HomePageState extends State<HomePage>{
                   Icon(Icons.notifications,size: 40,color: Colors.deepOrange,),
                   if ( _notificationsCount> 0)
                     Positioned(
-                      top: 0,
-                      right: 0,
+                      top: 1,
+                      right: 2,
                       child: Container(
                         padding: EdgeInsets.all(2),
                         decoration: BoxDecoration(
@@ -95,7 +93,7 @@ class _HomePageState extends State<HomePage>{
                           '$_notificationsCount',
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            fontSize: 10,
+                            fontSize: 14,
                             color: Colors.white,
                           ),
                         ),
@@ -188,10 +186,6 @@ class _HomePageState extends State<HomePage>{
         bottomNavigationBar: BottomNavigationBar(
           backgroundColor: Colors.deepOrange,
           items:  [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home, color: Colors.deepOrange),
-              label: 'Home',
-            ),
             BottomNavigationBarItem(
             icon: IconButton(
               icon: Icon(Icons.handshake,color: Colors.deepOrange,),

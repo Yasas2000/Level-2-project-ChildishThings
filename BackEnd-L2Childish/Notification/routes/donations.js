@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const Donation = require('../models/donation');
+const currentMonth = new Date().getMonth() + 1; // Get current month (1-12)
+const currentYear = new Date().getFullYear(); // Get current year
 
 console.log(Donation);
 
@@ -15,7 +17,68 @@ router.get('/list', async (req, res) => {
       console.log('err');
     }
   });
+router.get('/totalDonations',(req,res)=>{
 
+    Donation.aggregate([
+        {
+          $match: {
+            
+          },
+        },
+        {
+          $group: {
+            _id: null,
+            total: { $sum: "$amount" }, // Sum the amount field
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+            total: 1,
+          },
+        },
+      ])
+        .then((result) => {
+          console.log(result);
+          res.send(result);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+});  
+router.get('/sumOfmonth',(req,res)=>{
+    Donation.aggregate([
+        {
+          $match: {
+            // Filter donations for current month and year
+            createdAt: {
+              $gte: new Date(`${currentYear}-${currentMonth}-01`),
+              $lte: new Date(`${currentYear}-${currentMonth}-31`),
+            },
+          },
+        },
+        {
+          $group: {
+            _id: null,
+            total: { $sum: "$amount" }, // Sum the amount field
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+            total: 1,
+          },
+        },
+      ])
+        .then((result) => {
+          console.log(result);
+          res.send(result);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+
+});
 router.get('/', (req,res)=>{
     Donation.aggregate([
       {

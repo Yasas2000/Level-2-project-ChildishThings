@@ -1,14 +1,9 @@
 import 'dart:convert';
 import 'package:badges/badges.dart' as badges;
-
-import 'package:frontend/credi_card_page.dart';
-import 'package:frontend/feedback.dart';
 import "package:flutter/material.dart";
+import 'package:frontend/configs.dart';
 import 'package:frontend/notifications.dart';
-import 'feedback.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:http/http.dart' as http;
-
 import 'feedbackpage.dart';
 import 'home.dart';
 import 'item_page.dart';
@@ -38,7 +33,7 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _CustomAppBarState extends State<CustomAppBar> {
-  String id='ymeka2000';
+  String id='yazaz2000';
   int _notificationsCount = 0;
   @override
   initState()   {
@@ -47,7 +42,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
   }
 
   Future<void> _fetchNotificationsCount() async {
-    final url = Uri.parse('http://10.0.2.2:3300/notification/count/$id');
+    final url = Uri.parse(localhost+'/notification/count/$id');
     final response = await http.get(url);
     final data = jsonDecode(response.body);
     setState(() {

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/src/form_builder.dart';
 import 'package:frontend/app_bar.dart';
 import 'package:frontend/configs.dart';
 import 'package:payhere_mobilesdk_flutter/payhere_mobilesdk_flutter.dart';
@@ -71,6 +72,30 @@ class Payment extends StatelessWidget {
       return;
     }
   }
+  Future<void> sendNotificationtoAdmin(var pid,String uid) async {
+    try{
+      var url=Uri.parse(localhost+'/notification/pushNotifications');
+      final http.Response response;
+      String amount=d.amount as String;
+      response=await http.post(url,
+          body: {
+            'uid':'admin',
+            'title':'Payment $pid Recieved',
+            'desc':'Donation of $amount recieved from $uid '
+          }
+      );
+
+      if(response.statusCode==200){
+        print(response.body.toString());
+      }
+      else{
+        print('failed');
+      }
+    }catch(error){
+      print(error);
+      return;
+    }
+  }
 
   Future<void> saveDonation(var pid) async {
     try {
@@ -80,7 +105,7 @@ class Payment extends StatelessWidget {
         Uri.parse(url),
         body: {
           'id': id,
-          'paymentid': pid,
+          'pid': pid,
           'fname': d.fname,
           'lname': d.lname,
           'email': d.email,
@@ -88,11 +113,13 @@ class Payment extends StatelessWidget {
           'method': d.method,
         },
       );
-      print('${response.body}');
-      print('${response.statusCode}');
+
       if (response.statusCode == 200) {
+        print('${response.body}');
+        print('${response.statusCode}');
         await sendPaymentConfirmationEmail(d.email, d.amount);
         await sendNotification(pid, id);
+        await sendNotificationtoAdmin(pid, id);
       } else {
         print('failed');
         return;
@@ -253,7 +280,7 @@ class Payment extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(title: "Gateway",leadingIcon: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: Icon(Icons.arrow_back_ios_outlined,color: Colors.deepOrange,size: 40,),
       onPressed:(){
         Navigator.of(context).push(MaterialPageRoute(builder: (context)=>
             DonationForm()
@@ -271,8 +298,9 @@ class Payment extends StatelessWidget {
                     strokeAlign: BorderSide.strokeAlignCenter),
                 borderRadius: BorderRadius.circular(25),
                 gradient: LinearGradient(
-                    begin: AlignmentDirectional(3, 10),
-                    colors: [Colors.deepOrange, Colors.deepOrangeAccent])),
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [ Colors.orange,Color(0xFFFF6F00),])),
             child: Container(
               //margin: EdgeInsets.only(bottom: 200),
               child: Column(
@@ -282,12 +310,16 @@ class Payment extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
 
-                      Text(
-                        ' Donation Details ',
-                        style: TextStyle(
-                            fontSize: 25.0,
-                            wordSpacing: 10,
-                            color: Colors.white),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 20),
+                        child: Text(
+                          ' Donation Details ',
+                          style: TextStyle(
+                              fontSize: 25.0,
+                              wordSpacing: 10,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white),
+                        ),
                       ),
 
                     ],
@@ -296,29 +328,32 @@ class Payment extends StatelessWidget {
                     height: 100,
                   ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.values[5],
                     children: [
                       Column(
                         mainAxisAlignment: MainAxisAlignment.end,
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           Text(
-                            'Name :',
+                            'Name      :',
                             style: TextStyle(
                                 fontSize: 18.0,
-                                decoration: TextDecoration.underline),
+                                fontWeight: FontWeight.bold
+                            ),
                           ),
                           Text(
-                            'Amount :',
+                            'Amount      :',
                             style: TextStyle(
                                 fontSize: 18.0,
-                                decoration: TextDecoration.underline),
+                                fontWeight: FontWeight.bold
+                            ),
                           ),
                           Text(
-                            'Payment Type :',
+                            'Payment Type      :',
                             style: TextStyle(
                                 fontSize: 18.0,
-                                decoration: TextDecoration.underline),
+                                fontWeight: FontWeight.bold
+                            ),
                           ),
                         ],
                       ),
@@ -327,9 +362,9 @@ class Payment extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(d.fname + ' ' + d.lname, style: TextStyle(
-                          fontSize: 18.0,
-                          color: Colors.white),
-                      ),
+                              fontSize: 18.0,
+                              color: Colors.white),
+                          ),
                           Text(d.amount.toString() + 'lkr',style: TextStyle(
                               fontSize: 18.0,
                               color: Colors.white),),

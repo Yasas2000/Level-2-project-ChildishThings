@@ -9,6 +9,7 @@ const logsSchema = new mongoose.Schema(
         lname:String,
         fname:String,
         email:String,
+        date: { type: Date, default: Date.now },
   
     }
   );

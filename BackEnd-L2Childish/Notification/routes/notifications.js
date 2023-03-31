@@ -42,7 +42,7 @@ router.post('/pushNotifications',(req,res)=>{
       const notification = await Notification.findById(notificationId);
   
     if(notification.uid=='null'){
-      console.log('up1');
+
       await Notification.updateOne(
         { _id: notificationId },
         { $addToSet: { readBy: userId } },
@@ -51,7 +51,7 @@ router.post('/pushNotifications',(req,res)=>{
   
     }
     else{
-      console.log('up2');
+      
       await Notification.updateOne(
         { _id: notificationId ,uid:userId,status:false},
         { $set: { status:true } },
