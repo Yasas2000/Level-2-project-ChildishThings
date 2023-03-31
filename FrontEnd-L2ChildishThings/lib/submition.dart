@@ -1,13 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:myproject/appbar.dart';
+
+//Submission successful display after filling the quotation
 
 class submition extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.orange,
+        appBar: CustomAppBar(
+          title: 'Submission',
+          leadingIcon: IconButton(
+            icon: Icon(
+              Icons.home,
+              color: Colors.deepOrange,
+              size: 40,
+            ),
+            onPressed: () {},
+          ),
         ),
         resizeToAvoidBottomInset: false,
         body: Container(
@@ -30,13 +41,11 @@ class submition extends StatelessWidget {
                         height: 200,
                       ),
                       SizedBox(height: 20),
-                      Text(
-                        "Submission Successful!",
-                        style: TextStyle(
-                    color: Colors.orange,
-                    fontSize: 28,
-                  )
-                      ),
+                      Text("Submission Successful!",
+                          style: TextStyle(
+                            color: Colors.orange,
+                            fontSize: 28,
+                          )),
                     ],
                   ),
                 ),

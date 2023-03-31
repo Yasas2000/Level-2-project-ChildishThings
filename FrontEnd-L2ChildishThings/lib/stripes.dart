@@ -1,16 +1,18 @@
 import 'dart:convert';
-
+import 'package:myproject/configs.dart';
 import 'package:myproject/custom.dart';
 import 'package:myproject/type.dart';
-
 import 'package:flutter/material.dart';
 import './stripesTile.dart';
 import 'addStripestile.dart';
 import 'addStripestile.dart';
 import 'package:http/http.dart' as http;
+import 'package:myproject/appbar.dart';
+
+//All the stripe tiles will be displayed here
 
 Future<List<Map<String, dynamic>>> fetchData() async {
-  var url=Uri.parse('http://localhost:3000/api/getAllStripes');
+  var url = Uri.parse(localhost + '/getAllStripes');
   final response = await http.get(url);
   if (response.statusCode == 200) {
     List<dynamic> data = json.decode(response.body);
@@ -64,6 +66,17 @@ class _typeState extends State<Stripes> {
     return MaterialApp(
         home: Scaffold(
       resizeToAvoidBottomInset: false,
+      appBar: CustomAppBar(
+        title: 'Stripes',
+        leadingIcon: IconButton(
+          icon: Icon(
+            Icons.home,
+            color: Colors.deepOrange,
+            size: 40,
+          ),
+          onPressed: () {},
+        ),
+      ),
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
@@ -71,52 +84,50 @@ class _typeState extends State<Stripes> {
             fit: BoxFit.cover,
           ),
         ),
-        
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             SizedBox(
               height: 25,
             ),
-            
             const Text(
               "Stripes Photos",
               textAlign: TextAlign.center,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25,color: Colors.orange,),
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 25,
+                color: Colors.orange,
+              ),
             ),
             SizedBox(
               height: 10,
             ),
             Visibility(
-              visible: widget.isAdmin,
-              child:ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                primary: Colors.orange,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5.0),
-                ),
-              ),
-              child: const Text(
-                'click here to add new stripe type',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 10,
-                ),
-              ),
-              onPressed: () async {
-                  final result = await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => AddPhotoTileScreen(),
+                visible: widget.isAdmin,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.orange,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5.0),
                     ),
-                  );
-                },
-              )
-              
-               
-              ),
-        
+                  ),
+                  child: const Text(
+                    'click here to add new stripe type',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 10,
+                    ),
+                  ),
+                  onPressed: () async {
+                    final result = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AddPhotoTileScreen(),
+                      ),
+                    );
+                  },
+                )),
             SizedBox(
               height: 10,
             ),
@@ -150,15 +161,12 @@ class _typeState extends State<Stripes> {
               child: LayoutBuilder(
                 builder: (context, constraints) {
                   return Flexible(
-                  
-                  child:GridView.count(
-                  
-                  return GridView.count(
+                      child: GridView.count(
                     padding: const EdgeInsets.all(10),
                     shrinkWrap: true,
                     crossAxisCount: 1,
                     mainAxisSpacing: 10,
-                      childAspectRatio: 1.5,
+                    childAspectRatio: 1.5,
                     children: tileList.map((tile) {
                       return PhotoTile(
                         imageAsset: tile['imageAsset'] ?? "",
@@ -171,9 +179,7 @@ class _typeState extends State<Stripes> {
                         },
                       );
                     }).toList(),
-                  )
-
-                  );
+                  ));
                 },
               ),
             )

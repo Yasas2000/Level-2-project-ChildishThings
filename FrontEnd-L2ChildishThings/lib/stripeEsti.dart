@@ -1,27 +1,34 @@
 import 'package:flutter/material.dart';
-// ignore: depend_on_referenced_packages
 import 'package:url_launcher/url_launcher.dart';
-
 import 'package:myproject/stripsQuo.dart';
 import 'package:myproject/addStripestile.dart';
+import 'package:myproject/appbar.dart';
 
-
+//Stripes estimation web page
 
 class stripeEsti extends StatelessWidget {
-
   final String amount;
   final String hour;
-  const stripeEsti({required this.amount,required this.hour});
+  const stripeEsti({required this.amount, required this.hour});
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.orange,
-          
+        appBar: CustomAppBar(
+          title: 'Stripes Estimation',
+          leadingIcon: IconButton(
+            icon: Icon(
+              Icons.home,
+              color: Colors.deepOrange,
+              size: 40,
+            ),
+            onPressed: () {},
+          ),
         ),
         resizeToAvoidBottomInset: false,
         body: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          width: double.infinity,
           decoration: const BoxDecoration(
             image: DecorationImage(
               image: AssetImage("new.jpg"),

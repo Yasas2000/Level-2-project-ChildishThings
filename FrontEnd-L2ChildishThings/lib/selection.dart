@@ -1,6 +1,9 @@
-
 import 'package:flutter/material.dart';
 import 'package:myproject/type.dart';
+import 'package:myproject/appbar.dart';
+import 'package:myproject/appbar.dart';
+
+//Selecting whether the user is an admin or a customer
 
 class AdminForm extends StatefulWidget {
   @override
@@ -14,15 +17,15 @@ class _AdminFormState extends State<AdminForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.orange[900],
-          title: Text(
-            'Selection Form',
-            style: TextStyle(
-              fontFamily: 'Montserrat',
-              fontWeight: FontWeight.bold,
-              fontSize: 24,
+        appBar: CustomAppBar(
+          title: 'Selection Form',
+          leadingIcon: IconButton(
+            icon: Icon(
+              Icons.home,
+              color: Colors.deepOrange,
+              size: 40,
             ),
+            onPressed: () {},
           ),
         ),
         body: Container(
@@ -87,38 +90,38 @@ class _AdminFormState extends State<AdminForm> {
                         ),
                         SizedBox(height: 20),
                         Center(
-                        child:ElevatedButton(
-                          onPressed: () {
-                            if (_formKey.currentState!.validate()) {
-                              _formKey.currentState!.save();
-                              print('Admin status: $_isAdmin');
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => Material(
-                                    child: type(isAdmin: _isAdmin),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              if (_formKey.currentState!.validate()) {
+                                _formKey.currentState!.save();
+                                print('Admin status: $_isAdmin');
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => Material(
+                                      child: type(isAdmin: _isAdmin),
+                                    ),
                                   ),
-                                ),
-                              );
-                            }
-                          },
-                          child: Text(
-                            'Submit',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
+                                );
+                              }
+                            },
+                            child: Text(
+                              'Submit',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.orange,
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 8),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(24),
+                              ),
                             ),
                           ),
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.orange,
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 8),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(24),
-                            ),
-                          ),
-                        ),
                         )
                       ],
                     ),

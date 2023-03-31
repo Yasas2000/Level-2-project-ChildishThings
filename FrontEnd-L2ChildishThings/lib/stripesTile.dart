@@ -1,8 +1,11 @@
 import 'dart:convert';
+import 'package:myproject/configs.dart';
 import 'package:myproject/stripeEsti.dart';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:myproject/appbar.dart';
+
+//The components and the features of a strip tile 
 
 class PhotoTile extends StatelessWidget {
   final String id;
@@ -26,7 +29,6 @@ class PhotoTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-
     return Column(
       children: <Widget>[
         Container(
@@ -42,13 +44,13 @@ class PhotoTile extends StatelessWidget {
               width: 4,
             ),
             boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.2),
-                      spreadRadius: 6,
-                      blurRadius: 5,
-                      offset: Offset(0, 3),
-                    ),
-                  ],
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.2),
+                spreadRadius: 6,
+                blurRadius: 5,
+                offset: Offset(0, 3),
+              ),
+            ],
           ),
           child: InkWell(
             onTap: () {
@@ -61,10 +63,8 @@ class PhotoTile extends StatelessWidget {
             },
             child: Image.asset(
               imageAsset,
-
               width: 0.4 * screenWidth,
               height: 0.4 * screenWidth,
-
             ),
           ),
         ),
@@ -74,11 +74,9 @@ class PhotoTile extends StatelessWidget {
             text,
             style: TextStyle(
               color: Colors.orange,
-
               fontSize: 10,
               fontFamily: 'OpenSans',
               fontWeight: FontWeight.bold,
-
             ),
             textAlign: TextAlign.center,
           ),
@@ -89,14 +87,12 @@ class PhotoTile extends StatelessWidget {
             icon: Icon(Icons.delete),
             color: Colors.red,
             onPressed: () async {
-              var request = http.Request('DELETE',
-                  Uri.parse('http://localhost:3000/api/deleteStripes'));
-                  print("success");
+              var request = http.Request(
+                  'DELETE', Uri.parse(localhost + '/deleteStripes'));
+              print("success");
               request.headers['Content-Type'] =
                   'application/json; charset=UTF-8';
-              request.body = json.encode({
-                'text': text
-              });
+              request.body = json.encode({'text': text});
 
               final response = await http.Client().send(request);
 
