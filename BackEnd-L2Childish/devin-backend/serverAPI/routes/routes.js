@@ -15,6 +15,7 @@
 
 
     //Post Method
+    //saving the data of portrait quotation
     router.post('/post', (req, res)=> {
         let newGroup = new group();
         newGroup.numBigFamilies = req.body.numBigFamilies,
@@ -46,7 +47,7 @@
     
     
       
-   
+   //saving the data of stripes quotation
     
     router.post('/Stripes', (req, res)=> {
       let newGroup1 = new group1();
@@ -77,7 +78,7 @@
 
 
 
-
+//add stripe tiles
 
     router.post('/addStripTile', (req, res)=> {
         let newStripe = new StripesTiles();
@@ -100,23 +101,10 @@
  
 
 
-    //Get all Method
-    router.get('/getAll', (req, res) => {
-        group.find().then((result)=>{
-            res.send(result);
-        }).catch((error)=>{
-            console.log(error);
-        })
-    })
+  
 
-    router.get('/getAll1', (req, res) => {
-        group1.find().then((result)=>{
-            res.send(result);
-        }).catch((error)=>{
-            console.log(error);
-        })
-    })
 
+    //getting the custom value which was updated
     router.get('/getCustomValue', (req, res) => {
         custom.findOne({}).then((result) => {
             if (result) {
@@ -130,10 +118,12 @@
         });
     });
 
+    //getting the portrait value which was updated
     router.get('/getPortraitValue', (req, res) => {
         portrait.findOne({}).then((result) => {
             if (result) {
                 res.send(result);
+                console.log(result);
             } else {
                 res.status(404).send({ error: 'Portrait value not found' });
             }
@@ -143,22 +133,22 @@
         });
     });
 
+    router.get('/getPortraitValue1', (req, res) => {
+      portrait1.findOne({}).then((result) => {
+          if (result) {
+              res.send(result);
+              console.log(result);
+          } else {
+              res.status(404).send({ error: 'Portrait value not found' });
+          }
+      }).catch((error) => {
+          console.log(error);
+          res.status(500).send({ error: 'Something went wrong' });
+      });
+  });
+
     
-    //Get by ID Method
-    router.get('/getgroup', (req, res) => {
-        group.findById('').then((result)=>{
-            res.send(result);
-        }).catch((error)=>{
-            console.log(error);
-        })
-    })
-    router.get('/getgroup1', (req, res) => {
-        group1.findById('63d6ac1895a0be793cc69452').then((result)=>{
-            res.send(result);
-        }).catch((error)=>{
-            console.log(error);
-        })
-    })
+ 
 
    
     router.get('/getAllStripes', (req, res) => {
@@ -169,15 +159,9 @@
         })
     })
 
-    //Update by ID Method
-    router.patch('/updategroup', (req, res) => {
-        
-      });
 
-      router.patch('/updategroup1', (req, res) => {
-        
-      });
 
+      //updating the custom vlaue
       router.put('/updateCustomValue', (req, res) => {
         custom.findOneAndUpdate({}, { $set: { amount: req.body.amount } }, { new: true }, (err, customValue) => {
           if (err) return res.status(500).send(err);
@@ -189,6 +173,8 @@
         
       });
 
+
+      //updating the portrait vlaue(with out frame)
       router.put('/updatePortraitValue', (req, res) => {
         portrait.findOneAndUpdate({}, { $set: { amount: req.body.amount,
             
@@ -203,6 +189,8 @@
         
       });
 
+
+      //updating the portrait vlaue(with frame)
       router.put('/updatePortraitValue1', (req, res) => {
         portrait1.findOneAndUpdate({}, { $set: { 
             amount1: req.body.amount1
@@ -219,9 +207,9 @@
       
       
 
-    //Delete by ID Method
+  
 
-
+//delete a stripe tile
     router.delete('/deleteStripes', async (req, res) => {
         try {
           const text = req.body.text;
@@ -241,5 +229,3 @@
       });
       
 
-
-    module.exports = router;
