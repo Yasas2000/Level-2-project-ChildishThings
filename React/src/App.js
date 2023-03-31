@@ -8,7 +8,14 @@ import Requests from "./pages/Requests";
 import Messages from "./pages/Messages";
 import Analytics from "./pages/Analytics";
 import Events from "./pages/Events";
-import Setting from "./pages/Setting";
+import Settings from "./pages/Settings";
+import RegisteredUsers from "./pages/RegisteredUsers";
+import NonRegisteredUsers from "./pages/nonRegisteredUsers";
+import OnlineUsers from "./pages/onlineUsers";
+import QuotationRequests from "./pages/quotationRequests";
+import Donations from "./pages/Donations";
+import HelpRequests from "./pages/helpRequests";
+
 
 function App() {
   return (
@@ -19,17 +26,17 @@ function App() {
           <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/users" element={<Users />} />
-          <Route path="/users/registeredUsers" element={<registeredUsers />} />
-          <Route path="/users/nonRegisteredUsers" element={<nonRegisteredUsers />} />
-          <Route path="/users/onlineUsers" element={<onlineUsers />} />
+          <Route path="/users/registeredUsers" element={<RegisteredUsers/>} />
+          <Route path="/users/nonRegisteredUsers" element={<NonRegisteredUsers />} />
+          <Route path="/users/onlineUsers" element={<OnlineUsers />} />
           <Route path="/Requests" element={<Requests />} />
-          <Route path="/Requests/quotationRequests" element={<quotationRequests />} />
-          <Route path="/Requests/donations" element={<donations />} />
-          <Route path="/Requests/helpRequests" element={<helpRequests />} />
+          <Route path="/Requests/quotationRequests" element={<QuotationRequests />} />
+          <Route path="/Requests/donations" element={<Donations />} />
+          <Route path="/Requests/helpRequests" element={<HelpRequests />} />
           <Route path="/messages" element={<Messages />} />
           <Route path="/analytics" element={<Analytics />} />
           <Route path="/Events" element={<Events />} />
-          <Route path="/settings" element={<Setting />} />
+          <Route path="/settings" element={<Settings />} />
           <Route path="*" element={<> not found</>} />
         </Routes> 
       </SideBar>

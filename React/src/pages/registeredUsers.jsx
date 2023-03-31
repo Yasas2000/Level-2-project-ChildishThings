@@ -1,11 +1,16 @@
-import EventList from "../components/EventList";
+import RegUserList from "../components/RegUserList"; 
 
-const registeredUsers = () => {
+const RegisteredUsers = () => {
     return( 
-    <div>
-      <EventList/>
+      <div className="registeredUserList">
+      <div className="listContainer">
+        <RegUserList/>
+      </div>
     </div>
     );
   }
 
-  export default registeredUsers;
+  export default RegisteredUsers;
+
+
+
