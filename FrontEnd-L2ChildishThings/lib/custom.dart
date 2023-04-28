@@ -1,17 +1,22 @@
 import 'dart:convert';
 import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:frontend/stripsQuo.dart';
-import 'package:frontend/changeValue.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:http/http.dart' as http;
+
+
+import 'app_bar.dart';
+import 'changeValue.dart';
+import 'configs.dart';
+
+//Custom web page 
 
 class custom extends StatefulWidget {
   final bool isAdmin;
 
   custom({required this.isAdmin});
-  
+
   @override
   // ignore: library_private_types_in_public_api
   _MyAppState createState() => _MyAppState();
@@ -22,7 +27,6 @@ class _MyAppState extends State<custom> {
   double _price = 0;
   double amount = 0;
 
-
   @override
   void initState() {
     super.initState();
@@ -30,7 +34,8 @@ class _MyAppState extends State<custom> {
   }
 
   Future<void> fetchUpdatedAmount() async {
-    final response = await http.get(Uri.parse('http://localhost:3000/api/getCustomValue'));
+    final response =
+        await http.get(Uri.parse(localhost_+'/getCustomValue'));
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
       setState(() {
@@ -46,11 +51,20 @@ class _MyAppState extends State<custom> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.orange,
-          title: Text("Custom"),
+        appBar: CustomAppBar(
+          title: 'Custom',
+          leadingIcon: IconButton(
+            icon: Icon(
+              Icons.home,
+              color: Colors.deepOrange,
+              size: 40,
+            ),
+            onPressed: () {},
+          ),
         ),
         body: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          width: double.infinity,
           decoration: const BoxDecoration(
             image: DecorationImage(
               image: AssetImage("new.jpg"),
@@ -130,27 +144,25 @@ class _MyAppState extends State<custom> {
                 },
               ),
               Visibility(
-              visible: widget.isAdmin,
-              
-              child:InkWell(
-                child: const Text(
-                  'Click here to change the value',
-                  style: TextStyle(
-                    decoration: TextDecoration.underline,
-                    color: Colors.orange,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 22,
-                  ),
-                ),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => changeValue()),
-                  );
-                },
-              )
-              ),
-            SizedBox(height: 20),
+                  visible: widget.isAdmin,
+                  child: InkWell(
+                    child: const Text(
+                      'Click here to change the value',
+                      style: TextStyle(
+                        decoration: TextDecoration.underline,
+                        color: Colors.orange,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 22,
+                      ),
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => changeValue()),
+                      );
+                    },
+                  )),
+              SizedBox(height: 20),
             ],
           ),
         ),

@@ -29,9 +29,9 @@ router.get('/:userId', (req, res) => {
         res.send(deletions);
       }
     });
-}catch(err){
+    }catch(err){
     res.send(err);
-}
+    }
   });
 
 module.exports=router;

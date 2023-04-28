@@ -4,7 +4,7 @@ const bodyParser=require('body-parser');
 const mongoose = require('mongoose');
 const app = express();
 const cors = require('cors');
-const { sendEmail } = require('./sendEmail');
+const { sendEmail } = require('./models/sendEmail');
 app.use(bodyParser.json());
 //app.use(express.json());
 app.use(bodyParser.urlencoded({
@@ -19,6 +19,7 @@ app.post('/send-email', (req, res) => {
 
   
 });
+
 app.use(cors({
   origin: '*',
   methods: ['get','post'],

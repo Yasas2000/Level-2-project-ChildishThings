@@ -1,5 +1,9 @@
-import 'package:frontend/type.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend/type.dart';
+import 'app_bar.dart';
+import 'homepage.dart';
+
+//Selecting whether the user is an admin or a customer
 
 class AdminForm extends StatefulWidget {
   @override
@@ -13,87 +17,118 @@ class _AdminFormState extends State<AdminForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Selection Form'),
-      ),
-      body: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("new.jpg"),
-            fit: BoxFit.cover,
-          ),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Image.asset(
-              'logo.png',
-              width: 200,
-              height: 200,
+        appBar: CustomAppBar(title: 'Selection Form',leadingIcon:IconButton(
+          icon: Icon(Icons.home),
+          iconSize: 40,
+          color: Colors.deepOrange,
+          onPressed:(){
+            Navigator.of(context).push(MaterialPageRoute(builder: (context)=>
+                HomePage()
+            ));
+          },
+        )),
+        body: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage("new.jpg"),
+              fit: BoxFit.cover,
             ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 30,),
-                    Text(
-                      'Are you an admin?',
-                      style: TextStyle(fontSize: 18.0),
-                    ),
-                    SizedBox(height: 10.0),
-                    DropdownButtonFormField<bool>(
-                      value: _isAdmin,
-                      items: [
-                        DropdownMenuItem(
-                          value: true,
-                          child: Text('Yes'),
+          ),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Hero(
+                  tag: 'logo',
+                  child: Image.asset(
+                    'logo.png',
+                    width: 200,
+                    height: 200,
+                  ),
+                ),
+                SizedBox(height: 30),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Are you an admin?',
+                          style: TextStyle(
+                            fontFamily: 'Montserrat',
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                            color: Colors.orange,
+                          ),
                         ),
-                        DropdownMenuItem(
-                          value: false,
-                          child: Text('No'),
+                        SizedBox(height: 10),
+                        DropdownButtonFormField<bool>(
+                          value: _isAdmin,
+                          items: [
+                            DropdownMenuItem(
+                              value: true,
+                              child: Text('Yes'),
+                            ),
+                            DropdownMenuItem(
+                              value: false,
+                              child: Text('No'),
+                            ),
+                          ],
+                          onChanged: (value) {
+                            setState(() {
+                              _isAdmin = value!;
+                            });
+                          },
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            filled: true,
+                            fillColor: Colors.grey[200],
+                          ),
                         ),
-                      ],
-                      onChanged: (value) {
-                        setState(() {
-                          _isAdmin = value!;
-                        });
-                      },
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        filled: true,
-                        fillColor: Colors.grey[200],
-                      ),
-                    ),
-                    SizedBox(height: 20.0),
-                    ElevatedButton(
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          _formKey.currentState!.save();
-
-                          // Do something with the admin status
-                          print('Admin status: $_isAdmin');
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => Material(
-                                child: type(isAdmin: _isAdmin),
+                        SizedBox(height: 20),
+                        Center(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              if (_formKey.currentState!.validate()) {
+                                _formKey.currentState!.save();
+                                print('Admin status: $_isAdmin');
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => Material(
+                                      child: type(isAdmin: _isAdmin),
+                                    ),
+                                  ),
+                                );
+                              }
+                            },
+                            child: Text(
+                              'Submit',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
                               ),
                             ),
-                          );
-                        }
-                      },
-                      child: Text('Submit'),
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.orange,
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 8),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(24),
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
                     ),
-                  ],
+                  ),
                 ),
-              ),
+              ],
             ),
-          ],
-        ),
-      ),
-    );
+          ),
+        ));
   }
 }

@@ -6,6 +6,7 @@ import 'package:frontend/feedbackpage.dart';
 import 'package:frontend/leaderboard.dart';
 import 'package:frontend/loginscreen.dart';
 import 'package:frontend/notifications.dart';
+import 'package:frontend/selection.dart';
 import 'package:frontend/signup_screen.dart';
 import 'package:http/http.dart' as http;
 
@@ -282,7 +283,11 @@ class SlidingBar extends StatelessWidget {
           ),
           ListTile(
             title: const Text('Pricing'),
-            onTap: (){},
+            onTap: (){
+              Navigator.of(context).push(MaterialPageRoute(builder: (context)=>
+                  AdminForm()
+              ));
+            },
           ),
           ListTile(
             title: const Text('Photo Gallery'),

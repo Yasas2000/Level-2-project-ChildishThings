@@ -7,6 +7,7 @@ const donationRoutes=require('./routes/donations')
 const feedbackRoutes=require('./routes/feedbacks');
 const notificationRoutes=require('./routes/notifications');
 const sendEmailRoutes=require('./routes/sendEmails');
+const pricingRoutes = require('./routes/pricings');
 const app = express();
 const port = process.env.PORT || 3300;
 
@@ -34,6 +35,7 @@ app.use('/donation',donationRoutes);
 app.use('/feed',feedbackRoutes);
 app.use('/notification',notificationRoutes);
 app.use('/send-email',sendEmailRoutes);
+app.use('/api', pricingRoutes);
 
 app.listen(port, () => {
   console.log(`server started at http://localhost:${port}`);

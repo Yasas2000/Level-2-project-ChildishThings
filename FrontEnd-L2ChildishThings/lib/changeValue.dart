@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'app_bar.dart';
+import 'configs.dart';
+
+//Changing the custom value
 
 class changeValue extends StatelessWidget {
   @override
@@ -24,71 +28,89 @@ class _MyFormState extends State<MyForm> {
   final amount = TextEditingController();
 
   @override
-  Widget build(BuildContext context) => Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("new.jpg"),
-            fit: BoxFit.cover,
-          ),
-        ),
-        child: Scaffold(
-          backgroundColor: Colors.transparent,
-          resizeToAvoidBottomInset: false,
-          body: Form(
-            key: _formKey,
-            child: Column(
-              children: [
-                SizedBox(height: 20),
-                TextFormField(
-                  controller: amount,
-                  decoration: const InputDecoration(
-                    icon: Icon(Icons.money),
-                    labelText: 'Amount',
-                    hintText: 'Ex.32.45',
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Colors.orange,
-                      ),
-                    ),
-                    labelStyle: TextStyle(
-                      color: Color.fromARGB(255, 15, 14, 13),
-                      fontSize: 16,
-                    ),
-                  ),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Please enter an amount';
-                    }
-                    if (double.tryParse(value) == null) {
-                      return 'Please enter a valid amount in numbers';
-                    }
-                    return null;
-                  },
+  Widget build(BuildContext context) {
+    return MaterialApp(
+        home: Scaffold(
+            appBar: CustomAppBar(
+              title: 'Change Custom Value',
+              leadingIcon: IconButton(
+                icon: Icon(
+                  Icons.home,
+                  color: Colors.deepOrange,
+                  size: 40,
                 ),
-                SizedBox(height: 20),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.orange,
-                  ),
-                  onPressed: () async {
-                    if (_formKey.currentState!.validate()) {
-                      final response = await http.put(
-                        Uri.parse('http://localhost:3000/api/updateCustomValue'),
-                        headers: <String, String>{
-                          'Content-Type': 'application/json; charset=UTF-8',
-                        },
-                        body: jsonEncode(<String, dynamic>{
-                          'amount': double.parse(amount.text),
-                        }),
-                      );
-                    }
-                  },
-                  child: Text('Save'),
-                ),
-                SizedBox(height: 20),
-              ],
+                onPressed: () {},
+              ),
             ),
-          ),
-        ),
-      );
+            body: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              width: double.infinity,
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage("new.jpg"),
+                  fit: BoxFit.cover,
+                ),
+              ),
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                width: double.infinity,
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      SizedBox(height: 20),
+                      TextFormField(
+                        controller: amount,
+                        decoration: const InputDecoration(
+                          icon: Icon(Icons.money, color: Colors.orange),
+                          labelText: 'Amount',
+                          hintText: 'Ex.32.45',
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.orange,
+                            ),
+                          ),
+                          labelStyle: TextStyle(
+                            color: Colors.orange,
+                            fontSize: 16,
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please enter an amount';
+                          }
+                          if (double.tryParse(value) == null) {
+                            return 'Please enter a valid amount in numbers';
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(height: 20),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.orange,
+                        ),
+                        onPressed: () async {
+                          if (_formKey.currentState!.validate()) {
+                            final response = await http.put(
+                              Uri.parse(localhost_+'/updateCustomValue'),
+                              headers: <String, String>{
+                                'Content-Type':
+                                    'application/json; charset=UTF-8',
+                              },
+                              body: jsonEncode(<String, dynamic>{
+                                'amount': double.parse(amount.text),
+                              }),
+                            );
+                          }
+                        },
+                        child: Text('Save'),
+                      ),
+                      SizedBox(height: 20),
+                    ],
+                  ),
+                ),
+              ),
+            )));
+  }
 }

@@ -1,17 +1,17 @@
 import 'dart:convert';
-import 'dart:js';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:frontend/type.dart';
 import 'package:frontend/stripeEsti.dart';
+import 'package:frontend/successful.dart';
+import 'package:http/http.dart' as http;
+import 'app_bar.dart';
+import 'configs.dart';
+
+//Adding photo stripes
 
 class AddPhotoTileScreen extends StatefulWidget {
-  
   @override
   _AddPhotoTileScreenState createState() => _AddPhotoTileScreenState();
 }
-
-
 
 class _AddPhotoTileScreenState extends State<AddPhotoTileScreen> {
   final _formKey = GlobalKey<FormState>();
@@ -21,23 +21,32 @@ class _AddPhotoTileScreenState extends State<AddPhotoTileScreen> {
   final _hour = TextEditingController();
   late final bool _isAdmin;
 
-
-  void _showStripeEstimate(String amount,String hour) {
-  Navigator.push(
-    context as BuildContext,
-    MaterialPageRoute(
-      builder: (context) => stripeEsti(amount: amount,hour:hour),
-    ),
-  );
-}
+  void _showStripeEstimate(String amount, String hour) {
+    Navigator.push(
+      context as BuildContext,
+      MaterialPageRoute(
+        builder: (context) => stripeEsti(amount: amount, hour: hour),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text("Add Stripes Photo"),
+        appBar: CustomAppBar(
+          title: 'Add Stripe Tile',
+          leadingIcon: IconButton(
+            icon: Icon(
+              Icons.home,
+              color: Colors.deepOrange,
+              size: 40,
+            ),
+            onPressed: () {},
+          ),
         ),
         body: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          width: double.infinity,
           decoration: const BoxDecoration(
             image: DecorationImage(
               image: AssetImage("new.jpg"),
@@ -52,7 +61,7 @@ class _AddPhotoTileScreenState extends State<AddPhotoTileScreen> {
                 TextFormField(
                   controller: _imageAssets,
                   decoration: const InputDecoration(
-                    icon: Icon(Icons.image),
+                    icon: Icon(Icons.image, color: Colors.orange),
                     labelText: 'Image Name',
                     border: OutlineInputBorder(
                       borderSide: BorderSide(
@@ -75,7 +84,7 @@ class _AddPhotoTileScreenState extends State<AddPhotoTileScreen> {
                 TextFormField(
                   controller: _text,
                   decoration: const InputDecoration(
-                    icon: Icon(Icons.text_format),
+                    icon: Icon(Icons.text_format, color: Colors.orange),
                     labelText: 'Text',
                     border: OutlineInputBorder(
                       borderSide: BorderSide(
@@ -98,7 +107,7 @@ class _AddPhotoTileScreenState extends State<AddPhotoTileScreen> {
                 TextFormField(
                   controller: _amount,
                   decoration: const InputDecoration(
-                    icon: Icon(Icons.money),
+                    icon: Icon(Icons.money, color: Colors.orange),
                     labelText: 'Amount',
                     hintText: 'Ex:31,365.00',
                     border: OutlineInputBorder(
@@ -122,7 +131,7 @@ class _AddPhotoTileScreenState extends State<AddPhotoTileScreen> {
                 TextFormField(
                   controller: _hour,
                   decoration: const InputDecoration(
-                    icon: Icon(Icons.cloud_circle),
+                    icon: Icon(Icons.cloud_circle, color: Colors.orange),
                     labelText: 'Hours',
                     hintText: 'Ex:2',
                     border: OutlineInputBorder(
@@ -150,7 +159,7 @@ class _AddPhotoTileScreenState extends State<AddPhotoTileScreen> {
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
                       final response = await http.post(
-                        Uri.parse('http://localhost:3000/api/addStripTile'),
+                        Uri.parse(localhost_ + '/addStripTile'),
                         headers: <String, String>{
                           'Content-Type': 'application/json; charset=UTF-8',
                         },
@@ -167,7 +176,7 @@ class _AddPhotoTileScreenState extends State<AddPhotoTileScreen> {
                     if (response.statusCode == 200) {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => type(isAdmin: _isAdmin)),
+                        MaterialPageRoute(builder: (context) => successful()),
                       );
                     }
                   },

@@ -1,13 +1,17 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:frontend/poratraitQuo.dart';
-import 'package:frontend/changePortraitValue.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
+import 'app_bar.dart';
+import 'changePortraitValue.dart';
+import 'configs.dart';
+
+//Portrait estimation web page
+
 class portraitEsti extends StatefulWidget {
-   final bool isAdmin;
+  final bool isAdmin;
 
   const portraitEsti({Key? key, required this.isAdmin}) : super(key: key);
   @override
@@ -15,183 +19,153 @@ class portraitEsti extends StatefulWidget {
 }
 
 class _MyAppState extends State<portraitEsti> {
-  double _photo = 0;
+  int amount1 = 0;
+  int amount2 = 0;
+  int numOfPhotos = 0;
+  int selectedPackage = 1;
   double _price = 0;
-  double amount = 0;
-  double amount1 = 0;
-  bool isAmountSelected = true;
-  
+  double _size=0;
 
   void initState() {
     super.initState();
-    fetchUpdatedAmount();
+    _getAmounts();
   }
 
-  Future<void> fetchUpdatedAmount() async {
-    final response =
-        await http.get(Uri.parse('http://localhost:3000/api/getPortraitValue'));
-        
-    if (response.statusCode == 200) {
-      final data = json.decode(response.body);
-      setState(() {
-        amount = data['amount'];
-        amount1 = data['amount1'];
-      });
+  Future<void> _getAmounts() async {
+    final response1 =
+        await http.get(Uri.parse(localhost_ + '/getPortraitValue'));
+    final response2 =
+        await http.get(Uri.parse(localhost_ + '/getPortraitValue1'));
+    final data1 = json.decode(response1.body);
+    final data2 = json.decode(response2.body);
+    setState(() {
+      amount1 = data1['amount'];
+      amount2 = data2['amount1'];
+    });
+  }
+
+  int _calculateTotalPrice() {
+    if (selectedPackage == 1) {
+      return amount1 * numOfPhotos;
+    } else if (selectedPackage == 2) {
+      return amount2 * numOfPhotos;
     } else {
-      throw Exception('Failed to fetch updated amount');
+      return 0;
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final formattedPrice = NumberFormat('###,###.##').format(_price);
     return MaterialApp(
         home: Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.orange,
-        title: Text("Portrait Pricing Calculator"),
+      resizeToAvoidBottomInset: false,
+      appBar: CustomAppBar(
+        title: 'Portrait Estimation',
+        leadingIcon: IconButton(
+          icon: Icon(
+            Icons.home,
+            color: Colors.deepOrange,
+            size: 40,
+          ),
+          onPressed: () {},
+        ),
       ),
       body: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        width: double.infinity,
         decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage("new.jpg"),
             fit: BoxFit.cover,
           ),
         ),
-        child: Column(
-          children: <Widget>[
-            Image.asset(
-              'logo.png',
-              width: 200,
-              height: 200,
-            ),
-            SizedBox(height: 20),
-            Column(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextField(
-                    decoration: InputDecoration(
-                        hintText: 'Ex:50 photos',
-                        labelText: "Enter the Number of photos",
-                        border: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.orange))),
-                    onChanged: (value) {
-                      if (value.isEmpty) {
-                        setState(() {
-                          _photo = 0;
-                          _price = 0;
-                        });
-                      } else if (double.tryParse(value) != null) {
-                        setState(() {
-                          _photo = double.parse(value);
-                          _price = _photo * amount;
-                        });
-                      } else {
-                        print("Invalid input");
-                      }
-                    },
-                    keyboardType: TextInputType.number,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Enter the Number of photos:',
+                style: TextStyle(fontSize: 18.0, color: Colors.orange),
+              ),
+              TextField(
+                keyboardType: TextInputType.number,
+                onChanged: (value) {
+                  setState(() {
+                    numOfPhotos = int.parse(value);
+                  });
+                },
+              ),
+              SizedBox(height: 16.0),
+              Text(
+                'Select the package type:',
+                style: TextStyle(fontSize: 14.0, color: Colors.orange),
+              ),
+              DropdownButton<int>(
+                value: selectedPackage,
+                onChanged: (value) {
+                  setState(() {
+                    selectedPackage = value!;
+                  });
+                },
+                items: [
+                  DropdownMenuItem<int>(
+                    value: 1,
+                    child: Text("WITHOUT FRAMES (PHOTO - 6'x8')"),
                   ),
-                ),
-                SizedBox(height: 15),
-                DropdownButtonFormField(
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
+                  DropdownMenuItem<int>(
+                    value: 2,
+                    child: Text("WITH FRAMES (PHOTO - 6'x8')"),
                   ),
-                  items: [
-                    DropdownMenuItem(
-                      child: Text("Select the package type"),
-                      value: 0,
-                      
-                    ),
-                    DropdownMenuItem(
-                      child: Text("WITHOUT FRAMES (PHOTO - 6'x8')"),
-                      value: amount 
-                    ),
-                    DropdownMenuItem(
-                      child: Text("WITH PLYWOOD FRAMES (6'x8;)"),
-                      value: amount1 
-                    ),
-                  ],
-                  hint: Text('Select the package type'),
-                    onChanged: (value) {
-                    setState(() {
-                      if (value == amount1) {
-                        isAmountSelected = true;
-                        _price = _photo * amount1;
-                      } else if (value == amount) {
-                        isAmountSelected = false;
-                        _price = _photo * amount;
-                      }
-                    });
-                  },
+                ],
+              ),
+              SizedBox(height: 16.0),
 
-                  
-                ),
-              ],
-            ),
-            SizedBox(height: 15),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                "Estimated Price: \Rs.$formattedPrice",
+              Text(
+                'size',
+                style: TextStyle(fontSize: 18.0, color: Colors.orange),
+              ),
+              TextField(
+                keyboardType: TextInputType.number,
+                onChanged: (value) {
+                  setState(() {
+                    numOfPhotos = int.parse(value);
+                  });
+                },
+              ),
+              Text(
+                'Estimated Total Price: Rs ${_calculateTotalPrice()}',
+
                 style: TextStyle(
-                    fontSize: 24,
+                    fontSize: 18.0,
                     fontWeight: FontWeight.bold,
-                    color: Colors.black),
+                    color: Colors.orange),
               ),
-            ),
-            SizedBox(height: 15),
-            Text(
-              "Click the link below to get a custom quotation with ongoing discounts and promotions.\nWe highly recommend you to place a free booking to reserve the date and to avoid any \nprice fluctuations.",
-              style: TextStyle(
-                fontSize: 18,
+              SizedBox(
+                height: 150,
               ),
-            ),
-            SizedBox(height: 20),
-            widget.isAdmin
-                    ?
-            InkWell(
-              child: const Text(
-                'Click here to change the values',
-                style: TextStyle(
-                  decoration: TextDecoration.underline,
-                  color: Colors.orange,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 22,
-                ),
+              ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => poratraitQuo()));
+                  },
+                  child: Text('Get Exact Amount')),
+              SizedBox(
+                height: 40,
               ),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => changePortraitValue()),
-                );
-              },
-            ):
-            
-            SizedBox(height: 20),
-            InkWell(
-              child: const Text(
-                'GET THE EXACT AMOUNT',
-                style: TextStyle(
-                  decoration: TextDecoration.underline,
-                  color: Colors.orange,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 22,
-                ),
+              Visibility(
+                visible: widget.isAdmin == true,
+                child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => changePortraitValue()));
+                    },
+                    child: Text('Change Values')
+                    ),
+                    
               ),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => poratraitQuo()),
-                );
-              },
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     ));
