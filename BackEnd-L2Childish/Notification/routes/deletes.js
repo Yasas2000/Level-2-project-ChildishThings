@@ -20,7 +20,6 @@ router.post('/',async(req,res)=>{
 });
 
 router.get('/:userId', (req, res) => {
-    console.log(DeletedNots);
     try{
     DeletedNots.find({uid: req.params.userId }, (err, deletions) => {
       if (err) {

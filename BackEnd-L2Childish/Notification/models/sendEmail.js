@@ -6,13 +6,13 @@ let transporter = nodemailer.createTransport({
       pass: 'vnkwowpzrxrnbnwk'
     }
   });
-  function sendEmail(recipient,message){
+  function sendEmail(recipient,html){
 
     const mailOptions = {
         from: 'photoboothme499@gmail.com',
         to: recipient,
         subject: 'Payment Confirmation',
-        text: message
+        html:html
       };
     
       transporter.sendMail(mailOptions, function(error, info) {
