@@ -103,7 +103,7 @@ router.post('/pushNotifications',(req,res)=>{
           // Execute the query on the Deletions collection
           deletionsQuery.exec((err, deletionsCount) => {
             if (err) throw err;
-            console.log(notificationsResult)
+            //console.log(notificationsResult)
             if (notificationsResult && notificationsResult.length > 0) {
               const totalNotifications = notificationsResult[0].notificationsCount;
               res.json({ count: totalNotifications });

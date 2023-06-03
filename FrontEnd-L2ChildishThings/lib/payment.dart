@@ -36,11 +36,14 @@ class Payment extends StatelessWidget {
     }
   }
 
-  Future<void> sendEmail(String recipient, String message) async {
+  Future<void> sendEmail(String recipient, String pid,String amount,String date) async {
     var url = Uri.parse(localhost+'/send-email');
     var response = await http.post(url, body: {
       'recipient': recipient,
-      'message': message,
+      'pid': pid,
+      'amount': amount,
+      'date':date
+
     });
     if (response.statusCode == 200) {
       print('Email sent successfully!');
@@ -117,7 +120,8 @@ class Payment extends StatelessWidget {
       if (response.statusCode == 200) {
         print('${response.body}');
         print('${response.statusCode}');
-        await sendPaymentConfirmationEmail(d.email, d.amount);
+        await sendEmail(d.email,pid,d.amount,DateTime.now().toString() );
+        //await sendPaymentConfirmationEmail(d.email, d.amount);
         await sendNotification(pid, id);
         await sendNotificationtoAdmin(pid, id);
       } else {
