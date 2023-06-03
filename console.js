@@ -5,3 +5,5 @@ console.log("World")//second time update
 function main(){
   return null;
 }
+main()
+//console.log(main)
