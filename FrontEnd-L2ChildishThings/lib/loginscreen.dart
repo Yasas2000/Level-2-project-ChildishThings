@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, library_private_types_in_public_api, use_key_in_widget_constructors, prefer_const_literals_to_create_immutables, avoid_print, sized_box_for_whitespace, unused_field, unnecessary_new, unused_element, curly_braces_in_flow_control_structures, unused_import, non_constant_identifier_names, prefer_typing_uninitialized_variables, unused_local_variable, import_of_legacy_library_into_null_safe, use_build_context_synchronously, avoid_unnecessary_containers
+// ignore_for_file: prefer_const_constructors, library_private_types_in_public_api, use_key_in_widget_constructors, prefer_const_literals_to_create_immutables, avoid_print, sized_box_for_whitespace, unused_field, unnecessary_new, unused_element, curly_braces_in_flow_control_structures, unused_import, non_constant_identifier_names, prefer_typing_uninitialized_variables, unused_local_variable, import_of_legacy_library_into_null_safe, use_build_context_synchronously, avoid_unnecessary_containers, slash_for_doc_comments
 
 import 'dart:convert';
 
@@ -18,9 +18,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:quickalert/quickalert.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'app_bar.dart';
-import 'homepage.dart';
-
+/**
+ * This is the Login Screen widget
+ */
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -30,6 +30,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   bool isRememberMe = false;
   bool _isLoading = false;
+  bool _obscureText = true;
   GlobalKey<FormState> formkey = GlobalKey<FormState>();
 
   TextEditingController emailController = TextEditingController();
@@ -38,14 +39,15 @@ class _LoginScreenState extends State<LoginScreen> {
   SignIn(String email, String pass) async {
     String url = "http://localhost:5000/users/authenticate";
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-
-    Map body = {"email": email, "password": pass};
+    //SharedPreferences is used to store auth token
+    Map body = {"email": email, "password": pass}; //JSON object
 
     var jsonResponse;
     var res = await http.post(Uri.parse(url), body: body);
     //Need to check api status
     if (res.statusCode == 200) {
-      jsonResponse = json.decode(res.body);
+      jsonResponse = json.decode(res
+          .body); //decodes JSON string to a Dart map object which can be accessed
 
       print("Response status: ${res.statusCode}");
 
@@ -68,7 +70,7 @@ class _LoginScreenState extends State<LoginScreen> {
         }
       } else {
         setState(() {
-          _isLoading = false;
+          _isLoading = true;
         });
       }
     }
@@ -87,9 +89,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 context: context,
                 actions: [
                   IconsOutlineButton(
-                    onPressed: () {
-                    _launchURL('https://pub.dev/');
-                    },
+                    onPressed: () {},
                     text: 'Dashboard',
                     iconData: Icons.dashboard_customize_rounded,
                     color: Colors.green,
@@ -162,16 +162,6 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar:  CustomAppBar(title: '',leadingIcon:IconButton(
-          icon: Icon(Icons.home),
-          iconSize: 40,
-          color: Colors.deepOrange,
-          onPressed:(){
-            Navigator.of(context).push(MaterialPageRoute(builder: (context)=>
-                HomePage()
-            ));
-          },
-        )),
         body: AnnotatedRegion<SystemUiOverlayStyle>(
             value: SystemUiOverlayStyle.light,
             child: Form(
@@ -199,7 +189,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             Container(
                               margin: EdgeInsets.only(top: 10),
                               child: Image.asset(
-                                "Asset/photobooth.png",
+                                "assets/photobooth.png",
                                 height: 200,
                                 width: 200,
                               ),
@@ -271,35 +261,55 @@ class _LoginScreenState extends State<LoginScreen> {
                         color: Color(0xffEEEEEE),
                         boxShadow: [
                           BoxShadow(
-                              offset: Offset(0, 20),
-                              blurRadius: 100,
-                              color: Color(0xffEEEEEE)),
+                            offset: Offset(0, 20),
+                            blurRadius: 100,
+                            color: Color(0xffEEEEEE),
+                          ),
                         ],
                       ),
-                      child: TextFormField(
-                        controller: passwordController,
-                        obscureText: true,
-                        keyboardType: TextInputType.text,
-                        cursorColor: Color(0xffF5591F),
-                        decoration: InputDecoration(
-                          focusColor: Color(0xffF5591F),
-                          icon: Icon(
-                            Icons.vpn_key,
-                            color: Color(0xffF5591F),
+                      child: Stack(
+                        children: [
+                          TextFormField(
+                            controller: passwordController,
+                            obscureText: _obscureText,
+                            keyboardType: TextInputType.text,
+                            cursorColor: Color(0xffF5591F),
+                            decoration: InputDecoration(
+                              focusColor: Color(0xffF5591F),
+                              icon: Icon(
+                                Icons.vpn_key,
+                                color: Color(0xffF5591F),
+                              ),
+                              hintText: "Enter Password",
+                              enabledBorder: InputBorder.none,
+                              focusedBorder: InputBorder.none,
+                            ),
+                            validator: MultiValidator([
+                              RequiredValidator(errorText: "* Required"),
+                              MinLengthValidator(6,
+                                  errorText:
+                                      "Password should be at least 6 characters"),
+                              MaxLengthValidator(15,
+                                  errorText:
+                                      "Password should not be greater than 15 characters"),
+                            ]),
+                            
                           ),
-                          hintText: "Enter Password",
-                          enabledBorder: InputBorder.none,
-                          focusedBorder: InputBorder.none,
-                        ),
-                        validator: MultiValidator([
-                          RequiredValidator(errorText: "* Required"),
-                          MinLengthValidator(6,
-                              errorText:
-                                  "Password should be atleast 6 characters"),
-                          MaxLengthValidator(15,
-                              errorText:
-                                  "Password should not be greater than 15 characters")
-                        ]),
+                          Positioned(
+                            right: 20,
+                            bottom: 25,
+                            child: GestureDetector(
+                              onTap: () =>
+                                  setState(() => _obscureText = !_obscureText),
+                              child: Icon(
+                                _obscureText
+                                    ? Icons.visibility_off
+                                    : Icons.visibility,
+                                color: Colors.grey[500],
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     SizedBox(
@@ -383,27 +393,4 @@ class _LoginScreenState extends State<LoginScreen> {
                   ],
                 )))));
   }
-
-  String validatePassword(String value) {
-    if (value.isEmpty) {
-      return "* Required";
-    } else if (value.length < 6) {
-      return "Password should be atleast 6 characters";
-    } else if (value.length > 15) {
-      return "Password should not be greater than 15 characters";
-    } else
-      return '';
-  }
-
-  Future<void> _launchURL(String url) async {
-    
-    final Uri uri = Uri(scheme: "https", host: url);
-    if(!await launchUrl(
-      uri,
-      mode: LaunchMode.externalApplication,
-      )){
-        throw "Can not launch url";
-      }
-  } 
-
 }
