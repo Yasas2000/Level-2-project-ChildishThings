@@ -33,6 +33,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   bool isRememberMe = false;
   bool _isLoading = false;
+  bool _obscureText = true;
   GlobalKey<FormState> formkey = GlobalKey<FormState>();
 
   TextEditingController emailController = TextEditingController();
@@ -270,7 +271,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ]),
                       ),
                     ),
-                    Container(
+                     Container(
                       alignment: Alignment.center,
                       margin: EdgeInsets.only(left: 20, right: 20, top: 20),
                       padding: EdgeInsets.only(left: 20, right: 20),
@@ -280,35 +281,55 @@ class _LoginScreenState extends State<LoginScreen> {
                         color: Color(0xffEEEEEE),
                         boxShadow: [
                           BoxShadow(
-                              offset: Offset(0, 20),
-                              blurRadius: 100,
-                              color: Color(0xffEEEEEE)),
+                            offset: Offset(0, 20),
+                            blurRadius: 100,
+                            color: Color(0xffEEEEEE),
+                          ),
                         ],
                       ),
-                      child: TextFormField(
-                        controller: passwordController,
-                        obscureText: true,
-                        keyboardType: TextInputType.text,
-                        cursorColor: Color(0xffF5591F),
-                        decoration: InputDecoration(
-                          focusColor: Color(0xffF5591F),
-                          icon: Icon(
-                            Icons.vpn_key,
-                            color: Color(0xffF5591F),
+                      child: Stack(
+                        children: [
+                          TextFormField(
+                            controller: passwordController,
+                            obscureText: _obscureText,
+                            keyboardType: TextInputType.text,
+                            cursorColor: Color(0xffF5591F),
+                            decoration: InputDecoration(
+                              focusColor: Color(0xffF5591F),
+                              icon: Icon(
+                                Icons.vpn_key,
+                                color: Color(0xffF5591F),
+                              ),
+                              hintText: "Enter Password",
+                              enabledBorder: InputBorder.none,
+                              focusedBorder: InputBorder.none,
+                            ),
+                            validator: MultiValidator([
+                              RequiredValidator(errorText: "* Required"),
+                              MinLengthValidator(6,
+                                  errorText:
+                                      "Password should be at least 6 characters"),
+                              MaxLengthValidator(15,
+                                  errorText:
+                                      "Password should not be greater than 15 characters"),
+                            ]),
+                            
                           ),
-                          hintText: "Enter Password",
-                          enabledBorder: InputBorder.none,
-                          focusedBorder: InputBorder.none,
-                        ),
-                        validator: MultiValidator([
-                          RequiredValidator(errorText: "* Required"),
-                          MinLengthValidator(6,
-                              errorText:
-                                  "Password should be atleast 6 characters"),
-                          MaxLengthValidator(15,
-                              errorText:
-                                  "Password should not be greater than 15 characters")
-                        ]),
+                          Positioned(
+                            right: 20,
+                            bottom: 25,
+                            child: GestureDetector(
+                              onTap: () =>
+                                  setState(() => _obscureText = !_obscureText),
+                              child: Icon(
+                                _obscureText
+                                    ? Icons.visibility_off
+                                    : Icons.visibility,
+                                color: Colors.grey[500],
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     SizedBox(

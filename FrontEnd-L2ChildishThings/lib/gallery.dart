@@ -1,13 +1,19 @@
-// ignore_for_file: prefer_const_constructors, unnecessary_null_comparison, sort_child_properties_last, avoid_print
+// ignore_for_file: prefer_const_constructors, unnecessary_null_comparison, sort_child_properties_last, avoid_print, slash_for_doc_comments, use_build_context_synchronously
 
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io' as io;
-import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'package:frontend/homepage.dart';
+import 'package:frontend/FullScreenImagePage.dart';
 import 'package:http/http.dart' as http;
 import 'package:file_picker/file_picker.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:permission_handler/permission_handler.dart';
+/**
+ * This is the Gallery Screen
+ */
 
 class ImageGallery extends StatefulWidget {
   const ImageGallery({super.key});
@@ -79,7 +85,8 @@ class _ImageGalleryState extends State<ImageGallery>
 
     if (result != null) {
       final file = io.File(result.paths.first!);
-      final bytes = await file.readAsBytes();
+      final bytes =
+          await file.readAsBytes(); //reads the contents of file a sbytes
       await _uploadImage(bytes);
     } else {
       // User canceled the picker
@@ -102,6 +109,54 @@ class _ImageGalleryState extends State<ImageGallery>
     }
   }
 
+ void downloadImage(String imageUrl) async {
+  // Request permission to access the image gallery
+  PermissionStatus status = await Permission.storage.request();
+
+  if (status.isGranted) {
+    // Permission is granted, proceed with image download and saving
+    http.Response response = await http.get(Uri.parse(imageUrl));
+
+    if (response.statusCode == 200) {
+      // Save the image file to the app's temporary directory
+      io.Directory tempDir = await getTemporaryDirectory();
+      String tempPath = tempDir.path;
+      String fileName = imageUrl.split('/').last.replaceAll(RegExp(r'[^\w\s\-.]'), '');
+      String filePath = '$tempPath/$fileName';
+      await io.File(filePath).writeAsBytes(response.bodyBytes);
+
+      // Save the image to the gallery
+      final result = await ImageGallerySaver.saveFile(filePath);
+
+      if (result['isSuccess']) {
+        showToast('Image downloaded and saved to gallery successfully');
+      } else {
+        showToast('Failed to save image to gallery');
+      }
+
+      // Delete the temporary image file
+      await io.File(filePath).delete();
+    } else {
+      showToast('Failed to download image');
+    }
+  } else {
+    // Permission is denied, show a toast or any other feedback to indicate that the save operation is not possible
+    showToast('Permission denied. Cannot save image to gallery');
+  }
+}
+
+
+// Function to show a toast with a message
+void showToast(String message) {
+  Fluttertoast.showToast(
+    msg: message,
+    toastLength: Toast.LENGTH_SHORT,
+    gravity: ToastGravity.BOTTOM,
+  );
+}
+
+
+
   @override
   void initState() {
     super.initState();
@@ -119,10 +174,7 @@ class _ImageGalleryState extends State<ImageGallery>
             color: Colors.black,
           ),
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => HomePage()),
-            );
+            //Navigate to Home page
           },
         ),
         actions: [
@@ -158,7 +210,7 @@ class _ImageGalleryState extends State<ImageGallery>
               height: 150,
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage('Asset/bg.jpg'),
+                  image: AssetImage('assets/bg.jpg'),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -188,10 +240,8 @@ class _ImageGalleryState extends State<ImageGallery>
                       mainAxisSpacing: 10,
                     ),
                     itemBuilder: (BuildContext context, int index) {
+                      //callback fyunction called for each image
                       return GestureDetector(
-                        onTap: () {
-                          // handle image tap event
-                        },
                         child: Stack(
                           children: [
                             Container(
@@ -220,9 +270,7 @@ class _ImageGalleryState extends State<ImageGallery>
                                         ),
                                       ),
                                       IconButton(
-                                        onPressed: () {
-                                          // handle download icon tap event
-                                        },
+                                         onPressed: () => downloadImage(imageUrls[index]),
                                         icon: Icon(Icons.download),
                                         color: Colors.black,
                                       ),
@@ -241,7 +289,15 @@ class _ImageGalleryState extends State<ImageGallery>
                                       ),
                                       IconButton(
                                         onPressed: () {
-                                          // handle fullscreen icon tap event
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  FullScreenImagePage(
+                                                      imageUrl:
+                                                          imageUrls[index]),
+                                            ),
+                                          );
                                         },
                                         icon: Icon(Icons.fullscreen),
                                         color: Colors.black,
