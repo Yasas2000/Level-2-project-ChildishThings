@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:frontend/configs.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
+
+import 'login_state.dart';
 
 /**
  * This is the feedback page
@@ -17,7 +20,6 @@ class FeedbackBar extends StatefulWidget {
 
 class _FeedbackBarState extends State<FeedbackBar> {
   double _initialRating = 3.0;
-  String UserId='ymeka2000';
   String ?comment;
   @override
   void initState() {
@@ -27,6 +29,8 @@ class _FeedbackBarState extends State<FeedbackBar> {
   late double _rating=3.0;
   @override
   Widget build(BuildContext context) {
+    final loginState=Provider.of<LoginState>(context);
+    String userId=loginState.id;
     return AlertDialog(
 
       title: Container(
@@ -141,7 +145,7 @@ class _FeedbackBarState extends State<FeedbackBar> {
                     final response = await http.post(
                       Uri.parse(url),
                       headers: {'Content-Type': 'application/json'},
-                      body: jsonEncode({'uid':UserId,'rating':_rating.toDouble(),'comment':comment,'dt':DateTime.now().toString()}),
+                      body: jsonEncode({'uid':userId,'rating':_rating.toDouble(),'comment':comment,'dt':DateTime.now().toString()}),
                     );
                     if (response.statusCode == 200) {
                       print('${response.body}');

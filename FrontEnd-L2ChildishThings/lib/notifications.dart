@@ -4,8 +4,10 @@ import 'package:frontend/configs.dart';
 import 'package:http/http.dart' as http;
 import 'package:frontend/app_bar.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:provider/provider.dart';
 import 'donation_form.dart';
 import 'homepage.dart';
+import 'login_state.dart';
 
 /**
  * This is the notification page widget
@@ -19,11 +21,10 @@ class NotificationsPage extends StatefulWidget {
 class _NotificationsPageState extends State<NotificationsPage> {
 
   List<Notification> _notifications = [];
-  String userId="yazaz2000";
 
   var urlDeletion=Uri.parse(localhost+'/delete');
 
-  Future<List<Notification>> getNotification() async{
+  Future<List<Notification>> getNotification(String userId) async{
     _notifications.clear();
     var urlDeletes=Uri.parse(localhost+'/delete/$userId');
     var url=Uri.parse(localhost+'/notification/viewnotifications/$userId');
@@ -79,7 +80,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
     response2=await http.put(url);
     print(response2.body.toString());
   }
-  Future<void> deleteNotification(String id,String uid) async {
+  Future<void> deleteNotification(String id,String uid,String userId) async {
     try{
       if(uid==userId){
         var url = Uri.parse(localhost+'/notification/delete-notification/$id');
@@ -114,6 +115,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final loginState=Provider.of<LoginState>(context);
     return SafeArea(
       child: Scaffold(
         appBar: CustomAppBar(title: 'Notifications',leadingIcon:IconButton(
@@ -127,7 +129,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
           },
         )),
         body: FutureBuilder(
-          future: getNotification(),
+          future: getNotification(loginState.id),
           builder: (BuildContext context,AsyncSnapshot snapshot){
             if(snapshot.connectionState==ConnectionState.waiting){
               return  Center(
@@ -177,7 +179,10 @@ class _NotificationsPageState extends State<NotificationsPage> {
                                 ],
                               ),
                               trailing: IconButton(onPressed:() async{
-                              await deleteNotification(snapshot.data[index].oid,snapshot.data[index].id);
+                                if(loginState.id!="null"){
+                                  await deleteNotification(snapshot.data[index].oid,snapshot.data[index].id,loginState.id);
+                                }
+
                               }, icon:Icon(Icons.delete_outline,color: Colors.deepOrange,)),
                               shape: OutlineInputBorder(borderRadius:BorderRadius.all(Radius.circular(25))),
                               hoverColor: Colors.deepOrange,

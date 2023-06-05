@@ -8,8 +8,7 @@ import 'app_bar.dart';
 class submition extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
+    return  Scaffold(
         appBar: CustomAppBar(
           title: 'Submission',
           leadingIcon: IconButton(
@@ -54,7 +53,6 @@ class submition extends StatelessWidget {
             ],
           ),
         ),
-      ),
-    );
+      );
   }
 }

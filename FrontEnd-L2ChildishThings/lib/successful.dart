@@ -8,8 +8,7 @@ import 'app_bar.dart';
 class successful extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
+    return  Scaffold(
         appBar: CustomAppBar(
           title: 'Successful',
           leadingIcon: IconButton(
@@ -54,7 +53,6 @@ class successful extends StatelessWidget {
             ],
           ),
         ),
-      ),
-    );
+      );
   }
 }

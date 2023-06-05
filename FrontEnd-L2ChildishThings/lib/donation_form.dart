@@ -2,7 +2,6 @@ import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:frontend/app_bar.dart';
 import 'package:frontend/credi_card_page.dart';
-import 'package:frontend/item_page.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:form_validator/form_validator.dart';

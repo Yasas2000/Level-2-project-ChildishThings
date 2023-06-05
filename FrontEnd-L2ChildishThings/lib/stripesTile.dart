@@ -2,8 +2,9 @@ import 'dart:convert';
 import 'package:frontend/stripeEsti.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-
+import 'package:provider/provider.dart';
 import 'configs.dart';
+import 'login_state.dart';
 
 //The components and the features of a strip tile 
 
@@ -14,7 +15,6 @@ class PhotoTile extends StatelessWidget {
   final String amount;
   final String hour;
   final VoidCallback onDelete;
-  final bool isAdmin;
 
   PhotoTile({
     this.id = '',
@@ -23,11 +23,11 @@ class PhotoTile extends StatelessWidget {
     this.amount = '',
     this.hour = '',
     required this.onDelete,
-    required this.isAdmin,
   });
 
   @override
   Widget build(BuildContext context) {
+    final loginState=Provider.of<LoginState>(context);
     final screenWidth = MediaQuery.of(context).size.width;
     return Column(
       children: <Widget>[
@@ -82,7 +82,7 @@ class PhotoTile extends StatelessWidget {
           ),
         ),
         Visibility(
-          visible: isAdmin,
+          visible: loginState.role=="admin",
           child: IconButton(
             icon: Icon(Icons.delete),
             color: Colors.red,

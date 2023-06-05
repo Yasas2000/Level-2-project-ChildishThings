@@ -98,7 +98,7 @@ class _AdminFormState extends State<AdminForm> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => Material(
-                                      child: type(isAdmin: _isAdmin),
+                                      child: type(),
                                     ),
                                   ),
                                 );

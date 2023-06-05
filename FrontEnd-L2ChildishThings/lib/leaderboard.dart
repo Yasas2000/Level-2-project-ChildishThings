@@ -2,9 +2,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:provider/provider.dart';
 import 'app_bar.dart';
 import 'configs.dart';
 import 'homepage.dart';
+import 'login_state.dart';
 
 class LeaderboardPage extends StatefulWidget {
   @override
@@ -20,10 +22,9 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
     _fetchLeaderboardData();
   }
   late Color cl;
-  String UserId='yazaz2000';
-
-
   Future<void> _fetchLeaderboardData() async {
+    final loginState=Provider.of<LoginState>(context,listen:false);
+    String userId=loginState.id;
     final response = await http.get(Uri.parse(localhost+'/donation'));
     if (response.statusCode == 200) {
       setState(() {
@@ -33,7 +34,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
           var amount=item['totalAmount'].toString();
           var points=item['points'].toString();
           Color c=Colors.white;
-          if(id==UserId){
+          if(id==userId){
             c=Colors.deepOrange;
           }
           Leaderboard l=Leaderboard(id, amount, points, c);

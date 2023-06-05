@@ -44,8 +44,7 @@ class _MyFormState extends State<MyForm> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        home: Scaffold(
+    return  Scaffold(
             resizeToAvoidBottomInset: false,
             appBar: CustomAppBar(
               title: 'Stripes Quotation',
@@ -428,6 +427,6 @@ class _MyFormState extends State<MyForm> {
                   ),
                 ),
               ),
-            )));
+            ));
   }
 }

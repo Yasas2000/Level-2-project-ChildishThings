@@ -7,14 +7,21 @@ import 'package:frontend/forgotpassword.dart';
 import 'package:frontend/loginscreen.dart';
 import 'package:frontend/otp_screen.dart';
 import 'package:frontend/send_otp.dart';
+import 'package:provider/provider.dart';
 
+import 'app_state.dart';
 import 'homepage.dart';
 
 
 
 void main(){
   
-  runApp(MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => AppState().loginState,
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

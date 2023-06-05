@@ -12,8 +12,7 @@ class stripeEsti extends StatelessWidget {
   const stripeEsti({required this.amount, required this.hour});
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
+    return  Scaffold(
         appBar: CustomAppBar(
           title: 'Stripes Estimation',
           leadingIcon: IconButton(
@@ -98,7 +97,6 @@ class stripeEsti extends StatelessWidget {
             ],
           ),
         ),
-      ),
-    );
+      );
   }
 }

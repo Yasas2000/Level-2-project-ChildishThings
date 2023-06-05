@@ -9,9 +9,8 @@ import 'configs.dart';
 class changePortraitValue extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: MyForm(),
-    );
+    return const  MyForm();
+
   }
 }
 
@@ -30,8 +29,7 @@ class _MyFormState extends State<MyForm> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        home: Scaffold(
+    return  Scaffold(
             appBar: CustomAppBar(
               title: 'Change Value',
               leadingIcon: IconButton(
@@ -153,6 +151,6 @@ class _MyFormState extends State<MyForm> {
                   ),
                 ),
               ),
-            )));
+            ));
   }
 }

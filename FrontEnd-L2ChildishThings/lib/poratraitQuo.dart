@@ -16,9 +16,7 @@ import 'configs.dart';
 class poratraitQuo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: MyForm(),
-    );
+    return  MyForm();
   }
 }
 
@@ -100,8 +98,7 @@ class _MyFormState extends State<MyForm> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        home: Scaffold(
+    return Scaffold(
             resizeToAvoidBottomInset: false,
             appBar: CustomAppBar(
               title: 'Portrait Quotation',
@@ -636,6 +633,6 @@ class _MyFormState extends State<MyForm> {
                   ),
                 ),
               ),
-            )));
+            ));
   }
 }

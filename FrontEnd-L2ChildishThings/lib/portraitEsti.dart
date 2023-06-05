@@ -3,17 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:frontend/poratraitQuo.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 import 'app_bar.dart';
 import 'changePortraitValue.dart';
 import 'configs.dart';
+import 'login_state.dart';
 
 //Portrait estimation web page
 
 class portraitEsti extends StatefulWidget {
-  final bool isAdmin;
 
-  const portraitEsti({Key? key, required this.isAdmin}) : super(key: key);
+  const portraitEsti({Key? key}) : super(key: key);
   @override
   _MyAppState createState() => _MyAppState();
 }
@@ -56,8 +57,8 @@ class _MyAppState extends State<portraitEsti> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        home: Scaffold(
+    final loginState=Provider.of<LoginState>(context);
+    return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: CustomAppBar(
         title: 'Portrait Estimation',
@@ -154,7 +155,7 @@ class _MyAppState extends State<portraitEsti> {
                 height: 40,
               ),
               Visibility(
-                visible: widget.isAdmin == true,
+                visible: loginState.role=="admin",
                 child: ElevatedButton(
                     onPressed: () {
                       Navigator.of(context).push(MaterialPageRoute(
@@ -168,6 +169,6 @@ class _MyAppState extends State<portraitEsti> {
           ),
         ),
       ),
-    ));
+    );
   }
 }

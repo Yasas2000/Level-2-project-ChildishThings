@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import './stripesTile.dart';
 import 'addStripestile.dart';
 import 'addStripestile.dart';
@@ -7,6 +8,7 @@ import 'package:http/http.dart' as http;
 import 'app_bar.dart';
 import 'configs.dart';
 import 'custom.dart';
+import 'login_state.dart';
 
 //All the stripe tiles will be displayed here
 
@@ -22,9 +24,9 @@ Future<List<Map<String, dynamic>>> fetchData() async {
 }
 
 class Stripes extends StatefulWidget {
-  bool isAdmin;
 
-  Stripes({required this.isAdmin});
+
+
   @override
   _typeState createState() => _typeState();
 }
@@ -62,8 +64,8 @@ class _typeState extends State<Stripes> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        home: Scaffold(
+    final loginState=Provider.of<LoginState>(context);
+    return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: CustomAppBar(
         title: 'Stripes',
@@ -102,7 +104,7 @@ class _typeState extends State<Stripes> {
               height: 10,
             ),
             Visibility(
-                visible: widget.isAdmin,
+                visible: loginState.role=="admin",
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     primary: Colors.orange,
@@ -150,7 +152,7 @@ class _typeState extends State<Stripes> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => custom(
-                      isAdmin: widget.isAdmin,
+                      isAdmin: loginState.role=="admin",
                     ),
                   ),
                 );
@@ -172,7 +174,6 @@ class _typeState extends State<Stripes> {
                         text: tile['text'] ?? "",
                         amount: tile['amount'] ?? "",
                         hour: tile['hour'] ?? "",
-                        isAdmin: widget.isAdmin,
                         onDelete: () {
                           _deleteTile(tile);
                         },
@@ -185,6 +186,6 @@ class _typeState extends State<Stripes> {
           ],
         ),
       ),
-    ));
+    );
   }
 }

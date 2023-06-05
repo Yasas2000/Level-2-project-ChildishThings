@@ -7,14 +7,16 @@ import 'package:payhere_mobilesdk_flutter/payhere_mobilesdk_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server.dart';
+import 'package:provider/provider.dart';
 import 'donation_form.dart';
+import 'login_state.dart';
 
 /**
  * This is the page for payment widget
  */
 
 class Payment extends StatelessWidget {
-  var id = "yazaz2000";
+
   final Details d;
   Payment(this.d);
   Future<void> sendPaymentConfirmationEmail(String recipientEmail, String paymentAmount) async {
@@ -100,14 +102,14 @@ class Payment extends StatelessWidget {
     }
   }
 
-  Future<void> saveDonation(var pid) async {
+  Future<void> saveDonation(var pid,String userId) async {
     try {
       var url = localhost+'/donation';
       double amount=double.parse(d.amount as String);
       final response = await http.post(
         Uri.parse(url),
         body: {
-          'id': id,
+          'id': userId,
           'pid': pid,
           'fname': d.fname,
           'lname': d.lname,
@@ -122,8 +124,8 @@ class Payment extends StatelessWidget {
         print('${response.statusCode}');
         await sendEmail(d.email,pid,d.amount,DateTime.now().toString() );
         //await sendPaymentConfirmationEmail(d.email, d.amount);
-        await sendNotification(pid, id);
-        await sendNotificationtoAdmin(pid, id);
+        await sendNotification(pid, userId);
+        await sendNotificationtoAdmin(pid, userId);
       } else {
         print('failed');
         return;
@@ -134,7 +136,7 @@ class Payment extends StatelessWidget {
     }
   }
 
-  void startRecuurantPayment(BuildContext context) async {
+  void startRecuurantPayment(BuildContext context, String userId) async {
     Map paymentObject = {
       "sandbox": true,
       "merchant_id": "1222157",
@@ -218,7 +220,7 @@ class Payment extends StatelessWidget {
     });
   }
 
-  void startOneTimepayment(BuildContext context) async {
+  void startOneTimepayment(BuildContext context,String userId) async {
     Map paymentObject = {
       "sandbox": true,
       "merchant_id": "1222157",
@@ -240,7 +242,7 @@ class Payment extends StatelessWidget {
     PayHere.startPayment(paymentObject, (paymentId) async {
       print("One Time Payment Success. Payment Id: $paymentId");
 
-      await saveDonation(paymentId);
+      await saveDonation(paymentId,userId);
 
       showAlert(context, "Payment Success!", "Payment Id: $paymentId");
       Navigator.of(context).push(MaterialPageRoute(builder: (context) {
@@ -282,6 +284,7 @@ class Payment extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final loginState=Provider.of<LoginState>(context);
     return Scaffold(
       appBar: CustomAppBar(title: "Gateway",leadingIcon: IconButton(
           icon: Icon(Icons.arrow_back_ios_outlined,color: Colors.deepOrange,size: 40,),
@@ -384,7 +387,7 @@ class Payment extends StatelessWidget {
                     child: ElevatedButton(
                       onPressed: () {
                         if (d.method == "One time Payment") {
-                          startOneTimepayment(context);
+                          startOneTimepayment(context,loginState.id);
                         } else if (d.method == "Recurrant payment") {
                         } else {}
                       },

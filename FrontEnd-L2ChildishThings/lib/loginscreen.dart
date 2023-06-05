@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:frontend/forgotpassword.dart';
 import 'package:frontend/home.dart';
+import 'package:frontend/login_state.dart';
 import 'package:frontend/send_otp.dart';
 import 'package:frontend/signup_screen.dart';
 import 'package:form_field_validator/form_field_validator.dart';
@@ -14,6 +15,7 @@ import 'package:material_dialogs/material_dialogs.dart';
 import 'package:http/http.dart' as http;
 import 'package:material_dialogs/widgets/buttons/icon_button.dart';
 import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:quickalert/quickalert.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -28,6 +30,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+
   bool isRememberMe = false;
   bool _isLoading = false;
   GlobalKey<FormState> formkey = GlobalKey<FormState>();
@@ -36,7 +39,8 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController passwordController = TextEditingController();
 
   SignIn(String email, String pass) async {
-    String url = "http://localhost:5000/users/authenticate";
+    final loginState=Provider.of<LoginState>(context,listen: false);
+    String url = "http://10.0.2.2:5000/users/authenticate";
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
     Map body = {"email": email, "password": pass};
@@ -46,6 +50,10 @@ class _LoginScreenState extends State<LoginScreen> {
     //Need to check api status
     if (res.statusCode == 200) {
       jsonResponse = json.decode(res.body);
+      String username=jsonResponse['user']['fullName'];
+      String id=jsonResponse['user']['email'];
+      String role=jsonResponse['user']['role'];
+      loginState.login(id, role, username);
 
       print("Response status: ${res.statusCode}");
 
@@ -100,7 +108,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     onPressed: () {
                       Navigator.of(context).pushAndRemoveUntil(
                           MaterialPageRoute(
-                              builder: (BuildContext context) => Homepage()),
+                              builder: (BuildContext context) => HomePage()),
                           (Route<dynamic> route) => false);
                     },
                     text: 'Home',
@@ -113,7 +121,7 @@ class _LoginScreenState extends State<LoginScreen> {
           } else if (role == "User") {
             Navigator.of(context).pushAndRemoveUntil(
                 MaterialPageRoute(
-                    builder: (BuildContext context) => Homepage()),
+                    builder: (BuildContext context) => HomePage()),
                 (Route<dynamic> route) => false);
           } else {
             Navigator.pop(context);
@@ -161,6 +169,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final loginState=Provider.of<LoginState>(context);
     return Scaffold(
         appBar:  CustomAppBar(title: '',leadingIcon:IconButton(
           icon: Icon(Icons.home),

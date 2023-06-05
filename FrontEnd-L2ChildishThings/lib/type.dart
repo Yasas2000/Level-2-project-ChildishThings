@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/portraitEsti.dart';
 import 'package:frontend/stripes.dart';
+import 'package:provider/provider.dart';
 import 'app_bar.dart';
+import 'login_state.dart';
 
 //Display whether to choose stripe photos or portrait photos
 
 class type extends StatelessWidget {
-  final bool isAdmin;
 
-  const type({required this.isAdmin});
+  const type({});
 
   @override
   Widget build(BuildContext context) {
+    final loginState=Provider.of<LoginState>(context);
     final screenWidth = MediaQuery.of(context).size.width;
 
-    return MaterialApp(
-      home: Scaffold(
+    return  Scaffold(
         appBar: CustomAppBar(
           title: 'Type',
           leadingIcon: IconButton(
@@ -74,7 +75,6 @@ class type extends StatelessWidget {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => Stripes(
-                                        isAdmin: isAdmin,
                                       ),
                                     ),
                                   );
@@ -118,7 +118,6 @@ class type extends StatelessWidget {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => portraitEsti(
-                                        isAdmin: isAdmin,
                                       ),
                                     ),
                                   );
@@ -152,7 +151,6 @@ class type extends StatelessWidget {
             ],
           ),
         ),
-      ),
-    );
+      );
   }
 }

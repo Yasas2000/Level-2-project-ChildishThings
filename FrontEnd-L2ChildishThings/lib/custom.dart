@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:frontend/stripsQuo.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:http/http.dart' as http;
-
-
 import 'app_bar.dart';
 import 'changeValue.dart';
 import 'configs.dart';
