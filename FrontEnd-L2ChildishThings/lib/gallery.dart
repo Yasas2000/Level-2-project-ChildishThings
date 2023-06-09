@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'dart:io' as io;
 import 'package:flutter/material.dart';
 import 'package:frontend/FullScreenImagePage.dart';
+import 'package:frontend/configs.dart';
 import 'package:http/http.dart' as http;
 import 'package:file_picker/file_picker.dart';
 import 'package:path_provider/path_provider.dart';
@@ -27,7 +28,7 @@ class _ImageGalleryState extends State<ImageGallery>
   late List<String> imageUrls = [];
 
   Future<void> _fetchImageUrls() async {
-    final response = await http.get(Uri.parse('http://localhost:3000/images'));
+    final response = await http.get(Uri.parse(gallery_localhost+'/images'));
     final jsonData = json.decode(response.body);
     final List<dynamic> imageUrlData = jsonData['images'];
     setState(() {
@@ -39,7 +40,7 @@ class _ImageGalleryState extends State<ImageGallery>
     try {
       var request = http.MultipartRequest(
         'POST',
-        Uri.parse('http://localhost:3000/v3/post/single'),
+        Uri.parse(gallery_localhost+'/v3/post/single'),
       );
       request.files.add(
         http.MultipartFile.fromBytes(
@@ -61,7 +62,7 @@ class _ImageGalleryState extends State<ImageGallery>
     try {
       var request = http.MultipartRequest(
         'POST',
-        Uri.parse('http://localhost:3000/v3/post/multiple'),
+        Uri.parse(gallery_localhost+'/v3/post/multiple'),
       );
       for (var i = 0; i < files.length; i++) {
         request.files.add(

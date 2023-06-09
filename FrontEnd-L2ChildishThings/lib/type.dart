@@ -9,8 +9,6 @@ import 'login_state.dart';
 
 class type extends StatelessWidget {
 
-  const type({});
-
   @override
   Widget build(BuildContext context) {
     final loginState=Provider.of<LoginState>(context);
@@ -31,7 +29,7 @@ class type extends StatelessWidget {
         body: Container(
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage("new.jpg"),
+              image: AssetImage("Asset/new.jpg"),
               fit: BoxFit.cover,
             ),
           ),
@@ -41,7 +39,7 @@ class type extends StatelessWidget {
                 flex: 1,
                 child: Container(
                   child: Image.asset(
-                    'logo.png',
+                    'assets/logo.png',
                     width: 0.8 * screenWidth,
                     height: 0.8 * screenWidth,
                   ),
@@ -65,7 +63,7 @@ class type extends StatelessWidget {
                                   Radius.circular(25.0),
                                 ),
                                 border: Border.all(
-                                  color: Colors.orange,
+                                  color: Colors.deepOrange,
                                   width: 0.01 * screenWidth,
                                 ),
                               ),
@@ -80,7 +78,7 @@ class type extends StatelessWidget {
                                   );
                                 },
                                 child: Image.asset(
-                                  'stripe1.jpg',
+                                  'Asset/stripe1.jpg',
                                   width: 0.4 * screenWidth,
                                   height: 0.4 * screenWidth,
                                 ),
@@ -91,7 +89,7 @@ class type extends StatelessWidget {
                               child: Text(
                                 'STRIPE PHOTO',
                                 style: TextStyle(
-                                  color: Colors.orange,
+                                  color: Colors.deepOrange,
                                   fontSize: 10,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -108,7 +106,7 @@ class type extends StatelessWidget {
                                   Radius.circular(25.0),
                                 ),
                                 border: Border.all(
-                                  color: Colors.orange,
+                                  color: Colors.deepOrange,
                                   width: 0.01 * screenWidth,
                                 ),
                               ),
@@ -123,7 +121,7 @@ class type extends StatelessWidget {
                                   );
                                 },
                                 child: Image.asset(
-                                  'potarit1.jpg',
+                                  'Asset/potarit1.jpg',
                                   width: 0.4 * screenWidth,
                                   height: 0.4 * screenWidth,
                                 ),
@@ -134,7 +132,7 @@ class type extends StatelessWidget {
                               child: Text(
                                 'PORTRAIT PHOTO',
                                 style: TextStyle(
-                                  color: Colors.orange,
+                                  color: Colors.deepOrange,
                                   fontSize: 10,
                                   fontWeight: FontWeight.bold,
                                 ),

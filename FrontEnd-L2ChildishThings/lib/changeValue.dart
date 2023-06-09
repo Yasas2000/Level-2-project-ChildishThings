@@ -90,7 +90,7 @@ class _MyFormState extends State<MyForm> {
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
                             final response = await http.put(
-                              Uri.parse(localhost_+'/updateCustomValue'),
+                              Uri.parse(localhost+'/api/updateCustomValue'),
                               headers: <String, String>{
                                 'Content-Type':
                                     'application/json; charset=UTF-8',

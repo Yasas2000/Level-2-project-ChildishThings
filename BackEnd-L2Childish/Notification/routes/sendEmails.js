@@ -7,7 +7,25 @@ router.post('/', (req, res) => {
     const amount = req.body.amount;
     const date = req.body.date;
     const logoPath = "https://images.squarespace-cdn.com/content/v1/5f633f2a3ceb25330f960d39/9370e95a-b4f8-4ddf-952e-cbd33a7157cd/Photobooth.png?format=1500w"; // Replace with the actual path to your logo image
-
+    function generatePDF(htmlContent, outputPath) {
+      return new Promise((resolve, reject) => {
+        const doc = new PDFDocument();
+        const stream = fs.createWriteStream(outputPath);
+      
+        doc.pipe(stream);
+        doc.font('Helvetica').fontSize(12).text(htmlContent, 50, 50);
+        doc.end();
+      
+        stream.on('finish', () => {
+          console.log(`PDF generated successfully: ${outputPath}`);
+          resolve();
+        });
+      
+        stream.on('error', (error) => {
+          reject(error);
+        });
+      });
+    }
 // Function to generate the HTML with dynamic parameters
 function generateHTML(paymentId, amount, date) {
   return `
@@ -63,5 +81,380 @@ function generateHTML(paymentId, amount, date) {
   
     
   });
+  router.post('/quotation', (req, res) => {
+    const recipient='ymeka2000@gmail.com';
+    const numBigFamilies = req.body.numBigFamilies;
+    const name= req.body.firstName+req.body.lastName;
+    const number= req.body.contactNumber;
+    const email=req.body.email;
+    const date= req.body.date;
+    const eventDurationHours= req.body.eventDurationHours;
+    const eventLocation=req.body.eventLocation;
+    const eventStarttime=req.body.eventStarttime;
+    const totInvitees=req.body.totInvitees;
+    const numSmallFamilies=req.body.numSmallFamilies;
+    const numMarriedCouples=req.body.numMarriedCouples;
+    const numUnMarriedCouples=req.body.numUnMarriedCouples;
+    const numIndividualInvitees=req.body.numIndividualInvitees;
+    const logoPath = "https://images.squarespace-cdn.com/content/v1/5f633f2a3ceb25330f960d39/9370e95a-b4f8-4ddf-952e-cbd33a7157cd/Photobooth.png?format=1500w"; // Replace with the actual path to your logo image
 
+// Function to generate the HTML with dynamic parameters
+function generateHTML
+ (name,
+  number,
+  email,
+  date,
+  numBigFamilies,
+  numSmallFamilies,
+  numMarriedCouples,
+  numUnMarriedCouples,
+  numIndividualInvitees,
+  eventLocation,
+  eventDurationHours,
+  eventStarttime,
+  totInvitees) {
+  return `
+  <!DOCTYPE html>
+  <html>
+  <head>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+  
+      .container {
+        width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f88440;
+        color: #f8ffd0;
+      }
+  
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+  
+      .header img {
+        max-height: 80px;
+      }
+  
+      .logo-section {
+        text-align: center;
+        width:800px
+        background-color: #f7f7f7;
+      }
+        .logo-section img {
+        max-height: 100px;
+        max-width: 200px;
+        color:#000000;
+      }
+  
+      .customer-details,
+      .company-details {
+        width: 48%;
+      }
+  
+      .customer-details h2,
+      .company-details h2 {
+        font-size: 20px;
+        margin-top: 0;
+        margin-bottom: 10px;
+      }
+  
+      .customer-details p,
+      .company-details p {
+        margin-top: 0;
+        margin-bottom: 5px;
+      }
+  
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+  
+      th, td {
+        padding: 10px;
+        text-align: left;
+      }
+  
+      th {
+        background-color: #ff9e7c;
+        font-weight: bold;
+      }
+  
+      .total {
+        font-weight: bold;
+        text-align: right;
+        background-color: #000000;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="logo-section">
+        <img src="https://images.squarespace-cdn.com/content/v1/5f633f2a3ceb25330f960d39/9370e95a-b4f8-4ddf-952e-cbd33a7157cd/Photobooth.png?format=1500w" alt="Company Logo">
+      </div>
+    <div class="container">
+      <div class="header">
+        <div class="customer-details">
+          <h2>Customer Details</h2>
+          <p>${name}</p>
+          <p>${email}</p>
+          <p>${eventLocation}</p>
+          <p>${number}</p>
+          <p>${date}</p>
+          <p>Event time ${eventStarttime}</p>
+
+        </div>
+        <div class="company-details">
+          <h2>Company Details</h2>
+          <p>PhotoBoothMe LK</p>
+          <p>456 Business Avenue</p>
+          <p>City, State, ZIP</p>
+          <p>Tel:0788127829<p>
+        </div>
+      </div>
+      
+      <div class="quotation-details">
+        <h2>Quotation</h2>
+        <table>
+          <tr>
+            <th>Item</th>
+            <th>Options</th>
+            <th>Quantity</th>
+          </tr>
+          <tr>
+            <td>Portrait</td>
+            <td>No of big families</td>
+            <td>${numBigFamilies}</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td>No of small families</td>
+            <td>${numSmallFamilies}</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td>No of Married Couples</td>
+            <td>${numMarriedCouples}</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td>No of Unmarried Couples</td>
+            <td>${numUnMarriedCouples}</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td>No of Individuals</td>
+            <td>${numIndividualInvitees}</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td>Total Invitees</td>
+            <td>${totInvitees}</td>
+          </tr>
+          <!-- Add more rows for additional items -->
+          <tr class="total">
+            <td colspan="2">Total:</td>
+            <td>$100</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </body>
+  </html>
+  `;
+}
+    sendEmail(recipient, generateHTML(name,
+      number,
+      email,
+      date,
+      numBigFamilies,
+      numSmallFamilies,
+      numMarriedCouples,
+      numUnMarriedCouples,
+      numIndividualInvitees,
+      eventLocation,
+      eventDurationHours,
+      eventStarttime,
+      totInvitees));
+    res.status(200).send('Email sent successfully!');
+  
+    
+  });
+  router.post('/quotationStripes', (req, res) => {
+    const recipient='ymeka2000@gmail.com';
+    const name= req.body.firstName+req.body.lastName;
+    const number= req.body.contactNumber;
+    const email=req.body.email;
+    const date= req.body.date;
+    const eventDurationHours= req.body.eventDurationHours;
+    const eventLocation=req.body.eventLocation;
+    const eventStarttime=req.body.eventStarttime;
+    const totInvitees=req.body.totInvitees;
+    const logoPath = "https://images.squarespace-cdn.com/content/v1/5f633f2a3ceb25330f960d39/9370e95a-b4f8-4ddf-952e-cbd33a7157cd/Photobooth.png?format=1500w"; // Replace with the actual path to your logo image
+
+// Function to generate the HTML with dynamic parameters
+function generateHTML
+ (name,
+  number,
+  email,
+  date,
+  eventLocation,
+  eventDurationHours,
+  eventStarttime,
+  totInvitees) {
+  return `
+  <!DOCTYPE html>
+  <html>
+  <head>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+  
+      .container {
+        width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f88440;
+        color: #f8ffd0;
+      }
+  
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+  
+      .header img {
+        max-height: 80px;
+      }
+  
+      .logo-section {
+        text-align: center;
+        width:800px
+        background-color: #f7f7f7;
+      }
+        .logo-section img {
+        max-height: 100px;
+        max-width: 200px;
+        color:#000000;
+      }
+  
+      .customer-details,
+      .company-details {
+        width: 48%;
+      }
+  
+      .customer-details h2,
+      .company-details h2 {
+        font-size: 20px;
+        margin-top: 0;
+        margin-bottom: 10px;
+      }
+  
+      .customer-details p,
+      .company-details p {
+        margin-top: 0;
+        margin-bottom: 5px;
+      }
+  
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+  
+      th, td {
+        padding: 10px;
+        text-align: left;
+      }
+  
+      th {
+        background-color: #ff9e7c;
+        font-weight: bold;
+      }
+  
+      .total {
+        font-weight: bold;
+        text-align: right;
+        background-color: #000000;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="logo-section">
+        <img src="https://images.squarespace-cdn.com/content/v1/5f633f2a3ceb25330f960d39/9370e95a-b4f8-4ddf-952e-cbd33a7157cd/Photobooth.png?format=1500w" alt="Company Logo">
+      </div>
+    <div class="container">
+      <div class="header">
+        <div class="customer-details">
+          <h2>Customer Details</h2>
+          <p>${name}</p>
+          <p>${email}</p>
+          <p>${eventLocation}</p>
+          <p>${number}</p>
+          <p>${date}</p>
+          <p>Event time ${eventStarttime}</p>
+
+        </div>
+        <div class="company-details">
+          <h2>Company Details</h2>
+          <p>PhotoBoothMe LK</p>
+          <p>456 Business Avenue</p>
+          <p>City, State, ZIP</p>
+          <p>Tel:0788127829<p>
+        </div>
+      </div>
+      
+      <div class="quotation-details">
+        <h2>Quotation</h2>
+        <table>
+          <tr>
+            <th>Item</th>
+            <th>Options</th>
+            <th>Quantity</th>
+          </tr>
+
+          <tr>
+            <td>Stripes</td>
+            <td>Total Invitees</td>
+            <td>${totInvitees}</td>
+          </tr>
+          <tr>
+          <td></td>
+          <td>Duration</td>
+          <td>${eventDurationHours} hrs</td>
+          </tr>
+          <!-- Add more rows for additional items -->
+          <tr class="total">
+            <td colspan="2">Total:</td>
+            <td>$100</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </body>
+  </html>
+  `;
+}
+    sendEmail(recipient, generateHTML(name,
+      number,
+      email,
+      date,
+      eventLocation,
+      eventDurationHours,
+      eventStarttime,
+      totInvitees));
+    res.status(200).send('Email sent successfully!');
+  
+    
+  });
   module.exports=router;

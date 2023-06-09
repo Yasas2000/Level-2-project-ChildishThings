@@ -11,24 +11,15 @@ import 'configs.dart';
 
 //Stripes quotation
 
-class stripsQuo extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: MyForm(),
-    );
-  }
-}
-
-class MyForm extends StatefulWidget {
-  const MyForm({super.key});
+class stripsQuo extends StatefulWidget {
+  const stripsQuo({Key? key}) : super(key: key);
 
   @override
   // ignore: library_private_types_in_public_api
-  _MyFormState createState() => _MyFormState();
+  _stripQuoState createState() => _stripQuoState();
 }
 
-class _MyFormState extends State<MyForm> {
+class _stripQuoState extends State<stripsQuo> {
   final _formKey = GlobalKey<FormState>();
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
@@ -63,7 +54,7 @@ class _MyFormState extends State<MyForm> {
                 width: double.infinity,
                 decoration: const BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage("new.jpg"),
+                    image: AssetImage("Asset/new.jpg"),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -389,7 +380,7 @@ class _MyFormState extends State<MyForm> {
                           onPressed: () async {
                             if (_formKey.currentState!.validate()) {
                               final response = await http.post(
-                                Uri.parse(localhost_ + '/Stripes'),
+                                Uri.parse(localhost + '/api/Stripes'),
                                 headers: <String, String>{
                                   'Content-Type':
                                       'application/json; charset=UTF-8',
@@ -411,6 +402,23 @@ class _MyFormState extends State<MyForm> {
                                 }),
                               );
                               if (response.statusCode == 200) {
+                                var url = Uri.parse(localhost+'/send-email/quotation');
+                                var emailResponse = await http.post(url, body: jsonEncode(<String, dynamic>{
+                                  'firstName': _firstNameController.text,
+                                  'lastName': _lastNameController.text,
+                                  'contactNumber': _contactNumberController.text,
+                                  'email': _emailController.text,
+                                  'eventStarttime': _eventStarttimeController.text,
+                                  'date': _dateController.text,
+                                  'eventDurationHours': _eventDurationHours.text,
+                                  'evenLocation': _eventLocation.text,
+                                  'totInvitees': _totInvitees.text,
+                                }),);
+                                if (emailResponse.statusCode == 200) {
+                                  print('Email sent successfully!');
+                                } else {
+                                  print('Failed to send email. Error code: ${emailResponse.statusCode}');
+                                }
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(

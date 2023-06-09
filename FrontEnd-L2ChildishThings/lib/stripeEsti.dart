@@ -30,7 +30,7 @@ class stripeEsti extends StatelessWidget {
           width: double.infinity,
           decoration: const BoxDecoration(
             image: DecorationImage(
-              image: AssetImage("new.jpg"),
+              image: AssetImage("Asset/new.jpg"),
               fit: BoxFit.cover,
             ),
           ),
@@ -42,9 +42,10 @@ class stripeEsti extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Image.asset(
-                        'logo.png',
+                        'Asset/logo.png',
                         width: 200,
                         height: 200,
+                        color: Colors.deepOrange,
                       ),
                       SizedBox(height: 20),
                       Text(
@@ -77,7 +78,7 @@ class stripeEsti extends StatelessWidget {
                           'GET THE EXACT AMOUNT',
                           style: TextStyle(
                             decoration: TextDecoration.underline,
-                            color: Colors.orange,
+                            color: Colors.deepOrange,
                             fontWeight: FontWeight.bold,
                             fontSize: 22,
                           ),

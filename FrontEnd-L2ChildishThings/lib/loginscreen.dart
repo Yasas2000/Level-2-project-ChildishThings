@@ -21,19 +21,27 @@ import 'package:quickalert/quickalert.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'app_bar.dart';
+import 'configs.dart';
 import 'homepage.dart';
 
 
 class LoginScreen extends StatefulWidget {
+  const LoginScreen({Key? key}) :super(key: key);
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
 
+  @override
+  void initState() {
+    _loadUserEmailPassword();
+    super.initState();
+  }
   bool isRememberMe = false;
   bool _isLoading = false;
   bool _obscureText = true;
+  bool _isChecked=false;
   GlobalKey<FormState> formkey = GlobalKey<FormState>();
 
   TextEditingController emailController = TextEditingController();
@@ -41,7 +49,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   SignIn(String email, String pass) async {
     final loginState=Provider.of<LoginState>(context,listen: false);
-    String url = "http://10.0.2.2:5000/users/authenticate";
+    String url = localhost_+"/users/authenticate";
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
     Map body = {"email": email, "password": pass};
@@ -130,6 +138,41 @@ class _LoginScreenState extends State<LoginScreen> {
         });
   }
 
+  void _handleRemeberme(bool value) {
+    _isChecked = value;
+    SharedPreferences.getInstance().then(
+          (prefs) {
+        prefs.setBool("remember_me", value);
+        prefs.setString('email', emailController.text);
+        prefs.setString('password', passwordController.text);
+      },
+    );
+    setState(() {
+      _isChecked = value;
+    });
+  }
+  void _loadUserEmailPassword() async {
+    try {
+      SharedPreferences _prefs = await SharedPreferences.getInstance();
+      var _email = _prefs.getString("email") ?? "";
+      var _password = _prefs.getString("password") ?? "";
+      var _remeberMe = _prefs.getBool("remember_me") ?? false;
+      print(_remeberMe);
+      print(_email);
+      print(_password);
+      if (_remeberMe) {
+        setState(() {
+          _isChecked = true;
+        });
+        emailController.text = _email ?? "";
+        passwordController.text = _password ?? "";
+      }
+    } catch (e)
+    {
+      print(e);
+    }
+  }
+
   Widget buildRememberCb() {
     return Container(
       height: 40,
@@ -139,13 +182,12 @@ class _LoginScreenState extends State<LoginScreen> {
           Theme(
             data: ThemeData(unselectedWidgetColor: Colors.grey),
             child: Checkbox(
-              value: isRememberMe,
+              value: _isChecked,
               activeColor: Colors.orange,
               checkColor: Colors.white,
               onChanged: (value) {
-                setState(() {
-                  isRememberMe = value!;
-                });
+                _handleRemeberme(value??false);
+                //widget.prefs.setBool('rememberMe', value??false);
               },
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(5),
@@ -209,7 +251,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             Container(
                               margin: EdgeInsets.only(top: 10),
                               child: Image.asset(
-                                "Asset/photobooth.png",
+                                "Asset/Photobooth.png",
                                 height: 200,
                                 width: 200,
                               ),

@@ -12,7 +12,7 @@ let transporter = nodemailer.createTransport({
         from: 'photoboothme499@gmail.com',
         to: recipient,
         subject: 'Payment Confirmation',
-        html:html
+        html:html,
       };
     
       transporter.sendMail(mailOptions, function(error, info) {

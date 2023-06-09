@@ -49,7 +49,7 @@ class _AddPhotoTileScreenState extends State<AddPhotoTileScreen> {
           width: double.infinity,
           decoration: const BoxDecoration(
             image: DecorationImage(
-              image: AssetImage("new.jpg"),
+              image: AssetImage("Asset/new.jpg"),
               fit: BoxFit.cover,
             ),
           ),
@@ -159,7 +159,7 @@ class _AddPhotoTileScreenState extends State<AddPhotoTileScreen> {
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
                       final response = await http.post(
-                        Uri.parse(localhost_ + '/addStripTile'),
+                        Uri.parse(localhost + '/api/addStripTile'),
                         headers: <String, String>{
                           'Content-Type': 'application/json; charset=UTF-8',
                         },
@@ -170,17 +170,16 @@ class _AddPhotoTileScreenState extends State<AddPhotoTileScreen> {
                           'hour': _hour.text,
                         }),
                       );
+                      if (response.statusCode == 200) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => successful()),
+                        );
+                      }
                     }
+                    }, child: Text('Add'),
 
-                    var response;
-                    if (response.statusCode == 200) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => successful()),
-                      );
-                    }
-                  },
-                  child: Text('Add'),
+                    
                 ),
               ],
             ),

@@ -15,8 +15,8 @@ class LoginState with ChangeNotifier{
 
   void logout() {
     isLoggedIn = false;
-    id = '';
-    role = '';
+    id = 'null';
+    role = 'null';
     username='Guest';
     notifyListeners();
   }

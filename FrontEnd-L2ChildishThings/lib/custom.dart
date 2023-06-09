@@ -2,18 +2,18 @@ import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:frontend/stripsQuo.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:http/http.dart' as http;
 import 'app_bar.dart';
 import 'changeValue.dart';
 import 'configs.dart';
+import 'login_state.dart';
 
 //Custom web page 
 
 class custom extends StatefulWidget {
-  final bool isAdmin;
 
-  custom({required this.isAdmin});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -33,7 +33,7 @@ class _MyAppState extends State<custom> {
 
   Future<void> fetchUpdatedAmount() async {
     final response =
-        await http.get(Uri.parse(localhost_+'/getCustomValue'));
+        await http.get(Uri.parse(localhost+'/api/getCustomValue'));
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
       setState(() {
@@ -47,8 +47,8 @@ class _MyAppState extends State<custom> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
+    final loginState=Provider.of<LoginState>(context);
+    return  Scaffold(
         appBar: CustomAppBar(
           title: 'Custom',
           leadingIcon: IconButton(
@@ -142,7 +142,7 @@ class _MyAppState extends State<custom> {
                 },
               ),
               Visibility(
-                  visible: widget.isAdmin,
+                  visible: loginState.role=="admin",
                   child: InkWell(
                     child: const Text(
                       'Click here to change the value',
@@ -164,7 +164,6 @@ class _MyAppState extends State<custom> {
             ],
           ),
         ),
-      ),
-    );
+      );
   }
 }

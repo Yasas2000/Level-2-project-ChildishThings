@@ -51,7 +51,7 @@ dependencies:
   badges: ^3.0.3
   loading_animation_widget: ^1.2.0+4
   payhere_mobilesdk_flutter: ^3.0.1
-  shared_preferences: ^2.0.17
+  shared_preferences: ^2.1.1
   quickalert: ^1.0.1
   font_awesome_flutter: ^10.3.0
   material_dialogs: ^1.1.4
@@ -72,7 +72,8 @@ dependencies:
   file_picker: ^5.2.5
   flutter_plugin_android_lifecycle: ^2.0.8
   provider: ^6.0.5
-  
+  dots_indicator: ^2.0.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -104,14 +105,30 @@ flutter:
     - Asset/paypal.jpg
     - Asset/genie.jpg
     - Asset/email.png
-    - Asset/email.png
-    - Asset/photobooth.png
+    - Asset/Photobooth.png
     - Asset/passreset.png
     - Asset/sendOTP.jpg
+    - Asset/new.jpg
+    - Asset/stripe1.jpg
+    - Asset/potarit1.jpg
+    - Asset/logo.png
+    - Asset/party.jfif
+    - Asset/gaduation.jfif
+    - Asset/birth.jfif
+    - Asset/corparate.jfif
+    - Asset/cus.jfif
+    - Asset/gettogether.jfif
+    - Asset/wedding.jfif
     - Asset/bg.jpg
+    - assets/1.jpg
+    - assets/2.jpg
+    - assets/logoblack.png
+    - assets/logo.png
     - assets/images/1.jpg
     - assets/images/2.jpg
     - assets/images/logo.png
+    - assets/
+    - Asset/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 

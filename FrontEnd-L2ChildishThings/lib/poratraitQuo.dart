@@ -13,23 +13,16 @@ import 'configs.dart';
 
 //Portrait quotation
 
-class poratraitQuo extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return  MyForm();
-  }
-}
-
-class MyForm extends StatefulWidget {
-  const MyForm({super.key});
+class poratraitQuo extends StatefulWidget {
+  const poratraitQuo({super.key});
 
   Future<void> portraitQuotationForm() async {}
 
   @override
-  _MyFormState createState() => _MyFormState();
+  _poratraitQuoState createState() => _poratraitQuoState();
 }
 
-class _MyFormState extends State<MyForm> {
+class _poratraitQuoState extends State<poratraitQuo> {
   final _formKey = GlobalKey<FormState>();
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
@@ -102,13 +95,11 @@ class _MyFormState extends State<MyForm> {
             resizeToAvoidBottomInset: false,
             appBar: CustomAppBar(
               title: 'Portrait Quotation',
-              leadingIcon: IconButton(
-                icon: Icon(
-                  Icons.home,
-                  color: Colors.deepOrange,
-                  size: 40,
-                ),
-                onPressed: () {},
+              leadingIcon:  IconButton(
+                icon: Icon(Icons.arrow_back_ios_outlined,color: Colors.deepOrange,size: 40,),
+                onPressed:(){
+                  Navigator.of(context).pop();
+                },
               ),
             ),
             body: SingleChildScrollView(
@@ -117,7 +108,7 @@ class _MyFormState extends State<MyForm> {
                 width: double.infinity,
                 decoration: const BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage("new.jpg"),
+                    image: AssetImage("Asset/new.jpg"),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -145,15 +136,15 @@ class _MyFormState extends State<MyForm> {
                               labelText: 'First Name*',
                               border: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                  color: Colors.orange,
+                                  color: Colors.deepOrange,
                                 ),
                               ),
                               icon: Icon(
                                 Icons.person,
-                                color: Colors.orange,
+                                color: Colors.deepOrange,
                               ),
                               labelStyle: TextStyle(
-                                color: Colors.orange,
+                                color: Colors.deepOrange,
                               ),
                             ),
                             validator: (value) {
@@ -173,15 +164,15 @@ class _MyFormState extends State<MyForm> {
                               labelText: 'Last Name*',
                               border: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                  color: Colors.orange,
+                                  color: Colors.deepOrange,
                                 ),
                               ),
                               icon: Icon(
                                 Icons.person,
-                                color: Colors.orange,
+                                color: Colors.deepOrange,
                               ),
                               labelStyle: TextStyle(
-                                color: Colors.orange,
+                                color: Colors.deepOrange,
                               ),
                             ),
                             validator: (value) {
@@ -201,16 +192,16 @@ class _MyFormState extends State<MyForm> {
                               labelText: 'Contact Number*',
                               border: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                  color: Colors.orange,
+                                  color: Colors.deepOrange,
                                 ),
                               ),
                               hintText: 'Ex : 0777123456',
                               icon: Icon(
                                 Icons.phone,
-                                color: Colors.orange,
+                                color: Colors.deepOrange,
                               ),
                               labelStyle: TextStyle(
-                                color: Colors.orange,
+                                color: Colors.deepOrange,
                               ),
                             ),
                             validator: (value) {
@@ -237,10 +228,10 @@ class _MyFormState extends State<MyForm> {
                               ),
                               icon: Icon(
                                 Icons.email,
-                                color: Colors.orange,
+                                color: Colors.deepOrange,
                               ),
                               labelStyle: TextStyle(
-                                color: Colors.orange,
+                                color: Colors.deepOrange,
                               ),
                             ),
                             validator: (value) {
@@ -262,16 +253,16 @@ class _MyFormState extends State<MyForm> {
                               labelText: 'Event Start Time*',
                               border: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                  color: Colors.orange,
+                                  color: Colors.deepOrange,
                                 ),
                               ),
                               hintText: 'Ex:2.45 PM',
                               icon: Icon(
                                 Icons.lock_clock,
-                                color: Colors.orange,
+                                color: Colors.deepOrange,
                               ),
                               labelStyle: TextStyle(
-                                color: Colors.orange,
+                                color: Colors.deepOrange,
                               ),
                             ),
                             validator: (value) {
@@ -288,16 +279,16 @@ class _MyFormState extends State<MyForm> {
                                 labelText: 'Event Date*',
                                 border: OutlineInputBorder(
                                   borderSide: BorderSide(
-                                    color: Colors.orange,
+                                    color: Colors.deepOrange,
                                   ),
                                 ),
                                 hintText: 'DD/MM/YYYY',
                                 icon: Icon(
                                   Icons.date_range,
-                                  color: Colors.orange,
+                                  color: Colors.deepOrange,
                                 ),
                                 labelStyle: TextStyle(
-                                  color: Colors.orange,
+                                  color: Colors.deepOrange,
                                 ),
                               ),
                               validator: (value) {
@@ -313,16 +304,16 @@ class _MyFormState extends State<MyForm> {
                               labelText: 'Event Duration in Hours*',
                               border: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                  color: Colors.orange,
+                                  color: Colors.deepOrange,
                                 ),
                               ),
                               hintText: 'Ex:2',
                               icon: Icon(
                                 Icons.lock_clock,
-                                color: Colors.orange,
+                                color: Colors.deepOrange,
                               ),
                               labelStyle: TextStyle(
-                                color: Colors.orange,
+                                color: Colors.deepOrange,
                               ),
                             ),
                             validator: (value) {
@@ -342,16 +333,16 @@ class _MyFormState extends State<MyForm> {
                               labelText: 'Event Location*',
                               border: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                  color: Colors.orange,
+                                  color: Colors.deepOrange,
                                 ),
                               ),
                               hintText: 'Ex:Moratuwa',
                               icon: Icon(
                                 Icons.place,
-                                color: Colors.orange,
+                                color: Colors.deepOrange,
                               ),
                               labelStyle: TextStyle(
-                                color: Colors.orange,
+                                color: Colors.deepOrange,
                               ),
                             ),
                             validator: (value) {
@@ -386,17 +377,17 @@ class _MyFormState extends State<MyForm> {
                               labelText: 'Total Invitees *',
                               border: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                  color: Colors.orange,
+                                  color: Colors.deepOrange,
                                 ),
                               ),
                               helperText:
                                   'Number of invitees expected for the event',
                               icon: Icon(
                                 Icons.person,
-                                color: Colors.orange,
+                                color: Colors.deepOrange,
                               ),
                               labelStyle: TextStyle(
-                                color: Colors.orange,
+                                color: Colors.deepOrange,
                               ),
                             ),
                             validator: (value) {
@@ -416,17 +407,17 @@ class _MyFormState extends State<MyForm> {
                               labelText: 'Number of Big Families*',
                               border: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                  color: Colors.orange,
+                                  color: Colors.deepOrange,
                                 ),
                               ),
                               helperText:
                                   'Number of families with more than 04 members (>4)',
                               icon: Icon(
                                 Icons.person,
-                                color: Colors.orange,
+                                color: Colors.deepOrange,
                               ),
                               labelStyle: TextStyle(
-                                color: Colors.orange,
+                                color: Colors.deepOrange,
                               ),
                             ),
                             validator: (value) {
@@ -446,17 +437,17 @@ class _MyFormState extends State<MyForm> {
                               labelText: 'Number of Small Families*',
                               border: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                  color: Colors.orange,
+                                  color: Colors.deepOrange,
                                 ),
                               ),
                               helperText:
                                   'Number of families with 04 or less than 04 members (<=4)',
                               icon: Icon(
                                 Icons.person,
-                                color: Colors.orange,
+                                color: Colors.deepOrange,
                               ),
                               labelStyle: TextStyle(
-                                color: Colors.orange,
+                                color: Colors.deepOrange,
                               ),
                             ),
                             validator: (value) {
@@ -476,16 +467,16 @@ class _MyFormState extends State<MyForm> {
                               labelText: 'Number of Married Couples*',
                               border: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                  color: Colors.orange,
+                                  color: Colors.deepOrange,
                                 ),
                               ),
                               helperText: 'Number of married couples',
                               icon: Icon(
                                 Icons.person,
-                                color: Colors.orange,
+                                color: Colors.deepOrange,
                               ),
                               labelStyle: TextStyle(
-                                color: Colors.orange,
+                                color: Colors.deepOrange,
                               ),
                             ),
                             validator: (value) {
@@ -505,16 +496,16 @@ class _MyFormState extends State<MyForm> {
                               labelText: 'Number of Unmarried Couples*',
                               border: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                  color: Colors.orange,
+                                  color: Colors.deepOrange,
                                 ),
                               ),
                               helperText: 'Number of unmarried couples',
                               icon: Icon(
                                 Icons.abc,
-                                color: Colors.orange,
+                                color: Colors.deepOrange,
                               ),
                               labelStyle: TextStyle(
-                                color: Colors.orange,
+                                color: Colors.deepOrange,
                               ),
                             ),
                             validator: (value) {
@@ -534,17 +525,17 @@ class _MyFormState extends State<MyForm> {
                               labelText: 'Number of Individual Invitees*',
                               border: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                  color: Colors.orange,
+                                  color: Colors.deepOrange,
                                 ),
                               ),
                               helperText:
                                   'Number of Friends, Acquaintances and Colleagues',
                               icon: Icon(
                                 Icons.person,
-                                color: Colors.orange,
+                                color: Colors.deepOrange,
                               ),
                               labelStyle: TextStyle(
-                                color: Colors.orange,
+                                color: Colors.deepOrange,
                               ),
                             ),
                             validator: (value) {
@@ -564,29 +555,29 @@ class _MyFormState extends State<MyForm> {
                               labelText: 'Remarks',
                               border: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                  color: Colors.orange,
+                                  color: Colors.deepOrange,
                                 ),
                               ),
                               helperText:
                                   'Mention if you have any special concerns or requests',
                               icon: Icon(
                                 Icons.note,
-                                color: Colors.orange,
+                                color: Colors.deepOrange,
                               ),
                               labelStyle: TextStyle(
-                                color: Colors.orange,
+                                color: Colors.deepOrange,
                               ),
                             ),
                           ),
                           SizedBox(height: 40),
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              primary: Colors.orange,
+                              primary: Colors.deepOrange,
                             ),
                             onPressed: () async {
                               if (_formKey.currentState!.validate()) {
                                 final response = await http.post(
-                                  Uri.parse(localhost_ + '/post'),
+                                  Uri.parse(localhost + '/api/post'),
                                   headers: <String, String>{
                                     'Content-Type':
                                         'application/json; charset=UTF-8',
@@ -616,6 +607,28 @@ class _MyFormState extends State<MyForm> {
                                   }),
                                 );
                                 if (response.statusCode == 200) {
+                                  var url = Uri.parse(localhost+'/send-email/quotation');
+                                  var emailResponse = await http.post(url, body: jsonEncode(<String, dynamic>{
+                                    'firstName': _firstNameController.text,
+                                    'lastName': _lastNameController.text,
+                                    'contactNumber': _contactNumberController.text,
+                                    'email': _emailController.text,
+                                    'eventStarttime': _eventStarttimeController.text,
+                                    'date': _dateController.text,
+                                    'eventDurationHours': _eventDurationHours.text,
+                                    'evenLocation': _eventLocation.text,
+                                    'totInvitees': _totInvitees.text,
+                                    'numBigFamilitLoces': _numBigFamilies.text,
+                                    'numSmallFamilies': _numSmallFamilies.text,
+                                    'numMarriedCouples': _numMarriedCouples.text,
+                                    'numUnMarriedCouples': _numUnMarriedCouples.text,
+                                    'numIndividualInvitees': _numIndividualInvitees.text,
+                                  }),);
+                                  if (emailResponse.statusCode == 200) {
+                                    print('Email sent successfully!');
+                                  } else {
+                                    print('Failed to send email. Error code: ${emailResponse.statusCode}');
+                                  }
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(

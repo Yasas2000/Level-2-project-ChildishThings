@@ -8,14 +8,15 @@ import 'package:frontend/loginscreen.dart';
 import 'package:frontend/otp_screen.dart';
 import 'package:frontend/send_otp.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'app_state.dart';
 import 'homepage.dart';
 
 
 
-void main(){
-  
+void main()  {
+
   runApp(
     ChangeNotifierProvider(
       create: (context) => AppState().loginState,
@@ -33,6 +34,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter UI',
       theme: ThemeData(
         hoverColor: Colors.deepOrange,
+        primarySwatch: Colors.deepOrange,
         snackBarTheme: const SnackBarThemeData(
         backgroundColor: Colors.deepOrange,
         contentTextStyle: TextStyle(

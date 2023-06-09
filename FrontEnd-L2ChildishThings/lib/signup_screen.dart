@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:frontend/configs.dart';
 import 'package:frontend/loginscreen.dart';
 import 'package:frontend/models/user.dart';
 import 'package:http/http.dart' as http;
@@ -31,7 +32,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   Future<User> userSignUp(String fullName, String email, String phoneNumber,
       String password, String role) async {
-    const url = "http://localhost:5000/users/register";
+    var url = localhost_+"/users/register";
     Map<String, dynamic> requestPayload = {
       "fullName": fullName,
       "email": email,

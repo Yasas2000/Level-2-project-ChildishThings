@@ -1,28 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/portraitEsti.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'app_bar.dart';
 import 'configs.dart';
 
 //changing the protrait values
-
-class changePortraitValue extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return const  MyForm();
-
-  }
-}
-
-class MyForm extends StatefulWidget {
-  const MyForm({super.key});
+class changePortraitValue extends StatefulWidget {
+  const changePortraitValue({super.key});
 
   @override
   // ignore: library_private_types_in_public_api
-  _MyFormState createState() => _MyFormState();
+  _changePortraitValueState createState() => _changePortraitValueState();
 }
 
-class _MyFormState extends State<MyForm> {
+class _changePortraitValueState extends State<changePortraitValue> {
   final _formKey = GlobalKey<FormState>();
   final amount = TextEditingController();
   final amount1 = TextEditingController();
@@ -33,12 +25,10 @@ class _MyFormState extends State<MyForm> {
             appBar: CustomAppBar(
               title: 'Change Value',
               leadingIcon: IconButton(
-                icon: Icon(
-                  Icons.home,
-                  color: Colors.deepOrange,
-                  size: 40,
-                ),
-                onPressed: () {},
+                icon: Icon(Icons.arrow_back_ios_outlined,color: Colors.deepOrange,size: 40,),
+                onPressed:(){
+                  Navigator.of(context).pop();
+                },
               ),
             ),
             body: Container(
@@ -46,7 +36,7 @@ class _MyFormState extends State<MyForm> {
               width: double.infinity,
               decoration: const BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage("new.jpg"),
+                  image: AssetImage("Asset/new.jpg"),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -59,17 +49,17 @@ class _MyFormState extends State<MyForm> {
                       TextFormField(
                         controller: amount,
                         decoration: const InputDecoration(
-                          icon: Icon(Icons.money, color: Colors.orange),
+                          icon: Icon(Icons.money, color: Colors.deepOrange),
                           labelText:
                               'Amount for WITHOUT FRAMES (PHOTO - 6"x8")',
                           hintText: 'Ex.32.45',
                           border: OutlineInputBorder(
                             borderSide: BorderSide(
-                              color: Colors.orange,
+                              color: Colors.deepOrange,
                             ),
                           ),
                           labelStyle: TextStyle(
-                            color: Colors.orange,
+                            color: Colors.deepOrange,
                             fontSize: 16,
                           ),
                         ),
@@ -83,12 +73,12 @@ class _MyFormState extends State<MyForm> {
                       SizedBox(height: 20),
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          primary: Colors.orange,
+                          primary: Colors.deepOrange,
                         ),
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
                             final response = await http.put(
-                              Uri.parse(localhost_ + '/updatePortraitValue'),
+                              Uri.parse(localhost + '/api/updatePortraitValue'),
                               headers: <String, String>{
                                 'Content-Type':
                                     'application/json; charset=UTF-8',
@@ -97,6 +87,12 @@ class _MyFormState extends State<MyForm> {
                                 'amount': double.parse(amount.text),
                               }),
                             );
+                            if(response.statusCode==200){
+                              setState(() {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => changePortraitValue()));
+                              });
+                            }
                           }
                         },
                         child: Text('Save'),
@@ -105,16 +101,16 @@ class _MyFormState extends State<MyForm> {
                       TextFormField(
                         controller: amount1,
                         decoration: const InputDecoration(
-                          icon: Icon(Icons.money, color: Colors.orange),
+                          icon: Icon(Icons.money, color: Colors.deepOrange),
                           labelText: 'Amount for WITH PLYWOOD FRAMES (6"x8")',
                           hintText: 'Ex.32.45',
                           border: OutlineInputBorder(
                             borderSide: BorderSide(
-                              color: Colors.orange,
+                              color: Colors.deepOrange,
                             ),
                           ),
                           labelStyle: TextStyle(
-                            color: Colors.orange,
+                            color: Colors.deepOrange,
                             fontSize: 16,
                           ),
                         ),
@@ -128,12 +124,12 @@ class _MyFormState extends State<MyForm> {
                       SizedBox(height: 20),
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          primary: Colors.orange,
+                          primary: Colors.deepOrange,
                         ),
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
                             final response = await http.put(
-                              Uri.parse(localhost + '/updatePortraitValue1'),
+                              Uri.parse(localhost + '/api/updatePortraitValue1'),
                               headers: <String, String>{
                                 'Content-Type':
                                     'application/json; charset=UTF-8',
@@ -142,6 +138,13 @@ class _MyFormState extends State<MyForm> {
                                 'amount1': double.parse(amount1.text),
                               }),
                             );
+                            if(response.statusCode==200){
+                              setState(() {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => changePortraitValue()));
+                              });
+                            }
+
                           }
                         },
                         child: Text('Save'),

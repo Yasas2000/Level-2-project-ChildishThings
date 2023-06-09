@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/homepage.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'app_bar.dart';
@@ -24,7 +25,7 @@ class submition extends StatelessWidget {
         body: Container(
           decoration: const BoxDecoration(
             image: DecorationImage(
-              image: AssetImage("new.jpg"),
+              image: AssetImage("Asset/new.jpg"),
               fit: BoxFit.cover,
             ),
           ),
@@ -36,7 +37,7 @@ class submition extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Image.asset(
-                        'logo.png',
+                        'Asset/logo.png',
                         width: 200,
                         height: 200,
                       ),
@@ -46,6 +47,17 @@ class submition extends StatelessWidget {
                             color: Colors.orange,
                             fontSize: 28,
                           )),
+                      ElevatedButton(onPressed:() {
+                        Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                      builder: (context) => HomePage()),
+                      );
+                        },
+                          child: Text('Next'),
+                          style: ElevatedButton.styleFrom(primary: Colors.orange),
+
+                          )
                     ],
                   ),
                 ),

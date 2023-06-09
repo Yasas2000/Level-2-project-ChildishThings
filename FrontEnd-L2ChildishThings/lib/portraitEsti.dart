@@ -34,9 +34,9 @@ class _MyAppState extends State<portraitEsti> {
 
   Future<void> _getAmounts() async {
     final response1 =
-        await http.get(Uri.parse(localhost_ + '/getPortraitValue'));
+        await http.get(Uri.parse(localhost + '/api/getPortraitValue'));
     final response2 =
-        await http.get(Uri.parse(localhost_ + '/getPortraitValue1'));
+        await http.get(Uri.parse(localhost + '/api/getPortraitValue1'));
     final data1 = json.decode(response1.body);
     final data2 = json.decode(response2.body);
     setState(() {
@@ -76,7 +76,7 @@ class _MyAppState extends State<portraitEsti> {
         width: double.infinity,
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("new.jpg"),
+            image: AssetImage("Asset/new.jpg"),
             fit: BoxFit.cover,
           ),
         ),
@@ -100,7 +100,7 @@ class _MyAppState extends State<portraitEsti> {
               SizedBox(height: 16.0),
               Text(
                 'Select the package type:',
-                style: TextStyle(fontSize: 14.0, color: Colors.orange),
+                style: TextStyle(fontSize: 14.0, color: Colors.deepOrange),
               ),
               DropdownButton<int>(
                 value: selectedPackage,
@@ -124,7 +124,7 @@ class _MyAppState extends State<portraitEsti> {
 
               Text(
                 'size',
-                style: TextStyle(fontSize: 18.0, color: Colors.orange),
+                style: TextStyle(fontSize: 18.0, color: Colors.deepOrange),
               ),
               TextField(
                 keyboardType: TextInputType.number,
@@ -140,7 +140,7 @@ class _MyAppState extends State<portraitEsti> {
                 style: TextStyle(
                     fontSize: 18.0,
                     fontWeight: FontWeight.bold,
-                    color: Colors.orange),
+                    color: Colors.deepOrange),
               ),
               SizedBox(
                 height: 150,
