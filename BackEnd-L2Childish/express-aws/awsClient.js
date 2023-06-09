@@ -2,8 +2,8 @@ const AWS3 = require('@aws-sdk/client-s3')
 require('dotenv').config();
 
 
-//v3 config
-const s3Instance = new AWS3.S3Client({
+
+const s3Instance = new AWS3.S3Client({  //Creates an instance of S3 Client
     region: process.env.AWS_REGION,
     credentials: {
       accessKeyId: process.env.AWS_ACCESS_KEY_ID,
