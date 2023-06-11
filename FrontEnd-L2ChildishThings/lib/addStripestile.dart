@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:frontend/stripeEsti.dart';
 import 'package:frontend/successful.dart';
 import 'package:http/http.dart' as http;
@@ -37,11 +38,13 @@ class _AddPhotoTileScreenState extends State<AddPhotoTileScreen> {
           title: 'Add Stripe Tile',
           leadingIcon: IconButton(
             icon: Icon(
-              Icons.home,
+              Icons.arrow_back_ios_outlined,
               color: Colors.deepOrange,
               size: 40,
             ),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pop(context);
+            },
           ),
         ),
         body: Container(
@@ -126,10 +129,20 @@ class _AddPhotoTileScreenState extends State<AddPhotoTileScreen> {
                     }
                     return null;
                   },
+                  keyboardType:
+                  TextInputType.numberWithOptions(decimal: true),
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*$')),
+                  ],
+
                 ),
                 SizedBox(height: 20),
                 TextFormField(
                   controller: _hour,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                  ],
+
                   decoration: const InputDecoration(
                     icon: Icon(Icons.cloud_circle, color: Colors.orange),
                     labelText: 'Hours',
@@ -150,11 +163,12 @@ class _AddPhotoTileScreenState extends State<AddPhotoTileScreen> {
                     }
                     return null;
                   },
+
                 ),
                 SizedBox(height: 30),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    primary: Colors.orange,
+                    primary: Colors.deepOrange,
                   ),
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {

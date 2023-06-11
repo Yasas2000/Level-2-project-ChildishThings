@@ -1,19 +1,27 @@
-// ignore_for_file: prefer_const_constructors, sized_box_for_whitespace, sort_child_properties_last, unused_local_variable, unnecessary_null_comparison, prefer_const_declarations, use_build_context_synchronously
+// ignore_for_file: prefer_const_constructors, sized_box_for_whitespace, sort_child_properties_last, unused_local_variable, unnecessary_null_comparison, prefer_const_declarations, use_build_context_synchronously, slash_for_doc_comments
 
 import 'package:flutter/material.dart';
+import 'package:frontend/configs.dart';
 import 'package:frontend/loginscreen.dart';
 import 'package:http/http.dart' as http;
 
-class ForgotPasswordScreen extends StatefulWidget {
-  const ForgotPasswordScreen({super.key});
+import 'app_bar.dart';
+import 'homepage.dart';
 
+/**
+ * This is the create new password form screen
+ */
+
+class ForgotPasswordScreen extends StatefulWidget {
+  const ForgotPasswordScreen({super.key, required this.emailController});
+  final TextEditingController emailController;
   @override
   State<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
 }
 
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _emailController = TextEditingController();
+
   final _passwordController = TextEditingController();
 
   bool _obscureText = true;
@@ -21,6 +29,29 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        surfaceTintColor: Colors.deepOrange,
+        elevation: 0.0,
+        backgroundColor: Colors.transparent,
+        automaticallyImplyLeading: false,
+        title: Text('Reset Password',style: TextStyle(color: Colors.deepOrange),),
+        leading: IconButton(
+          icon: Icon(
+            Icons.home,
+            color: Colors.deepOrange,
+            size: 40,
+          ),
+          onPressed: () {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => HomePage()),
+                (route)=>false
+            );
+          },
+        ),
+      ),
       body: SingleChildScrollView(
         child: Container(
           padding: EdgeInsets.all(32.0),
@@ -38,7 +69,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 child: Transform.rotate(
                   angle: 0,
                   child: Image(
-                    image: AssetImage('assets/passreset.png'),
+                    image: AssetImage('Asset/passreset.png'),
                   ),
                 ),
               ),
@@ -48,7 +79,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 style: TextStyle(
                   fontSize: 36.0,
                   fontWeight: FontWeight.bold,
-                  color: Colors.black,
+                  color: Colors.deepOrange,
                   fontFamily: 'Montserrat',
                   shadows: [
                     Shadow(
@@ -66,37 +97,12 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   children: [
                     Container(
                       margin: EdgeInsets.only(left: 30, right: 30, bottom: 20),
-                      child: TextFormField(
-                        controller: _emailController,
-                        decoration: InputDecoration(
-                          hintText: "Email",
-                          filled: true,
-                          fillColor: Colors.grey[200],
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(25),
-                            borderSide: BorderSide.none,
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(25),
-                            borderSide: BorderSide(color: Colors.blue),
-                          ),
-                        ),
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return 'Please enter an email';
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(left: 30, right: 30, bottom: 20),
                       child: Stack(
                         children: [
                           TextFormField(
                             controller: _passwordController,
                             decoration: InputDecoration(
-                              hintText: "Password",
+                              hintText: "New Password",
                               filled: true,
                               fillColor: Colors.grey[200],
                               border: OutlineInputBorder(
@@ -105,12 +111,14 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(25),
-                                borderSide: BorderSide(color: Colors.blue),
+                                borderSide: BorderSide(color: Colors.deepOrange),
                               ),
                             ),
                             validator: (value) {
                               if (value!.isEmpty) {
                                 return 'Please enter a password';
+                              } else if (value.length < 8) {
+                                return 'Password must be at least 8 characters long';
                               }
                               return null;
                             },
@@ -118,7 +126,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           ),
                           Positioned(
                             right: 20,
-                            bottom: 15,
+                            top: 0,
+                            bottom: 0,
                             child: GestureDetector(
                               onTap: () =>
                                   setState(() => _obscureText = !_obscureText),
@@ -148,12 +157,14 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(25),
-                                borderSide: BorderSide(color: Colors.blue),
+                                borderSide: BorderSide(color: Colors.deepOrange),
                               ),
                             ),
                             validator: (value) {
                               if (value!.isEmpty) {
                                 return 'Please enter a password';
+                              } else if (value != _passwordController.text) {
+                                return 'Passwords do not match';
                               }
                               return null;
                             },
@@ -161,7 +172,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           ),
                           Positioned(
                             right: 20,
-                            bottom: 15,
+                            top: 0,
+                            bottom: 0,
                             child: GestureDetector(
                               onTap: () =>
                                   setState(() => _obscureText = !_obscureText),
@@ -178,32 +190,30 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     ),
                     Container(
                         margin:
-                            EdgeInsets.only(left: 30, right: 30, bottom: 20),
+                        EdgeInsets.only(left: 30, right: 30, bottom: 20),
                         child: ElevatedButton(
                           onPressed: () async {
                             if (_formKey.currentState!.validate()) {
-                              final email = _emailController.text;
+                              final email = widget.emailController.text;
                               final password = _passwordController.text;
                               final url =
-                                  Uri.parse('http://localhost:5000/users');
+                              Uri.parse(localhost_+'/users');
                               final response = await http.put(url,
                                   body: {'email': email, 'password': password});
 
                               if (response.statusCode == 200) {
-                                
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                       content: Text(
                                           'Password updated successfully')),
                                 );
 
-                                Navigator.push(
+                                Navigator.pushAndRemoveUntil(
                                   context,
-                                  MaterialPageRoute(
-                                      builder: (context) => LoginScreen()),
+                                  MaterialPageRoute(builder: (context) => LoginScreen()) ,
+                                      (route) => false,
                                 );
                               } else {
-                                
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                       content: Text('Error updating password')),
@@ -212,7 +222,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                             }
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.black,
+                            backgroundColor: Colors.deepOrange,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(25.0),
                             ),

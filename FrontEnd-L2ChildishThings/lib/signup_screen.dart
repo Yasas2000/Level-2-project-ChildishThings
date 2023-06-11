@@ -1,16 +1,19 @@
 // ignore_for_file: unused_import, use_key_in_widget_constructors, prefer_const_constructors, unnecessary_new, prefer_const_literals_to_create_immutables, avoid_print, library_private_types_in_public_api, override_on_non_overriding_member, unused_field, unused_element, curly_braces_in_flow_control_structures, prefer_typing_uninitialized_variables, prefer_final_fields, unused_local_variable, non_constant_identifier_names, import_of_legacy_library_into_null_safe, avoid_unnecessary_containers
 
 import 'dart:convert';
+import 'package:email_otp/email_otp.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:frontend/configs.dart';
 import 'package:frontend/loginscreen.dart';
 import 'package:frontend/models/user.dart';
+import 'package:frontend/signUp_otp.dart';
 import 'package:http/http.dart' as http;
 import 'package:quickalert/quickalert.dart';
 
 import 'app_bar.dart';
 import 'homepage.dart';
+import 'otp_screen.dart';
 
 class SignUpScreen extends StatefulWidget {
   @override
@@ -18,6 +21,7 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
+  EmailOTP myauth = EmailOTP();
   var role = "User";
   var confirmPass;
   bool _obscureText = true;
@@ -30,7 +34,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController _passController = TextEditingController();
   TextEditingController _confirmPassController = TextEditingController();
 
-  Future<User> userSignUp(String fullName, String email, String phoneNumber,
+  Future<Future> userSignUp(String fullName, String email, String phoneNumber,
       String password, String role) async {
     var url = localhost_+"/users/register";
     Map<String, dynamic> requestPayload = {
@@ -45,9 +49,37 @@ class _SignUpScreenState extends State<SignUpScreen> {
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode(requestPayload));
 
-    if (response.statusCode == 201) {
-      return User.fromJson(json.decode(response.body));
+    if (response.statusCode == 200) {
+      return QuickAlert.show(
+        context: context,
+        barrierColor: Colors.transparent,
+        text:
+        "Congratulations,Your account has been successfully created.Please login",
+        type: QuickAlertType.success,
+        confirmBtnColor: Colors.green,
+        onConfirmBtnTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => LoginScreen()),
+          );
+        },
+      );
     } else {
+      QuickAlert.show(
+        context: context,
+        barrierColor: Colors.transparent,
+        text:"The Email Already Existed",
+        type: QuickAlertType.error,
+        confirmBtnColor: Colors.red,
+        onConfirmBtnTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => LoginScreen()),
+          );
+        },
+      );
       throw Exception("Fail to sign up user");
     }
   }
@@ -96,7 +128,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             children: [
                               Container(
                                 child: Image.asset(
-                                  "Asset/photobooth.png",
+                                  "Asset/Photobooth.png",
                                   height: 200,
                                   width: 200,
                                 ),
@@ -317,30 +349,36 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ),
                         ),
                         GestureDetector(
-                          onTap: () {
-                            setState(() {
+                          onTap: () async {
                               if (_formKey.currentState!.validate()) {
-                                userSignUp(
-                                    _fullNameController.text,
-                                    _emailController.text,
-                                    _phoneNumberController.text,
-                                    _passController.text,
-                                    role);
-                                QuickAlert.show(
-                                  context: context,
-                                  text:
-                                      "Congratulations,Your account has been successfully created.Please login",
-                                  type: QuickAlertType.success,
-                                  onConfirmBtnTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => LoginScreen()),
-                                    );
-                                  },
+                                UserDetails user=UserDetails(_fullNameController.text, _emailController.text,_phoneNumberController.text,_passController.text,role);
+                                myauth.setConfig(
+                                  appEmail: "contact@hdevcoder.com",
+                                  appName: "Email OTP",
+                                  userEmail: _emailController.text,
+                                  otpLength: 4,
+                                  otpType: OTPType.digitsOnly,
                                 );
+                                if (await myauth.sendOTP() == true) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                              content: Text("OTP has been sent"),
+                              ),
+                              );
+                              Navigator.push(context,
+                                        MaterialPageRoute(
+                                        builder: (context) => SignUPOTPScreen(myauth: myauth, user: user,),
+                              ),
+                              );
+                              } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                              content: Text("Oops, OTP send failed"),
+                              ),
+                              );
                               }
-                            });
+                              }
+
                           },
                           child: Container(
                             alignment: Alignment.center,
@@ -395,30 +433,45 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   String? validateName(String? value) {
-    if (value!.length < 3)
+    if (value == null || value.trim().isEmpty) {
+      return 'Name is required';
+    } else if (value.length < 3) {
       return 'Name must be more than 2 characters';
-    else
-      return null;
+    } else if (!RegExp(r'^[a-zA-Z\s]+$').hasMatch(value)) {
+      return 'Name can only contain letters and spaces';
+    } else if (!value.contains(RegExp(r'^[A-Z][a-z]+(\s[A-Z][a-z]+)*$'))) {
+      return 'Name must be in the format: Firstname Lastname';
+    }
+    return null;
   }
 
   String? validateEmail(String? value) {
     String pattern =
         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
     RegExp regex = RegExp(pattern);
-    if (!regex.hasMatch(value!))
+    if (value == null || value.trim().isEmpty) {
+      return 'Email is required';
+    } else if (!regex.hasMatch(value)) {
       return 'Enter Valid Email';
-    else
-      return null;
+    }
+    return null;
   }
 
   String? validateMobile(String? value) {
-    if (value!.length != 10)
-      return 'Mobile Number must be of 10 digit';
-    else
-      return null;
+    if (value == null || value.trim().isEmpty) {
+      return 'Mobile number is required';
+    } else if (value.length != 10) {
+      return 'Mobile number must be of 10 digits';
+    } else if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
+      return 'Mobile number can only contain numeric digits';
+    } else if (!value.startsWith('0')) {
+      return 'Mobile number must start with 0';
+    }
+    return null;
   }
 
   String? validatePassword(String? value) {
+    //inputs & outputs nullable string value
     confirmPass = value;
     if (value!.isEmpty) {
       return "Please Enter New Password";
@@ -440,4 +493,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
       return null;
     }
   }
+}
+class UserDetails{
+  String fullName;
+  String email;
+  String monileNumber;
+  String password;
+  String role;
+  UserDetails(this.fullName,this.email,this.monileNumber,this.password,this.role);
 }

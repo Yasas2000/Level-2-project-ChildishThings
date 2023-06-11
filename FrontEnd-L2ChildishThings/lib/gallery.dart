@@ -6,12 +6,18 @@ import 'dart:io' as io;
 import 'package:flutter/material.dart';
 import 'package:frontend/CommentPage.dart';
 import 'package:frontend/FullScreenImagePage.dart';
+import 'package:frontend/bottom_navbar.dart';
+import 'package:frontend/configs.dart';
 import 'package:http/http.dart' as http;
 import 'package:file_picker/file_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
+
+import 'homepage.dart';
+import 'login_state.dart';
 /**
  * This is the Gallery Screen
  */
@@ -28,9 +34,10 @@ class _ImageGalleryState extends State<ImageGallery>
   late List<String> imageUrls = [];
   String comment = '';
   int imageCount = 0;
+  final TextEditingController _comment = TextEditingController();
 
   Future<void> _fetchImageUrls() async {
-    final response = await http.get(Uri.parse('http://localhost:3000/images'));
+    final response = await http.get(Uri.parse(gallery_localhost+'/images'));
     final jsonData = json.decode(response.body);
     final List<dynamic> imageUrlData = jsonData['images'];
     if (mounted) {
@@ -45,7 +52,7 @@ class _ImageGalleryState extends State<ImageGallery>
     try {
       var request = http.MultipartRequest(
         'POST',
-        Uri.parse('http://localhost:3000/v3/post/single'),
+        Uri.parse(gallery_localhost+'/v3/post/single'),
       );
       request.files.add(
         http.MultipartFile.fromBytes(
@@ -67,7 +74,7 @@ class _ImageGalleryState extends State<ImageGallery>
     try {
       var request = http.MultipartRequest(
         'POST',
-        Uri.parse('http://localhost:3000/v3/post/multiple'),
+        Uri.parse(gallery_localhost+'/v3/post/multiple'),
       );
       for (var i = 0; i < files.length; i++) {
         request.files.add(
@@ -122,44 +129,14 @@ class _ImageGalleryState extends State<ImageGallery>
       ),
     );
   }
-
-  void downloadImage(String imageUrl) async {
-    // Request permission to access the image gallery
-    PermissionStatus status = await Permission.storage.request();
-
-    if (status.isGranted) {
-      // Permission is granted, proceed with image download and saving
-      http.Response response = await http.get(Uri.parse(imageUrl));
-
-      if (response.statusCode == 200) {
-        // Save the image file to the app's temporary directory
-        io.Directory tempDir = await getTemporaryDirectory();
-        String tempPath = tempDir.path;
-        String fileName =
-            imageUrl.split('/').last.replaceAll(RegExp(r'[^\w\s\-.]'), '');
-        String filePath = '$tempPath/$fileName';
-        await io.File(filePath).writeAsBytes(response.bodyBytes);
-
-        // Save the image to the gallery
-        final result = await ImageGallerySaver.saveFile(filePath);
-
-        if (result['isSuccess']) {
-          showToast('Image downloaded and saved to gallery successfully');
-        } else {
-          showToast('Failed to save image to gallery');
-        }
-
-        // Delete the temporary image file
-        await io.File(filePath).delete();
-      } else {
-        showToast('Failed to download image');
-      }
-    } else {
-      // Permission is denied, show a toast or any other feedback to indicate that the save operation is not possible
-      showToast('Permission denied. Cannot save image to gallery');
-    }
+  Future<void> saveImageToGallery(String imageUrl) async {
+    var response = await http.get(Uri.parse(imageUrl));
+    final result = await ImageGallerySaver.saveImage(
+      response.bodyBytes,
+      quality: 100,
+    );
+    print(result); // Prints the path of the saved image
   }
-
 // Function to show a toast with a message
   void showToast(String message) {
     Fluttertoast.showToast(
@@ -177,28 +154,29 @@ class _ImageGalleryState extends State<ImageGallery>
 
   @override
   Widget build(BuildContext context) {
+    final loginState=Provider.of<LoginState>(context);
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.orange.withOpacity(0.7),
+        backgroundColor: Colors.white,
         leading: IconButton(
-          icon: Icon(Icons.home),
+          icon: Icon(Icons.home,size: 40,),color: Colors.deepOrange,
           onPressed: () {
-            // Navigate to Home page
+            Navigator.of(context).push(MaterialPageRoute(builder: (context)=>
+                HomePage()
+            ));
           },
         ),
         centerTitle: true,
         title: Text(
           'Gallery',
           style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-            letterSpacing: 2.0,
-            color: Colors.white,
+            color: Colors.deepOrange,fontSize: 24
           ),
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.comment),
+            padding: EdgeInsetsDirectional.only(end: 10),
+            icon: Icon(Icons.comment,color: Colors.deepOrange,size: 40,),
             onPressed: () {
               Navigator.push(
                 context,
@@ -210,6 +188,7 @@ class _ImageGalleryState extends State<ImageGallery>
           ),
         ],
       ),
+      bottomNavigationBar: BottomNavbar(initialIndex: 3,),
       body: Column(
         children: [
           Container(
@@ -217,7 +196,7 @@ class _ImageGalleryState extends State<ImageGallery>
             height: 150,
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('assets/bg.jpg'),
+                image: AssetImage('Asset/bg.jpg'),
                 fit: BoxFit.cover,
               ),
             ),
@@ -243,59 +222,62 @@ class _ImageGalleryState extends State<ImageGallery>
                   ),
                 ),
                 Spacer(),
-                PopupMenuButton(
-                  icon: Icon(Icons.add, color: Colors.black),
-                  itemBuilder: (BuildContext context) {
-                    return [
-                      PopupMenuItem(
-                        child: ListTile(
-                          leading: CircleAvatar(
-                            backgroundColor: Colors.orange,
-                            child: Icon(
-                              Icons.image,
-                              color: Colors.white,
+                Visibility(
+                  visible: loginState.role=='Admin',
+                  child: PopupMenuButton(
+                    icon: Icon(Icons.add, color: Colors.black),
+                    itemBuilder: (BuildContext context) {
+                      return [
+                        PopupMenuItem(
+                          child: ListTile(
+                            leading: CircleAvatar(
+                              backgroundColor: Colors.deepOrange,
+                              child: Icon(
+                                Icons.image,
+                                color: Colors.white,
+                              ),
+                            ),
+                            title: Text(
+                              'Upload Single Image',
+                              style: TextStyle(
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
                             ),
                           ),
-                          title: Text(
-                            'Upload Single Image',
-                            style: TextStyle(
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                            ),
-                          ),
+                          value: 'single',
                         ),
-                        value: 'single',
-                      ),
-                      PopupMenuItem(
-                        child: ListTile(
-                          leading: CircleAvatar(
-                            backgroundColor: Colors.orange,
-                            child: Icon(
-                              Icons.collections,
-                              color: Colors.white,
+                        PopupMenuItem(
+                          child: ListTile(
+                            leading: CircleAvatar(
+                              backgroundColor: Colors.deepOrange,
+                              child: Icon(
+                                Icons.collections,
+                                color: Colors.white,
+                              ),
+                            ),
+                            title: Text(
+                              'Upload Multiple Images',
+                              style: TextStyle(
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
                             ),
                           ),
-                          title: Text(
-                            'Upload Multiple Images',
-                            style: TextStyle(
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                            ),
-                          ),
+                          value: 'multiple',
                         ),
-                        value: 'multiple',
-                      ),
-                    ];
-                  },
-                  onSelected: (value) {
-                    if (value == 'single') {
-                      _pickImage();
-                    } else if (value == 'multiple') {
-                      _pickImages();
-                    }
-                  },
+                      ];
+                    },
+                    onSelected: (value) {
+                      if (value == 'single') {
+                        _pickImage();
+                      } else if (value == 'multiple') {
+                        _pickImages();
+                      }
+                    },
+                  ),
                 ),
               ],
             ),
@@ -343,7 +325,7 @@ class _ImageGalleryState extends State<ImageGallery>
                                     ),
                                     IconButton(
                                       onPressed: () =>
-                                          downloadImage(imageUrls[index]),
+                                          saveImageToGallery(imageUrls[index]),
                                       icon: Icon(Icons.download),
                                       color: Colors.black,
                                     ),
@@ -398,9 +380,11 @@ class _ImageGalleryState extends State<ImageGallery>
                       margin: EdgeInsets.symmetric(vertical: 10),
                       padding: EdgeInsets.symmetric(horizontal: 10),
                       child: TextField(
+                        controller: _comment,
                         decoration: InputDecoration(
                           labelText: 'Leave a comment',
                           border: OutlineInputBorder(),
+                          hintText:'Comment'
                         ),
                         onChanged: (value) {
                           setState(() {
@@ -412,14 +396,14 @@ class _ImageGalleryState extends State<ImageGallery>
                     InkWell(
                       onTap: () async {
                         final response = await http.post(
-                          Uri.parse('http://localhost:3000/comments'),
+                          Uri.parse(gallery_localhost+'/comments'),
                           body: json.encode({'content': comment}),
                           headers: {'Content-Type': 'application/json'},
                         );
 
                         if (response.statusCode == 201) {
                           setState(() {
-                            comment = '';
+                            _comment.clear();
                           });
                           showSnackBar('Comment saved successfully');
                         } else {
@@ -434,7 +418,7 @@ class _ImageGalleryState extends State<ImageGallery>
                         ),
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: Colors.orange,
+                          color: Colors.deepOrange,
                         ),
                       ),
                     ),

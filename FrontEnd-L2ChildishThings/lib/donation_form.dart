@@ -1,6 +1,7 @@
 import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:frontend/app_bar.dart';
+import 'package:frontend/bottom_navbar.dart';
 import 'package:frontend/credi_card_page.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
@@ -82,6 +83,7 @@ class _DonationFormState extends State<DonationForm> {
             ));
           },
         )),
+        bottomNavigationBar: BottomNavbar(initialIndex: 1,),
         body: Padding(
           padding: const EdgeInsets.all(10),
           child:
@@ -185,9 +187,10 @@ class _DonationFormState extends State<DonationForm> {
                               FormBuilderValidators.email(),
                               FormBuilderValidators.max(70),
                             ]),
+
                             // initialValue: '12',
 
-                            keyboardType: TextInputType.text,
+                            keyboardType: TextInputType.emailAddress,
                             textInputAction: TextInputAction.next,
                           ),
                           FormBuilderTextField(
@@ -250,7 +253,7 @@ class _DonationFormState extends State<DonationForm> {
                             validator: FormBuilderValidators.compose(
                                 [FormBuilderValidators.required()]),
                             options:
-                            ['One time Payment', 'Save Payment','Recurrant']
+                            ['One time Payment','Recurrant']
                                 .map((lang) => FormBuilderFieldOption(
                               value: lang,
                               child: Text(lang),

@@ -95,7 +95,9 @@ class _LoginScreenState extends State<LoginScreen> {
     QuickAlert.show(
         context: context,
         text: "You have successfully logged in",
-        type: quickAlertType,
+
+        type:quickAlertType,
+        confirmBtnColor: Colors.green,
         onConfirmBtnTap: () {
           if (role == "Admin") {
             Dialogs.bottomMaterialDialog(
@@ -109,7 +111,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     },
                     text: 'Dashboard',
                     iconData: Icons.dashboard_customize_rounded,
-                    color: Colors.green,
+                    color: Colors.deepOrange,
                     textStyle: TextStyle(color: Colors.white),
                     iconColor: Colors.white,
                   ),
@@ -122,7 +124,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     },
                     text: 'Home',
                     iconData: Icons.home_filled,
-                    color: Colors.green,
+                    color: Colors.deepOrange,
                     textStyle: TextStyle(color: Colors.white),
                     iconColor: Colors.white,
                   ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'app_bar.dart';
@@ -58,6 +59,12 @@ class _MyFormState extends State<MyForm> {
                       SizedBox(height: 20),
                       TextFormField(
                         controller: amount,
+                        keyboardType:
+                        TextInputType.numberWithOptions(decimal: true),
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*$')),
+                        ],
+
                         decoration: const InputDecoration(
                           icon: Icon(Icons.money, color: Colors.orange),
                           labelText: 'Amount',

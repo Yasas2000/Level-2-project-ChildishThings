@@ -82,7 +82,7 @@ class PhotoTile extends StatelessWidget {
             ),
           ),
           Visibility(
-            visible: loginState.role=="admin",
+            visible: loginState.role=="Admin",
             child: IconButton(
               icon: Icon(Icons.delete),
               color: Colors.red,

@@ -193,8 +193,9 @@ class _HomePageState extends State<HomePage>{
                         child: Container(
                           padding: EdgeInsets.all(2),
                           decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(25),
+                            color: Colors.deepOrange,
+                            borderRadius: BorderRadius.circular(30),
+                            border: Border.all(color: Colors.white,width:2 )
                           ),
                           constraints: BoxConstraints(
                             minWidth: 16,
@@ -205,7 +206,8 @@ class _HomePageState extends State<HomePage>{
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 14,
-                              color: Colors.deepOrange,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold
                             ),
                           ),
                         ),
@@ -267,12 +269,10 @@ class _HomePageState extends State<HomePage>{
                       children: [
                         GestureDetector(
                           onTap: () {
-                            // Navigator.push(
-                            //     context,
-                            //     MaterialPageRoute(
-                            //         builder: (context) => MainPhotoGalleryScreen(),
-                            //     ),
-                            // );
+                            Navigator.of(context).push(
+                                MaterialPageRoute(builder: (context) =>
+                                    ImageGallery()
+                                ));
                           },
                           child: Image.asset(
                             'assets/h3.jpeg',
@@ -281,12 +281,10 @@ class _HomePageState extends State<HomePage>{
                         ),
                         GestureDetector(
                           onTap: () {
-                            // Navigator.push(
-                            //     context,
-                            //     MaterialPageRoute(
-                            //         builder: (context) => MainPhotoGalleryScreen(),
-                            //     ),
-                            // );
+                            Navigator.of(context).push(
+                                MaterialPageRoute(builder: (context) =>
+                                    ImageGallery()
+                                ));
                           },
                           child: Image.asset(
                             'assets/1.jpg',
@@ -295,12 +293,10 @@ class _HomePageState extends State<HomePage>{
                         ),
                         GestureDetector(
                           onTap: () {
-                            // Navigator.push(
-                            //     context,
-                            //     MaterialPageRoute(
-                            //         builder: (context) => MainPhotoGalleryScreen(),
-                            //     ),
-                            // );
+                            Navigator.of(context).push(
+                                MaterialPageRoute(builder: (context) =>
+                                    ImageGallery()
+                                ));
                           },
                           child: Image.asset(
                             'assets/h1.jpeg',
@@ -309,12 +305,10 @@ class _HomePageState extends State<HomePage>{
                         ),
                         GestureDetector(
                           onTap: () {
-                            // Navigator.push(
-                            //     context,
-                            //     MaterialPageRoute(
-                            //         builder: (context) => MainPhotoGalleryScreen(),
-                            //     ),
-                            // );
+                            Navigator.of(context).push(
+                                MaterialPageRoute(builder: (context) =>
+                                    ImageGallery()
+                                ));
                           },
                           child: Image.asset(
                             'assets/2.jpg',
@@ -323,12 +317,10 @@ class _HomePageState extends State<HomePage>{
                         ),
                         GestureDetector(
                           onTap: () {
-                            // Navigator.push(
-                            //     context,
-                            //     MaterialPageRoute(
-                            //         builder: (context) => MainPhotoGalleryScreen(),
-                            //     ),
-                            // );
+                            Navigator.of(context).push(
+                                MaterialPageRoute(builder: (context) =>
+                                    ImageGallery()
+                                ));
                           },
                           child: Image.asset(
                             'assets/h2.jpeg',
@@ -337,12 +329,10 @@ class _HomePageState extends State<HomePage>{
                         ),
                         GestureDetector(
                           onTap: () {
-                            // Navigator.push(
-                            //     context,
-                            //     MaterialPageRoute(
-                            //         builder: (context) => MainPhotoGalleryScreen(),
-                            //     ),
-                            // );
+                            Navigator.of(context).push(
+                                MaterialPageRoute(builder: (context) =>
+                                    ImageGallery()
+                                ));
                           },
                           child: Image.asset(
                             'assets/3.jpg',
@@ -351,12 +341,10 @@ class _HomePageState extends State<HomePage>{
                         ),
                         GestureDetector(
                           onTap: () {
-                            // Navigator.push(
-                            //     context,
-                            //     MaterialPageRoute(
-                            //         builder: (context) => MainPhotoGalleryScreen(),
-                            //     ),
-                            // );
+                            Navigator.of(context).push(
+                                MaterialPageRoute(builder: (context) =>
+                                    ImageGallery()
+                                ));
                           },
                           child: Image.asset(
                             'assets/h4.jpeg',
@@ -365,12 +353,10 @@ class _HomePageState extends State<HomePage>{
                         ),
                         GestureDetector(
                           onTap: () {
-                            // Navigator.push(
-                            //     context,
-                            //     MaterialPageRoute(
-                            //         builder: (context) => MainPhotoGalleryScreen(),
-                            //     ),
-                            // );
+                            Navigator.of(context).push(
+                                MaterialPageRoute(builder: (context) =>
+                                    ImageGallery()
+                                ));
                           },
                           child: Image.asset(
                             'assets/h5.jpeg',
@@ -444,7 +430,7 @@ class _HomePageState extends State<HomePage>{
                 ),
               ],
             ),
-            bottomNavigationBar: BottomNavbar(),
+            bottomNavigationBar: BottomNavbar( initialIndex: 0,),
             floatingActionButton: FloatingActionButton(
               onPressed: () {
                 setState(() {
@@ -481,7 +467,11 @@ class SlidingBar extends StatelessWidget {
         children: <Widget>[
           DrawerHeader(
             decoration: const BoxDecoration(
-              color: Colors.deepOrange,
+              gradient: LinearGradient(
+                colors: [Color(0xffff5422), Color(0xffff7043)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -489,7 +479,7 @@ class SlidingBar extends StatelessWidget {
               children: <Widget>[
                 CircleAvatar(
                   radius: 40.0,
-                  backgroundImage: NetworkImage(userImageURL),
+                  backgroundImage: NetworkImage('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFtmCCXQ1CRqhrCgqONuYChTz9lsJL5Ru1brHzqdoFixY_cUOxIAl9n40FCdtWS_zPSFc&usqp=CAU'),
                 ),
                 const SizedBox(
                   height: 10.0,
@@ -505,8 +495,9 @@ class SlidingBar extends StatelessWidget {
               ],
             ),
           ),
-
+          
           ListTile(
+            leading:Icon(Icons.create,color: Colors.deepOrange,),
             title: const Text('Create Account'),
             onTap: (){
               Navigator.of(context).push(MaterialPageRoute(builder: (context)=>
@@ -514,12 +505,29 @@ class SlidingBar extends StatelessWidget {
               ));
             },
           ),
-
+          Padding(padding: EdgeInsets.all(1)),
           ListTile(
+            leading:Icon(Icons.newspaper,color: Colors.deepOrange,),
             title: const Text('Our Story'),
             onTap: (){},
           ),
+          Visibility(
+            visible:loginState.role=='Admin' ,
+            child: Padding(padding: EdgeInsets.all(1)),),
+          Visibility(
+            visible: loginState.role=='Admin',
+            child:  ListTile(
+            leading:Icon(Icons.admin_panel_settings,color: Colors.deepOrange,),
+            title: const Text('Pricing'),
+            onTap: (){
+              Navigator.of(context).push(MaterialPageRoute(builder: (context)=>
+                  type()
+              ));
+            },
+          ),),
+          Padding(padding: EdgeInsets.all(1)),
           ListTile(
+            leading:Icon(Icons.monetization_on_rounded,color: Colors.deepOrange,),
             title: const Text('Pricing'),
             onTap: (){
               Navigator.of(context).push(MaterialPageRoute(builder: (context)=>
@@ -527,7 +535,9 @@ class SlidingBar extends StatelessWidget {
               ));
             },
           ),
+          Padding(padding: EdgeInsets.all(1)),
           ListTile(
+            leading:Icon(Icons.photo,color: Colors.deepOrange,),
             title: const Text('Photo Gallery'),
             onTap: (){
               Navigator.of(context).push(MaterialPageRoute(builder: (context)=>
@@ -535,7 +545,9 @@ class SlidingBar extends StatelessWidget {
               ));
             },
           ),
+          Padding(padding: EdgeInsets.all(1)),
           ListTile(
+            leading:Icon(Icons.leaderboard,color: Colors.deepOrange,),
             title: const Text('Leaderboard'),
             onTap: (){
               Navigator.of(context).push(MaterialPageRoute(builder: (context)=>
@@ -543,7 +555,9 @@ class SlidingBar extends StatelessWidget {
               ));
             },
           ),
+          Padding(padding: EdgeInsets.all(1)),
           ListTile(
+            leading:Icon(Icons.feedback,color: Colors.deepOrange,),
             title: const Text('Feedback'),
             onTap:(){
               Navigator.of(context).push(MaterialPageRoute(builder: (context)=>
@@ -551,7 +565,9 @@ class SlidingBar extends StatelessWidget {
               ));
             },
           ),
+          Padding(padding: EdgeInsets.all(1)),
           ListTile(
+            leading:Icon(loginState.isLoggedIn?Icons.logout:Icons.login,color: Colors.deepOrange,),
             title: Text(loginState.isLoggedIn ?'Logout':'Login'),
             onTap: (){
               if (loginState.isLoggedIn) {

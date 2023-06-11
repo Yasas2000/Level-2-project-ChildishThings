@@ -5,8 +5,6 @@ import 'package:frontend/app_bar.dart';
 import 'package:frontend/configs.dart';
 import 'package:payhere_mobilesdk_flutter/payhere_mobilesdk_flutter.dart';
 import 'package:http/http.dart' as http;
-import 'package:mailer/mailer.dart';
-import 'package:mailer/smtp_server.dart';
 import 'package:provider/provider.dart';
 import 'donation_form.dart';
 import 'login_state.dart';
@@ -19,24 +17,6 @@ class Payment extends StatelessWidget {
 
   final Details d;
   Payment(this.d);
-  Future<void> sendPaymentConfirmationEmail(String recipientEmail, String paymentAmount) async {
-    final smtpServer = gmail('photoboothme499@gmail.com', 'vnkwowpzrxrnbnwk');
-
-    final message = Message()
-      ..from = Address('photoboothme499@gmail.com', 'PhotoboothMe')
-      ..recipients.add(recipientEmail)
-      ..subject = 'Payment Confirmation'
-      ..text = 'Thank you for your payment of $paymentAmount.';
-
-    try {
-      final sendReport = await send(message, smtpServer);
-      print('Message sent: ' + sendReport.toString());
-      return;
-    } catch (e) {
-      print('Error occurred: $e');
-      return;
-    }
-  }
 
   Future<void> sendEmail(String recipient, String pid,String amount,String date) async {
     var url = Uri.parse(localhost+'/send-email');
@@ -124,7 +104,9 @@ class Payment extends StatelessWidget {
         print('${response.statusCode}');
         await sendEmail(d.email,pid,d.amount,DateTime.now().toString() );
         //await sendPaymentConfirmationEmail(d.email, d.amount);
-        await sendNotification(pid, userId);
+        if(userId!=null){
+          await sendNotification(pid, userId);
+        }
         await sendNotificationtoAdmin(pid, userId);
       } else {
         print('failed');
@@ -143,8 +125,8 @@ class Payment extends StatelessWidget {
       "merchant_secret": "MTM4MTA5NzM0MTQ4ODE2MjYzOTEwNjU5MTA5ODUyNTM2OTAzMjEw",
       //"authorize": true,
       "notify_url": "https://ent13zfovoz7d.x.pipedream.net/",
-      "recurrence": d.period, // Recurring payment frequency
-      "duration": d.duration, //Recurring period
+      "recurrence": d.period! + ' Month', // Recurring payment frequency
+      "duration": d.duration! + ' Year', //Recurring period
       "items": d.purpose,
       "currency": "LKR",
       "amount": d.amount,
@@ -157,66 +139,18 @@ class Payment extends StatelessWidget {
       "country": "Sri Lanka",
     };
 
-    PayHere.startPayment(paymentObject, (paymentId) {
+    PayHere.startPayment(paymentObject, (paymentId) async {
       print("Recurring Payment Success. Payment Id: $paymentId");
+      await saveDonation(paymentId,userId);
+
+      showAlert(context, "Payment Success!", "Payment Id: $paymentId");
+      Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+        return DonationForm();
+      }));
     }, (error) {
       print("Recurring Payment Failed. Error: $error");
     }, () {
       print("Recurring Payment Dismissed");
-    });
-  }
-
-  void startPreAprrovalPayment(BuildContext context) async {
-    Map paymentObject = {
-      "sandbox": true, // true if using Sandbox Merchant ID
-      "preapprove": true, // Required
-      "merchant_id": "1211149", // Replace your Merchant ID
-      "notify_url": "http://sample.com/notify",
-      "items": d.purpose,
-      "currency": "LKR",
-      "first_name": d.fname,
-      "last_name": d.lname,
-      "email": d.email,
-      "phone": "0771234567",
-      "address": "No.1, Galle Road",
-      "city": "Colombo",
-      "country": "Sri Lanka",
-      "amount": d.amount // Optional. An amount to pass while pre-approving.
-    };
-
-    PayHere.startPayment(paymentObject, (paymentId) {
-      print("Tokenization Payment Success. Payment Id: $paymentId");
-    }, (error) {
-      print("Tokenization Payment Failed. Error: $error");
-    }, () {
-      print("Tokenization Payment Dismissed");
-    });
-  }
-
-  void savePaymentDetail(BuildContext context) {
-    Map paymentObject = {
-      "sandbox": true, // true if using Sandbox Merchant ID
-      "authorize": true, // Required
-      "merchant_id": "1222157", // Replace your Merchant ID
-      "notify_url": "https://ent13zfovoz7d.x.pipedream.net/",
-      "items": d.purpose,
-      "currency": "LKR",
-      "first_name": d.fname,
-      "last_name": d.lname,
-      "email": d.email,
-      "phone": "0771234567",
-      "address": "No.1, Galle Road",
-      "city": "Colombo",
-      "country": "Sri Lanka",
-      "amount": d.amount
-    };
-
-    PayHere.startPayment(paymentObject, (paymentId) {
-      print("Hold-on-Card Payment Success.");
-    }, (error) {
-      print("Hold-on-Card Payment Failed. Error: $error");
-    }, () {
-      print("Hold-on-Card Payment Dismissed");
     });
   }
 
@@ -388,7 +322,8 @@ class Payment extends StatelessWidget {
                       onPressed: () {
                         if (d.method == "One time Payment") {
                           startOneTimepayment(context,loginState.id);
-                        } else if (d.method == "Recurrant payment") {
+                        } else if (d.method == "Recurrant") {
+                          startRecuurantPayment(context, loginState.id);
                         } else {}
                       },
                       style: ElevatedButton.styleFrom(

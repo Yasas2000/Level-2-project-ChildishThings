@@ -12,6 +12,7 @@ class Otp extends StatelessWidget {
     required this.otpController,
   }) : super(key: key);
   final TextEditingController otpController;
+  
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +46,8 @@ class Otp extends StatelessWidget {
 }
 
 class OTPScreen extends StatefulWidget {
-  const OTPScreen({Key? key, required this.myauth}) : super(key: key);
+  final TextEditingController emailController;
+  const OTPScreen({Key? key, required this.myauth, required this.emailController}) : super(key: key);
   final EmailOTP myauth;
   @override
   State<OTPScreen> createState() => _OTPScreenState();
@@ -78,7 +80,7 @@ class _OTPScreenState extends State<OTPScreen> {
                 child: Transform.rotate(
                   angle: 38,
                   child: Image(
-                    image: AssetImage('assets/email.png'),
+                    image: AssetImage('Asset/email.png'),
                   ),
                 ),
               ),
@@ -133,8 +135,8 @@ class _OTPScreenState extends State<OTPScreen> {
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                       content: Text("OTP is verified"),
                     ));
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => ForgotPasswordScreen()));
+                    Navigator.pushAndRemoveUntil(context,
+                        MaterialPageRoute(builder: (context) => ForgotPasswordScreen(emailController: widget.emailController,)),(route)=>false);
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                       content: Text("Invalid OTP"),
@@ -143,14 +145,14 @@ class _OTPScreenState extends State<OTPScreen> {
                 },
                 style: ElevatedButton.styleFrom(
                   foregroundColor: Colors.white,
-                  backgroundColor: Colors.black, // text color
+                  backgroundColor: Colors.deepOrange, // text color
                   elevation: 5, // button elevation
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ), // rounded corner
                 ),
                 child: Container(
-                  width: double.infinity, // button width match parent
+                  width: double.maxFinite, // button width match parent
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   child: const Text(
                     "Confirm",

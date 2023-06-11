@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:frontend/homepage.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
 import './stripesTile.dart';
@@ -79,7 +80,13 @@ class _typeState extends State<Stripes> {
             color: Colors.deepOrange,
             size: 40,
           ),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => HomePage()),
+            );
+          },
         ),
       ),
       body: Container(
@@ -197,34 +204,6 @@ class _typeState extends State<Stripes> {
                                 }
                               }
                             }),
-
-
-                    // Expanded(
-                    //   child: LayoutBuilder(
-                    //     builder: (context, constraints) {
-                    //       return Flexible(
-                    //           child: GridView.count(
-                    //             padding: const EdgeInsets.all(10),
-                    //             shrinkWrap: true,
-                    //             crossAxisCount: 1,
-                    //             mainAxisSpacing: 10,
-                    //             childAspectRatio: 1.5,
-                    //             children: tileList.map((tile) {
-                    //               return PhotoTile(
-                    //                 imageAsset: tile.imageAsset ?? "",
-                    //                 text: tile.text?? "",
-                    //                 amount: tile.amount?? "",
-                    //                 hour: tile.hour ?? "",
-                    //                 onDelete: () {
-                    //                   _deleteTile(tile as Map<String, dynamic>);
-                    //                 }, id: '',
-                    //               );
-                    //             }).toList(),
-                    //           ));
-                    //     },
-                    //   ),
-                    // )
-
 
 
 

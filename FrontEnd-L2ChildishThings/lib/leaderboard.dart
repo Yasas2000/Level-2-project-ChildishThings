@@ -58,62 +58,65 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
             ));
           },
         )),
-        body: leaderboardData.isEmpty
-            ? Center(
-        child: LoadingAnimationWidget.staggeredDotsWave(
-        color: Colors.deepOrange,
-          size: 100,
-         ),
-        )
-        :SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(color: Colors.white),
+        body: Padding(
+          padding: EdgeInsetsDirectional.only(top: 20),
+          child: leaderboardData.isEmpty
+              ? Center(
+          child: LoadingAnimationWidget.staggeredDotsWave(
+          color: Colors.deepOrange,
+            size: 100,
+           ),
+          )
+          :SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(color: Colors.white),
 
-            child: DataTable(
+              child: DataTable(
 
-              columnSpacing: Checkbox.width,
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(25),
-                  border: Border.all(color: Colors.deepOrange)),
+                columnSpacing: Checkbox.width,
+                decoration: BoxDecoration(borderRadius: BorderRadius.circular(25),
+                    border: Border.all(color: Colors.deepOrange)),
 
-              columns: [
-                DataColumn(
-                  label: Text('Rank',
-                  style: TextStyle(color: Colors.deepOrange,fontWeight: FontWeight.bold),),
-                ),
-                DataColumn(
-                  label: Text('UserID',
-                      style: TextStyle(color: Colors.deepOrange,fontWeight: FontWeight.bold)),
-                ),
-                DataColumn(
-                  label: Text('Total Donation',
-                      style: TextStyle(color: Colors.deepOrange,fontWeight: FontWeight.bold)),
-                ),
-                DataColumn(
-                  label: Text('Points',
-                      style: TextStyle(color: Colors.deepOrange,fontWeight: FontWeight.bold)),
-                ),
-              ],
-              rows: List<DataRow>.generate(
-                leaderboardData.length,
-                    (int index) => DataRow(
+                columns: [
+                  DataColumn(
+                    label: Text('Rank',
+                    style: TextStyle(color: Colors.deepOrange,fontWeight: FontWeight.bold),),
+                  ),
+                  DataColumn(
+                    label: Text('UserID',
+                        style: TextStyle(color: Colors.deepOrange,fontWeight: FontWeight.bold)),
+                  ),
+                  DataColumn(
+                    label: Text('Total Donation',
+                        style: TextStyle(color: Colors.deepOrange,fontWeight: FontWeight.bold)),
+                  ),
+                  DataColumn(
+                    label: Text('Points',
+                        style: TextStyle(color: Colors.deepOrange,fontWeight: FontWeight.bold)),
+                  ),
+                ],
+                rows: List<DataRow>.generate(
+                  leaderboardData.length,
+                      (int index) => DataRow(
 
-                      color: MaterialStateColor.resolveWith((states) {
-                        if (states.contains(MaterialState.selected)) {
-                          return Colors.grey.withOpacity(0.5);
-                        }
-                        if (states.contains(MaterialState.hovered)) {
-                          return Colors.grey.withOpacity(0.2);
-                        }
-                        return leaderboardData[index].col.withOpacity(0.2);
-                      }),
-                  cells: <DataCell>[
-                    DataCell(Text((index + 1).toString())),
-                    DataCell(Text(leaderboardData[index].id)),
-                    DataCell(Text(leaderboardData[index].amount.toString())),
-                    DataCell(Text(leaderboardData[index].points.toString())),
-                  ],
+                        color: MaterialStateColor.resolveWith((states) {
+                          if (states.contains(MaterialState.selected)) {
+                            return Colors.grey.withOpacity(0.5);
+                          }
+                          if (states.contains(MaterialState.hovered)) {
+                            return Colors.grey.withOpacity(0.2);
+                          }
+                          return leaderboardData[index].col.withOpacity(0.2);
+                        }),
+                    cells: <DataCell>[
+                      DataCell(Text((index + 1).toString())),
+                      DataCell(Text(leaderboardData[index].id)),
+                      DataCell(Text(leaderboardData[index].amount.toString())),
+                      DataCell(Text(leaderboardData[index].points.toString())),
+                    ],
+                  ),
                 ),
               ),
             ),

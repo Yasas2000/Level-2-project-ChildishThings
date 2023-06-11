@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 
 import 'app_bar.dart';
 import 'configs.dart';
+import 'homepage.dart';
 
 //Stripes quotation
 
@@ -45,7 +46,14 @@ class _stripQuoState extends State<stripsQuo> {
                   color: Colors.deepOrange,
                   size: 40,
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => HomePage()),
+                          (route)=>false
+                  );
+                },
               ),
             ),
             body: SingleChildScrollView(
@@ -74,16 +82,16 @@ class _stripQuoState extends State<stripsQuo> {
                           decoration: const InputDecoration(
                               icon: Icon(
                                 Icons.person,
-                                color: Colors.orange,
+                                color: Colors.deepOrange,
                               ),
                               labelText: 'First Name*',
                               border: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                  color: Colors.orange,
+                                  color: Colors.deepOrange,
                                 ),
                               ),
                               labelStyle: TextStyle(
-                                color: Colors.orange,
+                                color: Colors.deepOrange,
                                 fontSize: 16,
                               )),
                           validator: (value) {
@@ -102,16 +110,16 @@ class _stripQuoState extends State<stripsQuo> {
                           decoration: const InputDecoration(
                               icon: Icon(
                                 Icons.person,
-                                color: Colors.orange,
+                                color: Colors.deepOrange,
                               ),
                               labelText: 'Last Name*',
                               border: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                  color: Colors.orange,
+                                  color: Colors.deepOrange,
                                 ),
                               ),
                               labelStyle: TextStyle(
-                                color: Colors.orange,
+                                color: Colors.deepOrange,
                                 fontSize: 16,
                               )),
                           validator: (value) {
@@ -130,27 +138,27 @@ class _stripQuoState extends State<stripsQuo> {
                           decoration: const InputDecoration(
                               icon: Icon(
                                 Icons.phone,
-                                color: Colors.orange,
+                                color: Colors.deepOrange,
                               ),
                               hintText: 'Ex:0777123456',
                               labelText: 'Contact Number*',
                               border: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                  color: Colors.orange,
+                                  color: Colors.deepOrange,
                                 ),
                               ),
                               labelStyle: TextStyle(
-                                color: Colors.orange,
+                                color: Colors.deepOrange,
                                 fontSize: 16,
                               )),
                           validator: (value) {
                             if (value!.isEmpty) {
-                              return 'Please enter a contact number';
+                              return 'Please enter a valid phone number';
                             }
-                            if (!RegExp(
-                                    r'^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$')
-                                .hasMatch(value)) {
-                              return 'Please enter a valid contact number';
+                            final phoneExp = RegExp(
+                                r'^(?:0|\+94)(?:11|21|23|24|25|26|31|32|33|34|35|36|37|38|41|45|47|51|52|54|55|57|63|65|66|67|81|91|92|93|94|95|97|99|77|76|71|70|75|78)\d{7}$');
+                            if (!phoneExp.hasMatch(value)) {
+                              return 'Please enter a valid phone number';
                             }
                             return null;
                           },
@@ -161,16 +169,16 @@ class _stripQuoState extends State<stripsQuo> {
                           decoration: const InputDecoration(
                               icon: Icon(
                                 Icons.email,
-                                color: Colors.orange,
+                                color: Colors.deepOrange,
                               ),
                               labelText: 'Email*',
                               border: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                  color: Colors.orange,
+                                  color: Colors.deepOrange,
                                 ),
                               ),
                               labelStyle: TextStyle(
-                                color: Colors.orange,
+                                color: Colors.deepOrange,
                                 fontSize: 16,
                               )),
                           validator: (value) {
@@ -186,55 +194,99 @@ class _stripQuoState extends State<stripsQuo> {
                           },
                         ),
                         SizedBox(height: 20),
-                        TextFormField(
-                          controller: _dateController,
-                          decoration: const InputDecoration(
-                              icon: Icon(
-                                Icons.date_range,
-                                color: Colors.orange,
-                              ),
-                              labelText: 'Event date (MM/DD/YYYY)*',
-                              border: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Colors.orange,
-                                ),
-                              ),
-                              labelStyle: TextStyle(
-                                color: Colors.orange,
-                                fontSize: 16,
-                              )),
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Please enter the event date';
-                            }
-                            return null;
-                          },
+                      TextFormField(
+                        readOnly: true,
+                        controller: _dateController,
+                        onTap: () async {
+                          // Show the date picker when the field is tapped
+                          DateTime? pickedDate = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(1900),
+                            lastDate: DateTime(2100),
+                          );
+
+                          if (pickedDate != null) {
+                            // Format the selected date as per your requirement
+                            String formattedDate =
+                            DateFormat('dd/MM/yyyy').format(pickedDate);
+
+                            // Update the text field with the selected date
+                            _dateController.text = formattedDate;
+                          }
+                        },
+                        decoration: InputDecoration(
+                          labelText: 'Event Date*',
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.deepOrange,
+                            ),
+                          ),
+                          icon: Icon(
+                            Icons.date_range,
+                            color: Colors.deepOrange,
+                          ),
+                          labelStyle: TextStyle(
+                            color: Colors.deepOrange,
+                          ),
                         ),
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please enter the event date';
+                          }
+                          return null;
+                        },
+                      ),
                         SizedBox(height: 20),
-                        TextFormField(
-                          controller: _eventStarttimeController,
-                          decoration: const InputDecoration(
-                              icon: Icon(
-                                Icons.lock_clock,
-                                color: Colors.orange,
-                              ),
-                              labelText: 'Event starting time*',
-                              hintText: 'Hour/Min/Sec(AM/PM)',
-                              border: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Colors.orange,
+                        GestureDetector(
+                          onTap: () {
+                            // Show the time picker when the field is tapped
+                            showTimePicker(
+                              context: context,
+                              initialTime: TimeOfDay.now(),
+                            ).then((pickedTime) {
+                              if (pickedTime != null) {
+                                // Format the selected time as per your requirement
+                                String formattedTime =
+                                pickedTime.format(context);
+
+                                // Update the text field with the selected time
+                                _eventStarttimeController.text =
+                                    formattedTime;
+                              }
+                            });
+                          },
+                          child: AbsorbPointer(
+                            child: TextFormField(
+                              controller: _eventStarttimeController,
+                              inputFormatters: [
+                                FilteringTextInputFormatter.allow(
+                                    RegExp(r'^\d{1,2}:\d{2} [AP]M$')),
+                              ],
+                              decoration: InputDecoration(
+                                labelText: 'Event Start Time*',
+                                border: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Colors.deepOrange,
+                                  ),
+                                ),
+                                hintText: 'Ex: 2:45 PM',
+                                icon: Icon(
+                                  Icons.lock_clock,
+                                  color: Colors.deepOrange,
+                                ),
+                                labelStyle: TextStyle(
+                                  color: Colors.deepOrange,
                                 ),
                               ),
-                              labelStyle: TextStyle(
-                                color: Colors.orange,
-                                fontSize: 16,
-                              )),
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Please enter the event date';
-                            }
-                            return null;
-                          },
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'Please enter the event time';
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
                         ),
                         SizedBox(height: 20),
                         TextFormField(
@@ -242,16 +294,16 @@ class _stripQuoState extends State<stripsQuo> {
                           decoration: const InputDecoration(
                               icon: Icon(
                                 Icons.location_city,
-                                color: Colors.orange,
+                                color: Colors.deepOrange,
                               ),
                               labelText: 'Event location*',
                               border: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                  color: Colors.orange,
+                                  color: Colors.deepOrange,
                                 ),
                               ),
                               labelStyle: TextStyle(
-                                color: Colors.orange,
+                                color: Colors.deepOrange,
                                 fontSize: 16,
                               )),
                           validator: (value) {
@@ -267,17 +319,17 @@ class _stripQuoState extends State<stripsQuo> {
                           decoration: const InputDecoration(
                               icon: Icon(
                                 Icons.event,
-                                color: Colors.orange,
+                                color: Colors.deepOrange,
                               ),
                               labelText:
                                   'Event Select*(eg;Birthday,corporate events,Parties,Wedding,Graduation,Other)',
                               border: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                  color: Colors.orange,
+                                  color: Colors.deepOrange,
                                 ),
                               ),
                               labelStyle: TextStyle(
-                                color: Colors.orange,
+                                color: Colors.deepOrange,
                                 fontSize: 16,
                               ),
                               helperText:
@@ -292,19 +344,22 @@ class _stripQuoState extends State<stripsQuo> {
                         SizedBox(height: 20),
                         TextFormField(
                           controller: _totInvitees,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                          ],
                           decoration: const InputDecoration(
                             icon: Icon(
                               Icons.person,
-                              color: Colors.orange,
+                              color: Colors.deepOrange,
                             ),
                             labelText: 'No.of Invitees *',
                             border: OutlineInputBorder(
                               borderSide: BorderSide(
-                                color: Colors.orange,
+                                color: Colors.deepOrange,
                               ),
                             ),
                             labelStyle: TextStyle(
-                              color: Colors.orange,
+                              color: Colors.deepOrange,
                               fontSize: 16,
                             ),
                             helperText:
@@ -323,20 +378,23 @@ class _stripQuoState extends State<stripsQuo> {
                         SizedBox(height: 20),
                         TextFormField(
                           controller: _eventDurationHours,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                          ],
                           decoration: const InputDecoration(
                             icon: Icon(
                               Icons.timelapse_rounded,
-                              color: Colors.orange,
+                              color: Colors.deepOrange,
                             ),
                             hintText: 'Ex:2',
                             labelText: 'Event duration in hours*',
                             border: OutlineInputBorder(
                               borderSide: BorderSide(
-                                color: Colors.orange,
+                                color: Colors.deepOrange,
                               ),
                             ),
                             labelStyle: TextStyle(
-                              color: Colors.orange,
+                              color: Colors.deepOrange,
                               fontSize: 16,
                             ),
                           ),
@@ -356,16 +414,16 @@ class _stripQuoState extends State<stripsQuo> {
                           decoration: const InputDecoration(
                             icon: Icon(
                               Icons.person,
-                              color: Colors.orange,
+                              color: Colors.deepOrange,
                             ),
                             labelText: 'Remarks',
                             border: OutlineInputBorder(
                               borderSide: BorderSide(
-                                color: Colors.orange,
+                                color: Colors.deepOrange,
                               ),
                             ),
                             labelStyle: TextStyle(
-                              color: Colors.orange,
+                              color: Colors.deepOrange,
                               fontSize: 16,
                             ),
                             helperText:
@@ -375,7 +433,7 @@ class _stripQuoState extends State<stripsQuo> {
                         SizedBox(height: 20),
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            primary: Colors.orange,
+                            primary: Colors.deepOrange,
                           ),
                           onPressed: () async {
                             if (_formKey.currentState!.validate()) {
@@ -402,8 +460,8 @@ class _stripQuoState extends State<stripsQuo> {
                                 }),
                               );
                               if (response.statusCode == 200) {
-                                var url = Uri.parse(localhost+'/send-email/quotation');
-                                var emailResponse = await http.post(url, body: jsonEncode(<String, dynamic>{
+                                var url = Uri.parse(localhost+'/send-email/quotationStripes');
+                                var emailResponse = await http.post(url, body:{
                                   'firstName': _firstNameController.text,
                                   'lastName': _lastNameController.text,
                                   'contactNumber': _contactNumberController.text,
@@ -413,7 +471,7 @@ class _stripQuoState extends State<stripsQuo> {
                                   'eventDurationHours': _eventDurationHours.text,
                                   'evenLocation': _eventLocation.text,
                                   'totInvitees': _totInvitees.text,
-                                }),);
+                                });
                                 if (emailResponse.statusCode == 200) {
                                   print('Email sent successfully!');
                                 } else {

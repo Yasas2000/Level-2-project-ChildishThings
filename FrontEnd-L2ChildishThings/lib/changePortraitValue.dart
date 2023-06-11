@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:frontend/portraitEsti.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -48,6 +49,12 @@ class _changePortraitValueState extends State<changePortraitValue> {
                       SizedBox(height: 20),
                       TextFormField(
                         controller: amount,
+                        keyboardType:
+                        TextInputType.numberWithOptions(decimal: true),
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*$')),
+                        ],
+
                         decoration: const InputDecoration(
                           icon: Icon(Icons.money, color: Colors.deepOrange),
                           labelText:
@@ -100,6 +107,12 @@ class _changePortraitValueState extends State<changePortraitValue> {
                       SizedBox(height: 20),
                       TextFormField(
                         controller: amount1,
+                        keyboardType:
+                        TextInputType.numberWithOptions(decimal: true),
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*$')),
+                        ],
+
                         decoration: const InputDecoration(
                           icon: Icon(Icons.money, color: Colors.deepOrange),
                           labelText: 'Amount for WITH PLYWOOD FRAMES (6"x8")',

@@ -1,4 +1,5 @@
 const nodemailer = require('nodemailer');
+const inlineCss = require('inline-css');
 let transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -6,13 +7,14 @@ let transporter = nodemailer.createTransport({
       pass: 'vnkwowpzrxrnbnwk'
     }
   });
-  function sendEmail(recipient,html){
-
+  function sendEmail(recipient,subject,html){
+    inlineCss(html, { url: ' ' }) // Pass an empty URL to prevent loading external resources
+  .then((inlinedHtml) => {
     const mailOptions = {
         from: 'photoboothme499@gmail.com',
         to: recipient,
-        subject: 'Payment Confirmation',
-        html:html,
+        subject: subject,
+        html:inlinedHtml,
       };
     
       transporter.sendMail(mailOptions, function(error, info) {
@@ -24,6 +26,7 @@ let transporter = nodemailer.createTransport({
           
         }
       });
+    });
   }
   module.exports = {
     sendEmail

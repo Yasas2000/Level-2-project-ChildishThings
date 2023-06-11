@@ -2,30 +2,13 @@ const express = require('express');
 const router = express.Router();
 const { sendEmail } = require('../models/sendEmail');
 router.post('/', (req, res) => {
+    const subject='Payment Confirmation'; 
     const recipient = req.body.recipient;
     const pid = req.body.pid;
     const amount = req.body.amount;
     const date = req.body.date;
     const logoPath = "https://images.squarespace-cdn.com/content/v1/5f633f2a3ceb25330f960d39/9370e95a-b4f8-4ddf-952e-cbd33a7157cd/Photobooth.png?format=1500w"; // Replace with the actual path to your logo image
-    function generatePDF(htmlContent, outputPath) {
-      return new Promise((resolve, reject) => {
-        const doc = new PDFDocument();
-        const stream = fs.createWriteStream(outputPath);
-      
-        doc.pipe(stream);
-        doc.font('Helvetica').fontSize(12).text(htmlContent, 50, 50);
-        doc.end();
-      
-        stream.on('finish', () => {
-          console.log(`PDF generated successfully: ${outputPath}`);
-          resolve();
-        });
-      
-        stream.on('error', (error) => {
-          reject(error);
-        });
-      });
-    }
+   
 // Function to generate the HTML with dynamic parameters
 function generateHTML(paymentId, amount, date) {
   return `
@@ -76,12 +59,13 @@ function generateHTML(paymentId, amount, date) {
     </html>
   `;
 }
-    sendEmail(recipient, generateHTML(pid,amount,date));
+    sendEmail(recipient,subject, generateHTML(pid,amount,date));
     res.status(200).send('Email sent successfully!');
   
     
   });
   router.post('/quotation', (req, res) => {
+    const subject='Portrait Quotation Request';
     const recipient='ymeka2000@gmail.com';
     const numBigFamilies = req.body.numBigFamilies;
     const name= req.body.firstName+req.body.lastName;
@@ -269,7 +253,7 @@ function generateHTML
   </html>
   `;
 }
-    sendEmail(recipient, generateHTML(name,
+    sendEmail(recipient,subject, generateHTML(name,
       number,
       email,
       date,
@@ -287,6 +271,7 @@ function generateHTML
     
   });
   router.post('/quotationStripes', (req, res) => {
+    const subject='Stripes Quotation Request';
     const recipient='ymeka2000@gmail.com';
     const name= req.body.firstName+req.body.lastName;
     const number= req.body.contactNumber;
@@ -309,7 +294,6 @@ function generateHTML
   eventStarttime,
   totInvitees) {
   return `
-  <!DOCTYPE html>
   <html>
   <head>
     <style>
@@ -346,6 +330,7 @@ function generateHTML
         .logo-section img {
         max-height: 100px;
         max-width: 200px;
+        align:center;
         color:#000000;
       }
   
@@ -445,7 +430,7 @@ function generateHTML
   </html>
   `;
 }
-    sendEmail(recipient, generateHTML(name,
+    sendEmail(recipient,subject, generateHTML(name,
       number,
       email,
       date,

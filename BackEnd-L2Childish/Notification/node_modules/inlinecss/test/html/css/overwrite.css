@@ -1,0 +1,16 @@
+.small {
+	font-size: 11px;
+}
+
+#openDefinition {
+	padding: 3px 5px;
+}
+
+#introduction {
+    margin: 60px 10px 25px;
+}
+
+footer {
+	text-align: center;
+	padding: 10px;
+}

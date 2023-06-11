@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:frontend/stripsQuo.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -65,14 +66,14 @@ class _MyAppState extends State<custom> {
           width: double.infinity,
           decoration: const BoxDecoration(
             image: DecorationImage(
-              image: AssetImage("new.jpg"),
+              image: AssetImage("Asset/new.jpg"),
               fit: BoxFit.cover,
             ),
           ),
           child: Column(
             children: <Widget>[
               Image.asset(
-                'logo.png',
+                'Asset/logo.png',
                 width: 200,
                 height: 200,
               ),
@@ -80,12 +81,17 @@ class _MyAppState extends State<custom> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextField(
+                    keyboardType:
+                    TextInputType.numberWithOptions(decimal: true),
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*$')),
+                    ],
                     decoration: InputDecoration(
                       hintText: 'Ex:2.5 hours',
                       labelText: "Enter the Number of hours",
                       border: OutlineInputBorder(
                         borderSide: BorderSide(
-                          color: Colors.orange,
+                          color: Colors.deepOrange,
                         ),
                       ),
                     ),
@@ -129,7 +135,7 @@ class _MyAppState extends State<custom> {
                   'GET THE EXACT AMOUNT',
                   style: TextStyle(
                     decoration: TextDecoration.underline,
-                    color: Colors.orange,
+                    color: Colors.deepOrange,
                     fontWeight: FontWeight.bold,
                     fontSize: 22,
                   ),
@@ -142,13 +148,13 @@ class _MyAppState extends State<custom> {
                 },
               ),
               Visibility(
-                  visible: loginState.role=="admin",
+                  visible: loginState.role=="Admin",
                   child: InkWell(
                     child: const Text(
                       'Click here to change the value',
                       style: TextStyle(
                         decoration: TextDecoration.underline,
-                        color: Colors.orange,
+                        color: Colors.deepOrange,
                         fontWeight: FontWeight.bold,
                         fontSize: 22,
                       ),

@@ -1,0 +1,55 @@
+a {
+    color: #red;
+    outline: none;
+}   
+
+a:hover {
+    font-weight: bold;
+}
+
+body {
+    font-family: comic sans;
+    line-height: 1;
+}
+
+.bold {
+	font-weight: bold;
+}
+
+.small {
+	font-size: 12px;
+}
+
+header {
+    background: #99FF66;
+    padding: 10px 15px 12px;
+}
+
+header h1{
+    font-weight:600;
+    font-size: 24px;	
+}
+
+#container {
+    width: 600px;
+    font-size: 18px;
+    padding: 50px 20px;
+    margin: 0 auto;
+}
+
+#container > * {
+	margin-bottom: 20px;
+}
+
+#openDefinition {
+	padding: 5px;
+}
+
+#introduction {
+    margin: 60px 0 25px;
+}
+
+footer {
+	text-align: center;
+	padding: 15px;
+}

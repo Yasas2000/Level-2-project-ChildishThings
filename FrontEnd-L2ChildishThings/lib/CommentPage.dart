@@ -2,7 +2,10 @@
 
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:frontend/configs.dart';
 import 'package:http/http.dart' as http;
+
+import 'app_bar.dart';
 
 class Commentpage extends StatefulWidget {
   const Commentpage({super.key});
@@ -15,7 +18,7 @@ class _CommentpageState extends State<Commentpage> {
   Future<List<String>> _fetchComments() async {
     try {
       final response =
-          await http.get(Uri.parse('http://localhost:3000/comments'));
+          await http.get(Uri.parse(gallery_localhost+'/comments'));
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         final comments = List<String>.from(data.map((item) => item['content']));
@@ -32,26 +35,19 @@ class _CommentpageState extends State<Commentpage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.orange.withOpacity(
-              0.7), // Set orange transparent background for app bar
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-          actions: [
-            IconButton(
-              icon: Icon(Icons.home),
-              onPressed: () {},
-            ),
-          ],
-        ),
+        appBar: CustomAppBar(title:'Comments',leadingIcon:IconButton(
+          icon: Icon(Icons.arrow_back_ios_outlined),
+          iconSize: 40,
+          color: Colors.deepOrange,
+          onPressed:(){
+            Navigator.pop(context);
+
+          },
+        )),
         body: Container(
           width: double.infinity, // Sets the width to fill the available space
           height: double.infinity, // Sets the height of the big box
-          color: Colors.orange[200], // Sets the background color of the box
+          color: Colors.deepOrange, // Sets the background color of the box
 
           child: FutureBuilder<List<String>>(
             future: _fetchComments(),

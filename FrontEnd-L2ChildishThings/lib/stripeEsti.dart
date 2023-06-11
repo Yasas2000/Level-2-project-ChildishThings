@@ -17,11 +17,13 @@ class stripeEsti extends StatelessWidget {
           title: 'Stripes Estimation',
           leadingIcon: IconButton(
             icon: Icon(
-              Icons.home,
+              Icons.arrow_back_ios_outlined,
               color: Colors.deepOrange,
               size: 40,
             ),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pop(context);
+            },
           ),
         ),
         resizeToAvoidBottomInset: false,

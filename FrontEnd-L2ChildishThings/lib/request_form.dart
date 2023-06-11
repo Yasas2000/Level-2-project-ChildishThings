@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend/bottom_navbar.dart';
 import 'package:frontend/eduHelp_form.dart';
 import 'package:frontend/financialReq_form.dart';
 import 'package:provider/provider.dart';
@@ -32,12 +33,16 @@ class _RequestingFormState extends State<RequestingForm> {
         leadingIcon:  IconButton(
           icon: Icon(Icons.home,color: Colors.deepOrange,size: 40,),
           onPressed:(){
-            Navigator.of(context).push(MaterialPageRoute(builder: (context)=>
-                HomePage()
-            ));
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => HomePage()),
+                    (route)=>false
+            );
           },
         ),
       ),
+      bottomNavigationBar: BottomNavbar(initialIndex: 2,),
       body: Column(
         children: [
           Container(
@@ -175,12 +180,14 @@ class _RequestingFormState extends State<RequestingForm> {
                                 decoration: const InputDecoration(
                                   labelText: 'Email',
                                 ),
-                                validator: (value){
-                                  if (value!.isEmpty){
-                                    return 'Please enter your email';
+                                validator: (value) {
+                                  if (value!.isEmpty) {
+                                    return 'Please enter an email address';
                                   }
-                                  if (!value.contains('@')|| !value.contains('.')){
-                                    return 'Please enter a valid email';
+                                  if (!RegExp(
+                                      r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                      .hasMatch(value)) {
+                                    return 'Please enter a valid email address';
                                   }
                                   return null;
                                 },
@@ -237,7 +244,7 @@ class _RequestingFormState extends State<RequestingForm> {
                         Center(
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.orange,
+                              backgroundColor: Colors.deepOrange,
                             ),
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {

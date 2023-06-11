@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend/gallery.dart';
 import 'package:frontend/homepage.dart';
 import 'package:frontend/loginscreen.dart';
 import 'package:frontend/request_form.dart';
@@ -9,15 +10,16 @@ import 'donation_form.dart';
 import 'login_state.dart';
 
 class BottomNavbar extends StatefulWidget {
+  final int initialIndex;
 
-  const BottomNavbar({Key? key}) : super(key: key);
+  const BottomNavbar({Key? key, required this.initialIndex}) : super(key: key);
 
   @override
   State<BottomNavbar> createState() => _BottomNavbarState();
 }
 
 class _BottomNavbarState extends State<BottomNavbar> {
-  late int _appBarSelectedIndex=0;
+  late int _appBarSelectedIndex=widget.initialIndex;
   void _onAppBarTapped(int index) {
     setState(() {
       _appBarSelectedIndex = index;
@@ -79,24 +81,11 @@ class _BottomNavbarState extends State<BottomNavbar> {
         BottomNavigationBarItem(
           backgroundColor: Colors.deepOrange,
           icon: IconButton(
-            icon: Icon(Icons.dashboard, color: Colors.white,),
-            onPressed: () {
-              Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) =>
-                      RequestingForm()
-                  ));
-            },
-          ),
-          label: 'Dashboard',
-        ),
-        BottomNavigationBarItem(
-          backgroundColor: Colors.deepOrange,
-          icon: IconButton(
             icon: Icon(Icons.photo_camera, color: Colors.white,),
             onPressed: () {
               Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) =>
-                      HomePage()
+                      ImageGallery()
                   ));
             },
           ),
@@ -105,10 +94,9 @@ class _BottomNavbarState extends State<BottomNavbar> {
       ],
       currentIndex:_appBarSelectedIndex,
       showUnselectedLabels: true,
-
-
+      selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
       selectedItemColor: Colors.white,
-      onTap: _onAppBarTapped,);
+     );
   }
 }
 
