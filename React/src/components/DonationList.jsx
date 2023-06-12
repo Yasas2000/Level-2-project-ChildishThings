@@ -12,12 +12,14 @@ const DonationList = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:5000/donations')
+    axios.get('http://localhost:3300/donation/list')
     .then(response => {
       console.log(response.data)
       setData(
         response.data.map((row,index)=>{
-          return { id:index+1,
+          return { 
+                   id:index+1,
+                   oid:row._id,
                    donationId:row.id,
                    fname:row.fname,
                    lname:row.lname,
@@ -33,8 +35,16 @@ const DonationList = () => {
   }, [])
 
 
-  const handleDelete = (id) => {
-    setData(data.filter((item) => item.id !== id));
+  const handleDelete = (oid) => {
+    axios.get(`http://localhost:3300/donation/delete-donation/${oid}`)
+    .then(response => {
+      console.log(response.data);
+      // Update your data here if necessary
+    })
+    .catch(error => {
+      console.log(error);
+    });
+    setData(data.filter((item) => item.oid !== oid));
   };
 
   const actionColumn = [
@@ -47,7 +57,7 @@ const DonationList = () => {
           <div className="cellAction">
             <div
               className="deleteButton"
-              onClick={() => handleDelete(params.row.id)}
+              onClick={() => handleDelete(params.row.oid)}
             >
               Delete
             </div>

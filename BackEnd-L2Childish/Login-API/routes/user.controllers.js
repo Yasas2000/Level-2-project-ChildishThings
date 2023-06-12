@@ -8,9 +8,37 @@ router.post("/authenticate", authenticate);
 router.post("/register", register);
 router.put("/", update);
 router.get("/count",count);
+router.get("/view",regusers);
 module.exports = router;
 
 //route functions
+router.get('/delete/:email', async function(req, res) {
+  const email = req.params.email;
+
+  try {
+    const user = await User.findOneAndDelete({ email: email });
+
+    if (user) {
+      res.send('User deleted successfully');
+    } else {
+      res.status(404).send('User not found');
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(500).send(err);
+  }
+});
+
+ async function regusers(req,res){
+  try {
+    const users = await User.find();
+    res.json(users);
+  } catch (err) {
+    res.status(500).json({ error: err });
+    console.log('err');
+  }
+
+}
 function count(req,res){
   try{
     User.countDocuments({})

@@ -12,25 +12,22 @@ const EventGridList = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:5000/event')
+    axios.get('http://localhost:3300/api/portraitQuotation')
     .then(response => {
       console.log(response.data)
       setData(
         response.data.map((row,index)=>{
           return {  id:index+1, 
+                    oid:row._id,
+                    date:row.date,
+                    eventStarttime:row.eventStarttime,
                     firstName:row.firstName,
                     lastName:row.firstName,
                     contactNumber:row.contactNumber,
                     email:row.email,
-                    eventStarttime:row.eventStarttime,
-                    date:row.date,
                     eventDurationHours:row.eventDurationHours,
                     totalInvitees:row.totalInvitees,
-                    remarks:row.remarks,  
-                    numSmallFamilies:row.numSmallFamilies,  
-                    numMarriedCouples:row.numMarriedCouples, 
-                    numUnMarriedCouples:row.numUnMarriedCouples,
-                    numIndividualInvitees:row.numIndividualInvitees
+                    remarks:row.remarks
                 }
     }))
     })
@@ -40,8 +37,16 @@ const EventGridList = () => {
   }, [])
 
 
-  const handleDelete = (id) => {
-    setData(data.filter((item) => item.id !== id));
+  const handleDelete = (oid) => {
+    axios.get(`http://localhost:3300/events/delete-events/${oid}`)
+    .then(response => {
+      console.log(response.data);
+      // Update your data here if necessary
+    })
+    .catch(error => {
+      console.log(error);
+    });
+    setData(data.filter((item) => item.oid !== oid));
   };
 
   const actionColumn = [

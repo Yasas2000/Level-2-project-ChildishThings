@@ -6,6 +6,23 @@ const currentYear = new Date().getFullYear(); // Get current year
 
 console.log(Donation);
 
+router.get('/delete-donation/:oid', function(req, res) {
+  const oid=req.params.oid; 
+
+  Donation.findByIdAndDelete(oid, function(err, donation) {
+    if (err) {
+      console.log(err);
+      res.status(500).send(err);
+      return;
+    }
+    
+    if (donation) {
+      res.send('Donation deleted successfully');
+    } else {
+      res.status(404).send('Donation not found');
+    }
+  });
+});
 router.get('/list', async (req, res) => {
     console.log(Donation);
 

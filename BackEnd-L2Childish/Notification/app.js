@@ -20,11 +20,8 @@ app.use(bodyParser.urlencoded({
     extended: true
   }));
 
-app.use(cors({
-origin: '*',
-methods: ['get','post'],
-allowedHeaders: ['Content-Type', 'Authorization'],
-}));  
+app.use(cors()); 
+
 
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', () => {

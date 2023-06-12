@@ -1,13 +1,13 @@
 import React from "react";
 import "../pages/Home.css"
-import Widgets from "../components/Widgets";
+import Dashboard from "../components/Widgets";
 
 const Home = () => {
   return (
     <div className="home">
       <div className="homeContainer">
         <div className="widgets">
-          <Widgets/>
+          <Dashboard/>
         </div>
       </div>
     </div>

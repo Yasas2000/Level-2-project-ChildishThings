@@ -1,26 +1,38 @@
 import { DataGrid } from "@mui/x-data-grid";
-import { userColumns } from "./DonationDataTableSource";
-//import { Link } from "react-router-dom";
+import { userColumns } from "./NotificationDataTable";
+import { Link } from "react-router-dom";
 import { useState,useEffect } from "react";
 import "./List.css";
 import axios from 'axios';
 
+const updateStatus=(oid)=>{
+  axios.put(`http://localhost:3300/notification/read/${oid},admin`)
+    .then(response => {
+      console.log(response.data);
+      // Update your data here if necessary
+    })
+    .catch(error => {
+      console.log(error);
+    });
+}
 
 
-
-const DonationList = () => {
+const NotificationList = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:5000/donations')
+    axios.get('http://localhost:3300/notification/viewnotifications/admin')
     .then(response => {
       console.log(response.data)
       setData(
         response.data.map((row,index)=>{
-          return { id:index+1,
-                   donationId:row.id,
+          return { 
+                   id:index+1,
+                   oid:row._id,
+                   uid:row.uid,
+                   title:row.title,
                    desc:row.desc,
-                   date:row.date,
+                   date:row.date
                   }
     }))
     })
@@ -30,8 +42,16 @@ const DonationList = () => {
   }, [])
 
 
-  const handleDelete = (id) => {
-    setData(data.filter((item) => item.id !== id));
+  const handleDelete = (oid) => {
+    axios.get(`http://localhost:3300/notification/delete-notification/${oid}`)
+    .then(response => {
+      console.log(response.data);
+      // Update your data here if necessary
+    })
+    .catch(error => {
+      console.log(error);
+    });
+    setData(data.filter((item) => item.oid !== oid));
   };
 
   const actionColumn = [
@@ -44,7 +64,7 @@ const DonationList = () => {
           <div className="cellAction">
             <div
               className="deleteButton"
-              onClick={() => handleDelete(params.row.id)}
+              onClick={() => handleDelete(params.row.oid)}
             >
               Delete
             </div>
@@ -70,4 +90,4 @@ const DonationList = () => {
   );
 };
 
-export default DonationList;
+export default NotificationList;

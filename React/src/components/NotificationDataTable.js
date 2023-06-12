@@ -1,8 +1,13 @@
 export const userColumns = [
     { field: "id", headerName: "ID", width: 70 },
-      { field: "title", 
-        headerName: "Title", 
+      { field: "uid", 
+        headerName: "UserID", 
         width: 230 
+      },
+      {
+        field: "title",
+        headerName: "Title",
+        width: 230,
       },
       {
         field: "desc",
