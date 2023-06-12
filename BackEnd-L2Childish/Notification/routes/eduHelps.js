@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Request = require('../models/eduHelp');
 const FinancialRequest=require('../models/financialHelp');
+
 router.get('/RequestCount', (req, res) => {
     Promise.all([
       Request.aggregate([
@@ -30,7 +31,6 @@ router.get('/RequestCount', (req, res) => {
         console.error('Failed to get the total count:', error);
         res.status(500).send('An error occurred');
       });
-  });
 
 router.post('/', async(req, res) => {
 
