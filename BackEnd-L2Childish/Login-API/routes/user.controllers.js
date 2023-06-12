@@ -1,14 +1,32 @@
 const express = require("express");
 const router = express.Router();
 const userServices = require("../services/user.services");
+const User=require('../models/user');
 
 //routes
 router.post("/authenticate", authenticate);
 router.post("/register", register);
 router.put("/", update);
+router.get("/count",count);
 module.exports = router;
 
 //route functions
+function count(req,res){
+  try{
+    User.countDocuments({})
+    .then((result) => {
+      console.log(result);
+      res.status(200).send(result.toString());
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(500).send('An error occurred');
+    });
+
+  }catch(error){
+    res.status(500).send(error);
+  }
+}
 function authenticate(req, res, next) {
   userServices
     .authenticate(req.body)

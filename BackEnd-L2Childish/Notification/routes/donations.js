@@ -17,6 +17,19 @@ router.get('/list', async (req, res) => {
       console.log('err');
     }
   });
+
+  router.get('/count', (req, res) => {
+    Donation.countDocuments({})
+      .then((result) => {
+        console.log(result);
+        res.status(200).send(result.toString());
+      })
+      .catch((error) => {
+        console.error(error);
+        res.status(500).send('An error occurred');
+      });
+  });
+  
 router.get('/totalDonations',(req,res)=>{
 
     Donation.aggregate([
@@ -51,7 +64,7 @@ router.get('/sumOfmonth',(req,res)=>{
         {
           $match: {
             // Filter donations for current month and year
-            createdAt: {
+            date: {
               $gte: new Date(`${currentYear}-${currentMonth}-01`),
               $lte: new Date(`${currentYear}-${currentMonth}-31`),
             },

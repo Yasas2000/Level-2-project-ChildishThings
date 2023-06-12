@@ -10,6 +10,7 @@ const sendEmailRoutes=require('./routes/sendEmails');
 const pricingRoutes = require('./routes/pricings');
 const eduHelpRoutes=require('./routes/eduHelps');
 const financialHelpRoutes=require('./routes/financialHelps');
+const nonRegistered=require('./routes/nonRegistered');
 const app = express();
 const port = process.env.PORT || 3300;
 
@@ -40,6 +41,7 @@ app.use('/send-email',sendEmailRoutes);
 app.use('/api', pricingRoutes);
 app.use('/edurequest',eduHelpRoutes);
 app.use('/financialrequest',financialHelpRoutes);
+app.use('/count',nonRegistered);
 
 app.listen(port, () => {
   console.log(`server started at http://localhost:${port}`);
