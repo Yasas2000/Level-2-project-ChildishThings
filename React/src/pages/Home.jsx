@@ -1,7 +1,6 @@
 import React from "react";
 import "../pages/Home.css"
 import Widgets from "../components/Widgets";
-import EventList from "../components/EventList";
 
 const Home = () => {
   return (
@@ -10,7 +9,6 @@ const Home = () => {
         <div className="widgets">
           <Widgets/>
         </div>
-          <EventList/>
       </div>
     </div>
   );

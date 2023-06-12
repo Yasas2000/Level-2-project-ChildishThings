@@ -1,7 +1,6 @@
 import "./Header.css";
 import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
-import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutlineOutlined";
-import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
+import {BiAnalyse} from "react-icons/bi";
 
 const Header = () => {
 
@@ -18,11 +17,7 @@ const Header = () => {
             <div className="counter">1</div>
           </div>
           <div className="item">
-            <ChatBubbleOutlineOutlinedIcon className="icon" />
-            <div className="counter">2</div>
-          </div>
-          <div className="item">
-            <SettingsOutlinedIcon className="icon" />
+            <BiAnalyse className="icon" />
           </div>
           <div className="item">
             <img

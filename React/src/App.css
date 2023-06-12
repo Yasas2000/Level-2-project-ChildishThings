@@ -10,7 +10,7 @@
 main { 
   padding: 10px;
   margin: 20px;
-  width: -webkit-fill-available;
+  width: stretch;
 }
 
 .title {
@@ -21,11 +21,12 @@ main {
 
 /* Sidebar */
 .sidebar {
-  background:linear-gradient(rgb(235, 142, 3),rgb(254, 168, 63) );
+  background:linear-gradient(rgb(255, 176, 57),transparent );
   color: black;
   height: 120vh;
   overflow-y: auto;
   width:300px;
+  background-color: darkorange;
 }
 
 Header 

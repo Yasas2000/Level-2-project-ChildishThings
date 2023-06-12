@@ -1,10 +1,11 @@
-import RegUserList from "../components/RegUserList"; 
+import QuotRequestList from "../components/QuotRequestList";
+
 
 const QuotationRequests = () => {
     return( 
       <div className="quotationRequestList">
         <div className="listContainer">
-          <RegUserList/>
+          <QuotRequestList/>
         </div>
       </div>
     );

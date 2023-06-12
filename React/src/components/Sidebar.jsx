@@ -1,10 +1,6 @@
 import { NavLink } from "react-router-dom";
-import { FaBars, FaHome, FaUser } from "react-icons/fa";
-import { MdMessage } from "react-icons/md";
-import { BiAnalyse, BiSearch } from "react-icons/bi";
-import { BiCog } from "react-icons/bi";
-import { AiTwotoneFileExclamation } from "react-icons/ai";
-import { BsCalendar, } from "react-icons/bs";
+import { FaBars, FaHome,FaHandHoldingUsd,FaLayerGroup,FaHandshake,FaUserFriends,FaUsers,FaFile,FaCalendarAlt} from "react-icons/fa";
+import {BiAnalyse, BiSearch} from "react-icons/bi";
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import SidebarMenu from "./SidebarMenu";
@@ -17,51 +13,41 @@ const routes = [
   {
     path: "/users",
     name: "Users",
-    icon: <FaUser />,
+    icon: <FaUsers />,
     subRoutes: [
       {
         path: "/users/registeredUsers",
         name: "Registered Users ",
-        icon: <FaUser/>,
+        icon: <FaUserFriends/>,
       },
       {
         path: "/users/nonRegisteredUsers",
         name: "Non Registered Users ",
-        icon: <FaUser/>,
-      },
-      {
-        path: "/users/onlineUsers",
-        name: "Online Users ",
-        icon: <FaUser/>,
+        icon: <FaUsers/>,
       },
     ],
   },
   {
     path: "/Requests",
     name: "Requests",
-    icon: <AiTwotoneFileExclamation />,
+    icon: <FaLayerGroup />,
     subRoutes: [
       {
         path: "/Requests/quotationRequests",
         name: "Quotation Requests",
-        icon: <AiTwotoneFileExclamation/>,
+        icon: <FaFile/>,
       },
       {
         path: "/Requests/Donations",
         name: "Donations ",
-        icon: <AiTwotoneFileExclamation/>,
+        icon: <FaHandHoldingUsd/>,
       },
       {
         path: "/Requests/helpRequests",
         name: "Help Requests",
-        icon: <AiTwotoneFileExclamation/>,
+        icon: <FaHandshake/>,
       },
     ],
-  },
-  {
-    path: "/messages",
-    name: "Messages",
-    icon: <MdMessage />,
   },
   {
     path: "/analytics",
@@ -71,13 +57,7 @@ const routes = [
   {
     path: "/Events",
     name: "Events",
-    icon: <BsCalendar/>,
-  },
-  {
-    path: "/settings",
-    name: "Settings",
-    icon: <BiCog />,
-    exact: true,
+    icon: <FaCalendarAlt/>,
   },
 ];
 
