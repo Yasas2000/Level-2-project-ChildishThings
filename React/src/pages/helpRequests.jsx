@@ -1,10 +1,10 @@
-import RegUserList from "../components/RegUserList";
+import HelpRequestList from "../components/HelpRequestList";
 
 const HelpRequests = () => {
     return (
       <div className="HelpRequestList">
         <div className="listContainer">
-          <RegUserList/>
+          <HelpRequestList/>
         </div>
       </div>
     );
