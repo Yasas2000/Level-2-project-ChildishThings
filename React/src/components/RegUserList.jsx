@@ -9,7 +9,7 @@ import axios from 'axios';
 const RegUserList = () => {
   const [data, setData] = useState(userRows);
   useEffect(() => {
-    axios.get('http://localhost:5000/users/view')
+    axios.get('http://localhost:3300/users/view')
     .then(response => {
       console.log(response.data)
       setData(
@@ -31,7 +31,7 @@ const RegUserList = () => {
   }, [])
 
   const handleDelete = (email) => {
-    axios.get(`http://localhost:5000/users/delete/${email}`)
+    axios.get(`http://localhost:3300/users/delete/${email}`)
     .then(response => {
       console.log(response.data);
       // Update your data here if necessary
