@@ -11,12 +11,13 @@ const HelpRequestList = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:5000/helprequest')
+    axios.get('http://localhost:3300/edurequest/list')
     .then(response => {
       console.log(response.data)
       setData(
         response.data.map((row,index)=>{
           return { id:index+1,
+                   oid:row._id,
                    fullName:row.fullName,
                    telephoneNumber:row.telephoneNumber,
                    email:row.email,
@@ -35,8 +36,16 @@ const HelpRequestList = () => {
   }, [])
 
 
-  const handleDelete = (id) => {
-    setData(data.filter((item) => item.id !== id));
+  const handleDelete = (oid) => {
+    axios.get(`http://localhost:3300/edurequest/deleteRequest/${oid}`)
+    .then(response => {
+      console.log(response.data);
+      // Update your data here if necessary
+    })
+    .catch(error => {
+      console.log(error);
+    });
+    setData(data.filter((item) => item.oid !== oid));
   };
 
   const actionColumn = [
@@ -49,7 +58,7 @@ const HelpRequestList = () => {
           <div className="cellAction">
             <div
               className="deleteButton"
-              onClick={() => handleDelete(params.row.id)}
+              onClick={() => handleDelete(params.row.oid)}
             >
               Delete
             </div>

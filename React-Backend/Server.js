@@ -1,36 +1,54 @@
-const express = require('express')
-const app = express();
-const mongoose = require('mongoose');
-mongoose.set('strictQuery', false);
-var routes = require('./route/routes');
-const cors = require('cors');
- 
-app.use(cors(
-  {
-    origin: "*"
-  }
- 
-));
- 
-app.listen(9992,function check(err)
-{
-    if(err)
-    console.log("error")
-    else
-    console.log("started")
-});
+const { ApolloServer, gql } = require('apollo-server');
+const { MongoClient } = require('mongodb');
+const { ObjectId } = require('mongodb');
 
-mongoose.connect("mongodb://localhost:27017/gbs",{useNewUrlParser: true,  useUnifiedTopology: true },
-function checkDb(error)
-{
-    if(error)
-    {
-        console.log("Error Connecting to DB");
-    }
-    else
-    {
-        console.log("successfully Connected to DB");
-    }
+// MongoDB connection URL
+const url = 'mongodb+srv://ekanayakaym20:2ilctvjCgYFhYP2W@cluster0.vyyy7ro.mongodb.net/Childish-Backend';
+// MongoDB database name
+const dbName = 'L2-Project';
+// MongoDB collection name
+const collectionName = 'your-collection-name';
+
+// Define your GraphQL schema
+const typeDefs = gql`
+  type Query {
+    getData: [Data]
+  }
+
+  type Data {
+    id: ID
+    name: String
+    value: Int
+  }
+`;
+
+async function connectToMongo() {
+  const client = new MongoClient(url);
+
+  try {
+    await client.connect();
+    const db = client.db(dbName);
+    const collection = db.collection(collectionName);
+
+    const data = await collection.find().toArray();
+
+    return data;
+  } finally {
+    await client.close();
+  }
+}
+
+// Define your resolvers
+const resolvers = {
+  Query: {
+    getData: () => connectToMongo(),
+  },
+};
+
+// Create an instance of ApolloServer
+const server = new ApolloServer({ typeDefs, resolvers });
+
+// Start the server
+server.listen().then(({ url }) => {
+  console.log(`Server running at ${url}`);
 });
-app.use(express.json());
-app.use(routes);

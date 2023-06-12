@@ -20,11 +20,6 @@ const routes = [
         name: "Registered Users ",
         icon: <FaUserFriends/>,
       },
-      {
-        path: "/users/nonRegisteredUsers",
-        name: "Non Registered Users ",
-        icon: <FaUsers/>,
-      },
     ],
   },
   {

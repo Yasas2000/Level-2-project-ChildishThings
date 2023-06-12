@@ -98,8 +98,62 @@
         });
     });
 
- 
+    router.get('/stripeQuotation', async (req, res) => {
+  
+      try {
+        const users = await group1.find();
+        res.json(users);
+      } catch (err) {
+        res.status(500).json({ error: err });
+        console.log('err');
+      }
+    });
+    router.get('/portraitQuotation', async (req, res) => {
+  
+      try {
+        const users = await group.find();
+        res.json(users);
+      } catch (err) {
+        res.status(500).json({ error: err });
+        console.log('err');
+      }
+    });
 
+    router.get('/deletePortrait/:oid', function(req, res) {
+      const oid=req.params.oid; 
+    
+      group.findByIdAndDelete(oid, function(err, portrait) {
+        if (err) {
+          console.log(err);
+          res.status(500).send(err);
+          return;
+        }
+        
+        if (portrait) {
+          res.send('Portrait deleted successfully');
+        } else {
+          res.status(404).send('Donation not found');
+        }
+      });
+    });
+
+   router.get('/deleteStripes/:oid', function(req, res) {
+      const oid=req.params.oid; 
+    
+      group1.findByIdAndDelete(oid, function(err, stripe) {
+        if (err) {
+          console.log(err);
+          res.status(500).send(err);
+          return;
+        }
+        
+        if (stripe) {
+          res.send('Stripe deleted successfully');
+        } else {
+          res.status(404).send('Stripe not found');
+        }
+      });
+    });
 
   
 
@@ -228,4 +282,33 @@
         }
       });
       
-
+      router.get('/QuotationCount', (req, res) => {
+        Promise.all([
+          group.aggregate([
+            {
+              $group: {
+                _id: null,
+                totalCount: { $sum: 1 },
+              },
+            },
+          ]).exec(),
+          group1.aggregate([
+            {
+              $group: {
+                _id: null,
+                totalCount: { $sum: 1 },
+              },
+            },
+          ]).exec(),
+        ])
+          .then((results) => {
+            const totalCount = results.reduce((sum, result) => sum + (result[0]?.totalCount || 0), 0);
+            console.log('Total count:', totalCount);
+            res.status(200).send(totalCount.toString());
+          })
+          .catch((error) => {
+            console.error('Failed to get the total count:', error);
+            res.status(500).send('An error occurred');
+          });
+      });
+    

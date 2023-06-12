@@ -1,8 +1,27 @@
 import "./Header.css";
 import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
 import {BiAnalyse} from "react-icons/bi";
+import { Link } from 'react-router-dom';
+import { useState,useEffect } from "react";
+import axios from 'axios';
+
 
 const Header = () => {
+  const [notificationCount, setNotificationCount] = useState(0);
+
+  useEffect(() => {
+    fetchNotificationCount();
+  }, []);
+
+  const fetchNotificationCount = async () => {
+    try {
+      const response = await axios.get('http://localhost:3300/notification/count/admin');
+      const count = response.data.count; 
+      setNotificationCount(count);
+    } catch (error) {
+      console.error('Error fetching notification count:', error);
+    }
+  };
 
   return (
     <div className="header">
@@ -13,8 +32,10 @@ const Header = () => {
         <div className="headerRight">
         <div className="items">
           <div className="item">
-            <NotificationsNoneOutlinedIcon className="icon" />
-            <div className="counter">1</div>
+            <Link to="/Notification">
+              <NotificationsNoneOutlinedIcon className="icon" />
+            </Link>
+            <div className="counter">{notificationCount}</div>
           </div>
           <div className="item">
             <BiAnalyse className="icon" />

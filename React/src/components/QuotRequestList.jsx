@@ -8,18 +8,18 @@ import axios from 'axios';
 
 
 
-const EventGridList = () => {
+const QuotRequestList = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:5000/quotationRequest')
+    axios.get('http://localhost:3300/api/stripeQuotation')
     .then(response => {
       console.log(response.data)
       setData(
         response.data.map((row,index)=>{
           return {  id:index+1, 
-                    firstName:row.firstName,
-                    lastName:row.firstName,
+                    oid:row._id,
+                    fullName:row.firstName+' '+row.lastName,
                     contactNumber:row.contactNumber,
                     email:row.email,
                     eventStarttime:row.eventStarttime,
@@ -36,8 +36,16 @@ const EventGridList = () => {
   }, [])
 
 
-  const handleDelete = (id) => {
-    setData(data.filter((item) => item.id !== id));
+  const handleDelete = (oid) => {
+    axios.get(`http://localhost:3300/api/deleteStripes/${oid}`)
+    .then(response => {
+      console.log(response.data);
+      // Update your data here if necessary
+    })
+    .catch(error => {
+      console.log(error);
+    });
+    setData(data.filter((item) => item.oid !== oid));
   };
 
   const actionColumn = [
@@ -50,7 +58,7 @@ const EventGridList = () => {
           <div className="cellAction">
             <div
               className="deleteButton"
-              onClick={() => handleDelete(params.row.id)}
+              onClick={() => handleDelete(params.row.oid)}
             >
               Delete
             </div>
@@ -76,4 +84,4 @@ const EventGridList = () => {
   );
 };
 
-export default EventGridList;
+export default QuotRequestList;

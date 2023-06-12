@@ -9,12 +9,13 @@ import axios from 'axios';
 const RegUserList = () => {
   const [data, setData] = useState(userRows);
   useEffect(() => {
-    axios.get('http://localhost:5000/registeredUsers')
+    axios.get('http://localhost:5000/users/view')
     .then(response => {
       console.log(response.data)
       setData(
         response.data.map((row,index)=>{
           return {  id:index+1, 
+                    oid:row._id,
                     fullName:row.fullName,
                     email:row.email,
                     phoneNo:row.phoneNo,
@@ -29,8 +30,16 @@ const RegUserList = () => {
     });
   }, [])
 
-  const handleDelete = (id) => {
-    setData(data.filter((item) => item.id !== id));
+  const handleDelete = (email) => {
+    axios.get(`http://localhost:5000/users/delete/${email}`)
+    .then(response => {
+      console.log(response.data);
+      // Update your data here if necessary
+    })
+    .catch(error => {
+      console.log(error);
+    });
+    setData(data.filter((item) => item.email !== email));
   };
 
   const handleRoleButtonClick = (rowData) => {
@@ -55,12 +64,9 @@ const RegUserList = () => {
       renderCell: (params) => {
         return (
           <div className="cellAction">
-            <Link to="/users/test" style={{ textDecoration: "none" }}>
-              <div className="viewButton">View</div>
-            </Link>
             <div
               className="deleteButton"
-              onClick={() => handleDelete(params.row.id)}
+              onClick={() => handleDelete(params.row.email)}
             >
               Delete
             </div>
