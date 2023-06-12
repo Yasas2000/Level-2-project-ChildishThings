@@ -1,8 +1,8 @@
 import { DataGrid } from "@mui/x-data-grid";
-import { userColumns, userRows } from "./datatablesource";
+import { userColumns, userRows } from "./nonRegUserDataTable";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import "./NonRegUserList.css";
+import "./UserList.css";
 
 const NonRegUserList = () => {
   const [data, setData] = useState(userRows);
@@ -20,9 +20,6 @@ const NonRegUserList = () => {
       renderCell: (params) => {
         return (
           <div className="cellAction">
-            <Link to="/users/test" style={{ textDecoration: "none" }}>
-              <div className="viewButton">View</div>
-            </Link>
             <div
               className="deleteButton"
               onClick={() => handleDelete(params.row.id)}

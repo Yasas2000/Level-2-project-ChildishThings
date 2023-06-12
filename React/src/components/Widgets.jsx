@@ -22,12 +22,6 @@ function Widgets() {
           <span className="count">789</span>
         </div>
       </div>
-      <div className="widgetItem">
-        <span className="widgetTitle">Online Users</span>
-        <div className="countContainer">
-          <span className="count">130</span>
-        </div>
-      </div>
       </div>
       <div className="heading">
         <span className="headingTitle">Requests</span>

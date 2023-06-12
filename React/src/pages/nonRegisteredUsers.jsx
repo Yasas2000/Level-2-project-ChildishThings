@@ -1,14 +1,15 @@
-import RegUserList from "../components/RegUserList";
+import NonRegUserList from "../components/NonRegUserList";
+
 
 const NonRegisteredUsers = () => {
   return( 
     <div className="NonRegisteredUserList">
     <div className="listContainer">
-      <RegUserList/>
+      <NonRegUserList/>
     </div>
   </div>
   );
 
-  };
+};
   
-  export default NonRegisteredUsers;
+export default NonRegisteredUsers;
