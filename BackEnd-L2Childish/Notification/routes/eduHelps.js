@@ -31,6 +31,7 @@ router.get('/RequestCount', (req, res) => {
         console.error('Failed to get the total count:', error);
         res.status(500).send('An error occurred');
       });
+    });
 
 router.post('/', async(req, res) => {
 

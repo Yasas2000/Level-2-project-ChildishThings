@@ -34,6 +34,7 @@ class stripeEsti extends StatelessWidget {
             image: DecorationImage(
               image: AssetImage("Asset/new.jpg"),
               fit: BoxFit.cover,
+              opacity: 0.5
             ),
           ),
           child: Column(

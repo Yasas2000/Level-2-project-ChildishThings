@@ -31,6 +31,7 @@ class type extends StatelessWidget {
             image: DecorationImage(
               image: AssetImage("Asset/new.jpg"),
               fit: BoxFit.cover,
+              opacity: 0.5
             ),
           ),
           child: Column(
@@ -42,6 +43,7 @@ class type extends StatelessWidget {
                     'assets/logo.png',
                     width: 0.8 * screenWidth,
                     height: 0.8 * screenWidth,
+                    color: Colors.deepOrange,
                   ),
                 ),
               ),

@@ -247,7 +247,7 @@ class _EducationalHelpRequestingFormState extends State<EducationalHelpRequestin
                       Center(
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.orange,
+                            backgroundColor: Colors.deepOrange,
                           ),
                           onPressed: () async {
                             if (_formKey.currentState!.validate()){
@@ -270,10 +270,10 @@ class _EducationalHelpRequestingFormState extends State<EducationalHelpRequestin
                                 }),
                               );
                               if (response.statusCode == 200) {
-                                Navigator.push(
+                                Navigator.pushAndRemoveUntil(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => submition()),
+                                      builder: (context) => submition()),(route) => false,
                                 );
                               }
                             }
@@ -285,7 +285,7 @@ class _EducationalHelpRequestingFormState extends State<EducationalHelpRequestin
                       Center(
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.orange,
+                            backgroundColor: Colors.deepOrange,
                           ),
                           onPressed: (){
                             _clearForm();

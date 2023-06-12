@@ -87,6 +87,7 @@ class _MyAppState extends State<portraitEsti> {
           image: DecorationImage(
             image: AssetImage("Asset/new.jpg"),
             fit: BoxFit.cover,
+            opacity: 0.5
           ),
         ),
         child: Padding(
@@ -136,14 +137,6 @@ class _MyAppState extends State<portraitEsti> {
                 ],
               ),
               SizedBox(height: 16.0),
-              TextField(
-                keyboardType: TextInputType.number,
-                onChanged: (value) {
-                  setState(() {
-                    numOfPhotos = int.parse(value);
-                  });
-                },
-              ),
               Text(
                 'Estimated Total Price: Rs ${_calculateTotalPrice()}',
                 style: TextStyle(
@@ -161,7 +154,7 @@ class _MyAppState extends State<portraitEsti> {
                 },
                 child: Text('Get Exact Amount'),
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.deepOrange, // Set the background color to orange
+                  primary: Colors.deepOrange,alignment: Alignment.center // Set the background color to orange
                 ),
               ),
               SizedBox(
@@ -170,6 +163,7 @@ class _MyAppState extends State<portraitEsti> {
               Visibility(
                 visible: loginState.role == 'Admin',
                 child: ElevatedButton(
+                    style: ButtonStyle(alignment: Alignment.center,),
                     onPressed: () {
                       Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => changePortraitValue()));

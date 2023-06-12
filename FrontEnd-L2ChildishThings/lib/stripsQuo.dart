@@ -64,6 +64,7 @@ class _stripQuoState extends State<stripsQuo> {
                   image: DecorationImage(
                     image: AssetImage("Asset/new.jpg"),
                     fit: BoxFit.cover,
+                    opacity: 0.5
                   ),
                 ),
                 child: Container(
@@ -405,6 +406,9 @@ class _stripQuoState extends State<stripsQuo> {
                             if (double.tryParse(value) == null) {
                               return 'Please enter a valid number';
                             }
+                            if (!RegExp(r'^-?\d+$').hasMatch(value)) {
+                              return 'Please enter a valid number';
+                            }
                             return null;
                           },
                         ),
@@ -469,7 +473,7 @@ class _stripQuoState extends State<stripsQuo> {
                                   'eventStarttime': _eventStarttimeController.text,
                                   'date': _dateController.text,
                                   'eventDurationHours': _eventDurationHours.text,
-                                  'evenLocation': _eventLocation.text,
+                                  'eventLocation': _eventLocation.text,
                                   'totInvitees': _totInvitees.text,
                                 });
                                 if (emailResponse.statusCode == 200) {

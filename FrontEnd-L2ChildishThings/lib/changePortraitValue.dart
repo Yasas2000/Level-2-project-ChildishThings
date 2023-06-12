@@ -39,6 +39,7 @@ class _changePortraitValueState extends State<changePortraitValue> {
                 image: DecorationImage(
                   image: AssetImage("Asset/new.jpg"),
                   fit: BoxFit.cover,
+                  opacity: 0.5
                 ),
               ),
               child: Container(

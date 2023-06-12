@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'app_bar.dart';
 import 'configs.dart';
+import 'homepage.dart';
 
 //Changing the custom value
 
@@ -37,7 +38,13 @@ class _MyFormState extends State<MyForm> {
                   color: Colors.deepOrange,
                   size: 40,
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => HomePage()),
+                  );
+                },
               ),
             ),
             body: Container(
@@ -45,8 +52,9 @@ class _MyFormState extends State<MyForm> {
               width: double.infinity,
               decoration: const BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage("new.jpg"),
+                  image: AssetImage("Asset/new.jpg"),
                   fit: BoxFit.cover,
+                  opacity: 0.5
                 ),
               ),
               child: Container(
@@ -71,11 +79,11 @@ class _MyFormState extends State<MyForm> {
                           hintText: 'Ex.32.45',
                           border: OutlineInputBorder(
                             borderSide: BorderSide(
-                              color: Colors.orange,
+                              color: Colors.deepOrange,
                             ),
                           ),
                           labelStyle: TextStyle(
-                            color: Colors.orange,
+                            color: Colors.deepOrange,
                             fontSize: 16,
                           ),
                         ),
@@ -92,7 +100,7 @@ class _MyFormState extends State<MyForm> {
                       SizedBox(height: 20),
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          primary: Colors.orange,
+                          primary: Colors.deepOrange,
                         ),
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {

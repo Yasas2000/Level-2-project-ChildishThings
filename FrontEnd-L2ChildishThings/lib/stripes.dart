@@ -95,6 +95,7 @@ class _typeState extends State<Stripes> {
           image: DecorationImage(
             image: AssetImage("Asset/new.jpg"),
             fit:BoxFit.fill,
+            opacity: 0.5
           ),
         ),
           child: Center(

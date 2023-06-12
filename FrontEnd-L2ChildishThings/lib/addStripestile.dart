@@ -54,6 +54,7 @@ class _AddPhotoTileScreenState extends State<AddPhotoTileScreen> {
             image: DecorationImage(
               image: AssetImage("Asset/new.jpg"),
               fit: BoxFit.cover,
+              opacity: 0.5
             ),
           ),
           child: Form(
@@ -185,9 +186,9 @@ class _AddPhotoTileScreenState extends State<AddPhotoTileScreen> {
                         }),
                       );
                       if (response.statusCode == 200) {
-                        Navigator.push(
+                        Navigator.pushAndRemoveUntil(
                           context,
-                          MaterialPageRoute(builder: (context) => successful()),
+                          MaterialPageRoute(builder: (context) => successful()),(route) => false,
                         );
                       }
                     }

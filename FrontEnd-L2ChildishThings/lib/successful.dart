@@ -10,23 +10,13 @@ class successful extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
-        appBar: CustomAppBar(
-          title: 'Successful',
-          leadingIcon: IconButton(
-            icon: Icon(
-              Icons.home,
-              color: Colors.deepOrange,
-              size: 40,
-            ),
-            onPressed: () {},
-          ),
-        ),
         resizeToAvoidBottomInset: false,
         body: Container(
           decoration: const BoxDecoration(
             image: DecorationImage(
               image: AssetImage("Asset/new.jpg"),
               fit: BoxFit.cover,
+              opacity: 0.5
             ),
           ),
           child: Column(
@@ -40,22 +30,23 @@ class successful extends StatelessWidget {
                         'Asset/logo.png',
                         width: 200,
                         height: 200,
+                        color: Colors.deepOrange,
                       ),
                       SizedBox(height: 20),
                       Text("Stripe is added successfully!",
                           style: TextStyle(
-                            color: Colors.orange,
+                            color: Colors.deepOrange,
                             fontSize: 28,
                           )),
                       ElevatedButton(onPressed:() {
-                        Navigator.push(
+                        Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => Stripes()),
+                              builder: (context) => Stripes()),(route) => false,
                         );
                       },
                         child: Text('Next'),
-                        style: ElevatedButton.styleFrom(primary: Colors.orange),
+                        style: ElevatedButton.styleFrom(primary: Colors.deepOrange),
 
                       )
                     ],

@@ -220,6 +220,7 @@ class _DonationFormState extends State<DonationForm> {
                               FormBuilderValidators.required(),
                               FormBuilderValidators.numeric(),
                               FormBuilderValidators.max(double.infinity),
+                              FormBuilderValidators.min(500),
                             ]),
                             // initialValue: '12',
 
@@ -395,20 +396,6 @@ class _DonationFormState extends State<DonationForm> {
                             ),
                           ),
 
-
-
-
-                          FormBuilderSwitch(
-                            title: const Text('I Accept the terms and conditions'),
-                            name: 'accept_terms_switch',
-                            initialValue: true,
-                            validator: FormBuilderValidators.equal(
-                              true,
-                              errorText:
-                              'You must accept terms and conditions to continue',
-                            ),
-                            //onChanged: _onChanged,
-                          ),
                         ],
                       ),
                     ),

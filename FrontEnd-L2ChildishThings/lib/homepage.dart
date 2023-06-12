@@ -159,14 +159,6 @@ class _HomePageState extends State<HomePage>{
   Widget build (BuildContext context){
 
     final loginState=Provider.of<LoginState>(context);
-    // return  Consumer<LoginState>(
-    //     builder: (context, loginState, _) async {
-    //       final userId = loginState.id;
-    //       if (userId.isNotEmpty) {
-    //         await _fetchNotificationsCount(userId);
-    //       }
-    //     }
-    // )
           return Scaffold(
             appBar: AppBar(
               centerTitle: true,
@@ -193,7 +185,7 @@ class _HomePageState extends State<HomePage>{
                         child: Container(
                           padding: EdgeInsets.all(2),
                           decoration: BoxDecoration(
-                            color: Colors.deepOrange,
+                            color: Colors.red,
                             borderRadius: BorderRadius.circular(30),
                             border: Border.all(color: Colors.white,width:2 )
                           ),
@@ -432,11 +424,7 @@ class _HomePageState extends State<HomePage>{
             ),
             bottomNavigationBar: BottomNavbar( initialIndex: 0,),
             floatingActionButton: FloatingActionButton(
-              onPressed: () {
-                setState(() {
-                  _isChatWindowVisible = !_isChatWindowVisible;
-                });
-              },
+              onPressed: _toggleChatWindow,
               child: const CircleAvatar(
                 backgroundColor: Colors.transparent,
                 backgroundImage: AssetImage('assets/chat.png'),
@@ -619,7 +607,6 @@ class _DraggableFloatWidgetState extends State<DraggableFloatWidget> {
     );
   }
 }
-
 //Chat window
 class ChatWindow extends StatefulWidget {
   const ChatWindow({Key? key}) : super(key: key);
@@ -656,7 +643,7 @@ class _ChatWindowState extends State<ChatWindow> {
 
   void sendUserMessageToChatBot (String userMessage) async{
     //Chat bot service API endpoint URL
-    const apiUrl = '';
+    const apiUrl = '0KDSCvGKTUEuBovd1yDq3tdFzn17BtQi';
 
     try {
       final response = await http.post(
@@ -664,12 +651,20 @@ class _ChatWindowState extends State<ChatWindow> {
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({'message': userMessage}),
       ); //Sends user's message to the chatBot API endpoint via HTTP POST request
-      final chatBotResponse = jsonDecode(response.body);
-
-      setState(() {
-        _messages.insert(0, chatBotResponse['message']); //add chat bots response to the chat history
-      });
-    } catch(e){
+      // final chatBotResponse = jsonDecode(response.body);
+      // setState(() {
+      //   _messages.insert(0, chatBotResponse['message']); //add chat bots response to the chat history
+      // });
+      if (response.statusCode==200){
+        final chatBotResponse = jsonDecode(response.body);
+        setState(() {
+          _messages.insert(0, chatBotResponse['message']);
+        });
+      }else{
+        print('Failed to send message to chat bot. Status code: ${response.statusCode}');
+      }
+    }
+    catch(e){
       if (kDebugMode) {
         print('Error sending message to chat bot: $e');
       }
@@ -710,4 +705,75 @@ class _ChatWindowState extends State<ChatWindow> {
       ),
     );
   }
+}
+
+class ChatScreen extends StatefulWidget {
+  @override
+  _ChatScreenState createState() => _ChatScreenState();
+}
+
+class _ChatScreenState extends State<ChatScreen> {
+  List<Message> messages = []; // List to store the conversation messages
+  TextEditingController textEditingController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Assistant'),
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: ListView.builder(
+              itemCount: messages.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text(messages[index].text),
+                );
+              },
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: textEditingController,
+                    decoration: InputDecoration(
+                      hintText: 'Type a message...',
+                    ),
+                  ),
+                ),
+                IconButton(
+                  icon: Icon(Icons.send),
+                  onPressed: _sendMessage,
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _sendMessage() {
+    String messageText = textEditingController.text;
+    textEditingController.clear();
+
+    if (messageText.isNotEmpty) {
+      setState(() {
+        messages.add(Message(text: messageText, isUser: true)); // Add user message to the conversation
+        messages.add(Message(text: 'This is a response from the chat bot.', isUser: false));
+      });
+    }
+  }
+}
+
+class Message {
+  final String text;
+  final bool isUser;
+
+  Message({required this.text, required this.isUser});
 }

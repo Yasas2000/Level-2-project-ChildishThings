@@ -195,7 +195,7 @@ class _FinancialRequestingFormState extends State<FinancialRequestingForm>{
                                 return null;
                               },
                               onSaved: (value){
-                                _companyName = value!;
+                                _companyAddress = value!;
                               },
                             ),
                           ],
@@ -260,18 +260,21 @@ class _FinancialRequestingFormState extends State<FinancialRequestingForm>{
                                   'fullName': widget.donee.name,
                                   'telephoneNumber': widget.donee.number,
                                   'email': widget.donee.email,
-                                  'purpose':_purpose,
-                                  'companyName':_companyName,
-                                  'companyAddress':_companyAddress,
-                                  'companyEmail':_companyEmail
+                                  'purpose':_purposeController.text,
+                                  'companyName':_nameController.text,
+                                  'companyAddress':_addressController.text,
+                                  'companyEmail':_emailController.text
                                 }),
                               );
                               if (response.statusCode == 200) {
-                                Navigator.push(
+                                Navigator.pushAndRemoveUntil(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => submition()),
+                                      builder: (context) => submition()),(route) => false,
                                 );
+                              }
+                              else{
+                                print(response.body);
                               }
                             }
                           },

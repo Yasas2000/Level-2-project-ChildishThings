@@ -103,8 +103,7 @@ class Payment extends StatelessWidget {
         print('${response.body}');
         print('${response.statusCode}');
         await sendEmail(d.email,pid,d.amount,DateTime.now().toString() );
-        //await sendPaymentConfirmationEmail(d.email, d.amount);
-        if(userId!=null){
+        if(userId!='null'){
           await sendNotification(pid, userId);
         }
         await sendNotificationtoAdmin(pid, userId);
@@ -175,6 +174,11 @@ class Payment extends StatelessWidget {
     };
     PayHere.startPayment(paymentObject, (paymentId) async {
       print("One Time Payment Success. Payment Id: $paymentId");
+      try{
+
+      }catch(e){
+        showAlert(context,"Error!","$e");
+      }
 
       await saveDonation(paymentId,userId);
 

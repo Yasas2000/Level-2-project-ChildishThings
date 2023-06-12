@@ -1,10 +1,8 @@
 const config = require("../config.json");
 const mongoose = require("mongoose");
 const conenctionOptions = {
-  useCreateIndex: true,
   useNewUrlParser: true,
   useUnifiedTopology: true,
-  useFindAndModify: false,
 };
 try {
   mongoose

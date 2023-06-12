@@ -375,10 +375,11 @@ function generateHTML
     </style>
   </head>
   <body>
-    <div class="logo-section">
-        <img src="https://images.squarespace-cdn.com/content/v1/5f633f2a3ceb25330f960d39/9370e95a-b4f8-4ddf-952e-cbd33a7157cd/Photobooth.png?format=1500w" alt="Company Logo">
-      </div>
+    
     <div class="container">
+    <div class="logo-section">
+    <img src="https://images.squarespace-cdn.com/content/v1/5f633f2a3ceb25330f960d39/9370e95a-b4f8-4ddf-952e-cbd33a7157cd/Photobooth.png?format=1500w" alt="Company Logo">
+    </div>
       <div class="header">
         <div class="customer-details">
           <h2>Customer Details</h2>

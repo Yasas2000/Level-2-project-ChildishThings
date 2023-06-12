@@ -118,7 +118,22 @@
         console.log('err');
       }
     });
-
+    router.get('/quotation', async (req, res) => {
+      try {
+        const stripeTiles = await group1.find();
+        const portraitTiles = await group.find();
+        const mergedResponse = {
+          stripeQuotation: stripeTiles,
+          portraitQuotation: portraitTiles
+        };
+        res.json(mergedResponse);
+      } catch (err) {
+        res.status(500).json({ error: err });
+        console.log(err);
+      }
+    });
+    
+    
     router.get('/deletePortrait/:oid', function(req, res) {
       const oid=req.params.oid; 
     

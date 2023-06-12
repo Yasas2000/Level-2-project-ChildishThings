@@ -110,6 +110,7 @@ class _poratraitQuoState extends State<poratraitQuo> {
                   image: DecorationImage(
                     image: AssetImage("Asset/new.jpg"),
                     fit: BoxFit.cover,
+                    opacity: 0.5
                   ),
                 ),
                 child: Container(
@@ -682,7 +683,7 @@ class _poratraitQuoState extends State<poratraitQuo> {
                                     'eventStarttime': _eventStarttimeController.text,
                                     'date': _dateController.text,
                                     'eventDurationHours': _eventDurationHours.text,
-                                    'evenLocation': _eventLocation.text,
+                                    'eventLocation': _eventLocation.text,
                                     'totInvitees': _totInvitees.text,
                                     'numBigFamilitLoces': _numBigFamilies.text,
                                     'numSmallFamilies': _numSmallFamilies.text,

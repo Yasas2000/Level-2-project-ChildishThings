@@ -27,7 +27,7 @@ const financialrequestSchema = mongoose.Schema(
             type: String,
             required: true
         },
-        compnyAddress: {
+        companyAddress: {
             type: String,
             required: true
         },
