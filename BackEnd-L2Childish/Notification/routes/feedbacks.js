@@ -24,6 +24,23 @@ router.post('/',(req,res)=>
 });
 
 });
+router.get('/deleteFeedback/:oid', function(req, res) {
+  const oid=req.params.oid; 
+
+Feedback.findByIdAndDelete(oid, function(err, feedback) {
+  if (err) {
+  console.log(err);
+  res.status(500).send(err);
+  return;
+  }
+  
+  if (feedback) {
+  res.send('Request deleted successfully');
+  } else {
+  res.status(404).send('Stripe not found');
+  }
+});
+});
 
 router.get('/',async (req,res)=>{
     try {

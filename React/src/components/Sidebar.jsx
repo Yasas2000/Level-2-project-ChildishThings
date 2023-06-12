@@ -28,8 +28,13 @@ const routes = [
     icon: <FaLayerGroup />,
     subRoutes: [
       {
-        path: "/Requests/quotationRequests",
-        name: "Quotation Requests",
+        path: "/Requests/stripeQuotationRequests",
+        name: "Stripe Quotation Requests",
+        icon: <FaFile/>,
+      },
+      {
+        path: "/Requests/portraitQuotationRequests",
+        name: "Portrait Quotation Requests",
         icon: <FaFile/>,
       },
       {
@@ -38,10 +43,15 @@ const routes = [
         icon: <FaHandHoldingUsd/>,
       },
       {
-        path: "/Requests/helpRequests",
-        name: "Help Requests",
+        path: "/Requests/EducationalHelpRequests",
+        name: "Educational Help Requests",
         icon: <FaHandshake/>,
       },
+      {
+        path: "/Requests/FinancialHelpRequests",
+        name: "Financial Help Requests",
+        icon: <FaHandshake/>,
+      }
     ],
   },
   {
@@ -53,6 +63,11 @@ const routes = [
     path: "/Events",
     name: "Events",
     icon: <FaCalendarAlt/>,
+  },
+  {
+    path: "/Feedback",
+    name: "Feedback",
+    icon: <FaFile/>,
   },
 ];
 

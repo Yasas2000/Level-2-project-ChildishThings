@@ -38,7 +38,9 @@ const Header = () => {
             <div className="counter">{notificationCount}</div>
           </div>
           <div className="item">
-            <BiAnalyse className="icon" />
+          <Link to="/Analytics">
+              <BiAnalyse className="icon" />
+          </Link>
           </div>
           <div className="item">
             <img

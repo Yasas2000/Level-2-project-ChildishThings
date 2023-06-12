@@ -1,6 +1,6 @@
 import { DataGrid } from "@mui/x-data-grid";
-import { userColumns } from "./EventDataTableSource";
-import { Link } from "react-router-dom";
+import { userColumns } from "./PortraitQuotRequestDataTableSource";
+//import { Link } from "react-router-dom";
 import { useState,useEffect } from "react";
 import "./List.css";
 import axios from 'axios';
@@ -8,7 +8,7 @@ import axios from 'axios';
 
 
 
-const EventGridList = () => {
+const PortraitQuotRequestList = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -19,14 +19,18 @@ const EventGridList = () => {
         response.data.map((row,index)=>{
           return {  id:index+1, 
                     oid:row._id,
-                    date:row.date,
-                    eventStarttime:row.eventStarttime,
                     fullName:row.firstName+' '+row.lastName,
                     contactNumber:row.contactNumber,
                     email:row.email,
+                    eventStarttime:row.eventStarttime,
+                    date:row.date,
                     eventDurationHours:row.eventDurationHours,
                     totInvitees:row.totInvitees,
-                    remarks:row.remarks
+                    remarks:row.remarks,
+                    numSmallFamilies:row.numSmallFamilies,
+                    numMarriedCouples:row.numMarriedCouples,
+                    numUnMarriedCouples:row.numUnMarriedCouples,
+                    numIndividualInvitees:row.numIndividualInvitees
                 }
     }))
     })
@@ -34,34 +38,10 @@ const EventGridList = () => {
       console.log(error);
     });
   }, [])
-  useEffect(() => {
-    axios.get('http://localhost:3300/api/stripeQuotation')
-    .then(response => {
-      console.log(response.data)
-      setData(
-        response.data.map((row,index)=>{
-          return {  id:index+1, 
-                    oid:row._id,
-                    date:row.date,
-                    eventStarttime:row.eventStarttime,
-                    fullName:row.firstName+' '+row.lastName,
-                    contactNumber:row.contactNumber,
-                    email:row.email,
-                    eventDurationHours:row.eventDurationHours,
-                    totInvitees:row.totInvitees,
-                    remarks:row.remarks
-                }
-    }))
-    })
-    .catch(error => {
-      console.log(error);
-    });
-  }, [])
-
 
 
   const handleDelete = (oid) => {
-    axios.get(`http://localhost:3300/events/delete-events/${oid}`)
+    axios.get(`http://localhost:3300/api/deletePortrait/${oid}`)
     .then(response => {
       console.log(response.data);
       // Update your data here if necessary
@@ -82,7 +62,7 @@ const EventGridList = () => {
           <div className="cellAction">
             <div
               className="deleteButton"
-              onClick={() => handleDelete(params.row.id)}
+              onClick={() => handleDelete(params.row.oid)}
             >
               Delete
             </div>
@@ -94,7 +74,7 @@ const EventGridList = () => {
   return (
     <div className="datatable">
       <div className="datatableTitle">
-        Events
+        Portrait Quotation Requests
       </div>
       <DataGrid
         className="datagrid"
@@ -108,4 +88,4 @@ const EventGridList = () => {
   );
 };
 
-export default EventGridList;
+export default PortraitQuotRequestList;

@@ -2,7 +2,7 @@ import EventGrid from "../components/EventGrid";
 
 const Events = () => {
     return (
-      <div className="HelpRequestList">
+      <div className="Event">
         <div className="listContainer">
           <EventGrid/>
         </div>
