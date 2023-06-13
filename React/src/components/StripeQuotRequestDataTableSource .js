@@ -36,9 +36,6 @@ export const userColumns = [
       headerName: "DRemarks",
       width: 230,
     },
-    
-    
-    
 
   ];
   

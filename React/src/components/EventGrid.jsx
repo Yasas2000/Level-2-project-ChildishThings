@@ -21,12 +21,11 @@ const EventGridList = () => {
                     oid:row._id,
                     date:row.date,
                     eventStarttime:row.eventStarttime,
-                    firstName:row.firstName,
-                    lastName:row.firstName,
+                    fullName:row.firstName+' '+row.lastName,
                     contactNumber:row.contactNumber,
                     email:row.email,
                     eventDurationHours:row.eventDurationHours,
-                    totalInvitees:row.totalInvitees,
+                    totInvitees:row.totInvitees,
                     remarks:row.remarks
                 }
     }))
@@ -35,6 +34,30 @@ const EventGridList = () => {
       console.log(error);
     });
   }, [])
+  useEffect(() => {
+    axios.get('http://localhost:3300/api/stripeQuotation')
+    .then(response => {
+      console.log(response.data)
+      setData(
+        response.data.map((row,index)=>{
+          return {  id:index+1, 
+                    oid:row._id,
+                    date:row.date,
+                    eventStarttime:row.eventStarttime,
+                    fullName:row.firstName+' '+row.lastName,
+                    contactNumber:row.contactNumber,
+                    email:row.email,
+                    eventDurationHours:row.eventDurationHours,
+                    totInvitees:row.totInvitees,
+                    remarks:row.remarks
+                }
+    }))
+    })
+    .catch(error => {
+      console.log(error);
+    });
+  }, [])
+
 
 
   const handleDelete = (oid) => {

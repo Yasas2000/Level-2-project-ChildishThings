@@ -1,28 +1,33 @@
 import { DataGrid } from "@mui/x-data-grid";
-import Button from '@mui/material/Button'
-import { userColumns,userRows } from "./RegUserDataTableSource";
-import { Link } from "react-router-dom";
+import { userColumns } from "./StripeQuotRequestDataTableSource ";
+//import { Link } from "react-router-dom";
 import { useState,useEffect } from "react";
-import "./UserList.css";
+import "./List.css";
 import axios from 'axios';
 
-const RegUserList = () => {
-  const [data, setData] = useState(userRows);
+
+
+
+const StripeQuotRequestList = () => {
+  const [data, setData] = useState([]);
+
   useEffect(() => {
-    axios.get('http://localhost:3300/users/view')
+    axios.get('http://localhost:3300/api/stripeQuotation')
     .then(response => {
       console.log(response.data)
       setData(
         response.data.map((row,index)=>{
           return {  id:index+1, 
                     oid:row._id,
-                    fullName:row.fullName,
+                    fullName:row.firstName+' '+row.lastName,
+                    contactNumber:row.contactNumber,
                     email:row.email,
-                    phoneNo:row.phoneNo,
-                    password:row.password,
-                    role:row.role,
-                    createdDate:row.createdDate
-                  }
+                    eventStarttime:row.eventStarttime,
+                    date:row.date,
+                    eventDurationHours:row.eventDurationHours,
+                    totInvitees:row.totInvitees,
+                    remarks:row.remarks
+                }
     }))
     })
     .catch(error => {
@@ -30,8 +35,9 @@ const RegUserList = () => {
     });
   }, [])
 
-  const handleDelete = (email) => {
-    axios.get(`http://localhost:3300/users/delete/${email}`)
+
+  const handleDelete = (oid) => {
+    axios.get(`http://localhost:3300/api/deleteStripes/${oid}`)
     .then(response => {
       console.log(response.data);
       // Update your data here if necessary
@@ -39,24 +45,10 @@ const RegUserList = () => {
     .catch(error => {
       console.log(error);
     });
-    setData(data.filter((item) => item.email !== email));
-  };
-
-  const handleRoleButtonClick = (rowData) => {
-    console.log(`Role button clicked for row with ID ${rowData.id}`);
+    setData(data.filter((item) => item.oid !== oid));
   };
 
   const actionColumn = [
-    {
-      field: 'role',
-      headerName: 'Role',
-      width: 130,
-      renderCell: (params) => (
-        <Button variant="contained" onClick={() => handleRoleButtonClick(params.row)}>
-          {params.row.role}
-        </Button>
-      ),
-    },
     {
       field: "action",
       headerName: "Action",
@@ -66,7 +58,7 @@ const RegUserList = () => {
           <div className="cellAction">
             <div
               className="deleteButton"
-              onClick={() => handleDelete(params.row.email)}
+              onClick={() => handleDelete(params.row.oid)}
             >
               Delete
             </div>
@@ -75,11 +67,10 @@ const RegUserList = () => {
       },
     },
   ];
-
   return (
     <div className="datatable">
       <div className="datatableTitle">
-        Registered Users
+        Stripe Quotation Requests
       </div>
       <DataGrid
         className="datagrid"
@@ -93,4 +84,4 @@ const RegUserList = () => {
   );
 };
 
-export default RegUserList;
+export default StripeQuotRequestList;

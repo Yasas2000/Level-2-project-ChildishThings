@@ -109,6 +109,66 @@ router.get('/sumOfmonth',(req,res)=>{
         });
 
 });
+router.get('/sumOfLastFiveMonths', (req, res) => {
+  const currentYear = new Date().getFullYear();
+  const currentMonth = new Date().getMonth() + 1;
+  const lastFiveMonths = [];
+
+  for (let i = 0; i < 5; i++) {
+    const month = currentMonth - i;
+    const year = currentYear - Math.floor((currentMonth - month) / 12);
+    lastFiveMonths.push({
+      $match: {
+        date: {
+          $gte: new Date(`${year}-${month}-01`),
+          $lte: new Date(`${year}-${month}-31`),
+        },
+      },
+    });
+  }
+
+  Donation.aggregate([
+    ...lastFiveMonths,
+    {
+      $group: {
+        _id: {
+          month: { $month: '$date' },
+          year: { $year: '$date' },
+        },
+        total: { $sum: '$amount' },
+      },
+    },
+    {
+      $project: {
+        _id: 0,
+        month: '$_id.month',
+        year: '$_id.year',
+        total: 1,
+      },
+    },
+    {
+      $sort: { year: 1, month: 1 },
+    },
+  ])
+    .then((results) => {
+      const formattedResults = {};
+      results.forEach((result) => {
+        const { month, year, total } = result;
+        const monthYear = `${year}-${month}`;
+        formattedResults[monthYear] = total;
+      });
+
+      console.log(formattedResults);
+      res.send(formattedResults);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(500).send('An error occurred while retrieving donations.');
+    });
+});
+
+
+
 router.get('/', (req,res)=>{
     Donation.aggregate([
       {

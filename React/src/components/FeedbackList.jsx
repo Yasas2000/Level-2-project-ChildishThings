@@ -1,6 +1,6 @@
 import { DataGrid } from "@mui/x-data-grid";
-import { userColumns } from "./QuotRequestDataTableSource ";
-import { Link } from "react-router-dom";
+import { userColumns } from "./FeedbackDataTableSource";
+//import { Link } from "react-router-dom";
 import { useState,useEffect } from "react";
 import "./List.css";
 import axios from 'axios';
@@ -8,26 +8,22 @@ import axios from 'axios';
 
 
 
-const QuotRequestList = () => {
+const FeedbackList = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:3300/api/stripeQuotation')
+    axios.get('http://localhost:3300/feed')
     .then(response => {
       console.log(response.data)
       setData(
         response.data.map((row,index)=>{
-          return {  id:index+1, 
-                    oid:row._id,
-                    fullName:row.firstName+' '+row.lastName,
-                    contactNumber:row.contactNumber,
-                    email:row.email,
-                    eventStarttime:row.eventStarttime,
-                    date:row.date,
-                    eventDurationHours:row.eventDurationHours,
-                    totalInvitees:row.totalInvitees,
-                    remarks:row.remarks
-                }
+          return { 
+                   id:index+1,
+                   oid:row._id,
+                   uid:row.uid,
+                   rating:parseFloat(row.rating.$numberDecimal),
+                   comment:row.comment
+                  }
     }))
     })
     .catch(error => {
@@ -37,7 +33,7 @@ const QuotRequestList = () => {
 
 
   const handleDelete = (oid) => {
-    axios.get(`http://localhost:3300/api/deleteStripes/${oid}`)
+    axios.get(`http://localhost:3300/feed/deleteFeedback/${oid}`)
     .then(response => {
       console.log(response.data);
       // Update your data here if necessary
@@ -70,7 +66,7 @@ const QuotRequestList = () => {
   return (
     <div className="datatable">
       <div className="datatableTitle">
-        Quotation Requests
+        Feedbacks
       </div>
       <DataGrid
         className="datagrid"
@@ -84,4 +80,4 @@ const QuotRequestList = () => {
   );
 };
 
-export default QuotRequestList;
+export default FeedbackList;

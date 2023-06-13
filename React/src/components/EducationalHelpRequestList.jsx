@@ -1,13 +1,13 @@
 import { DataGrid } from "@mui/x-data-grid";
-import { userColumns } from "./HelpRequestDataTableSource";
-import { Link } from "react-router-dom";
+import { userColumns } from "./EducationalHelpRequestDataTableSource";
+//import { Link } from "react-router-dom";
 import { useState,useEffect } from "react";
 import "./List.css";
 import axios from 'axios';
 
 
 
-const HelpRequestList = () => {
+const EducationalHelpRequestList = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -18,6 +18,7 @@ const HelpRequestList = () => {
         response.data.map((row,index)=>{
           return { id:index+1,
                    oid:row._id,
+                   userId:row.userId,
                    fullName:row.fullName,
                    telephoneNumber:row.telephoneNumber,
                    email:row.email,
@@ -70,7 +71,7 @@ const HelpRequestList = () => {
   return (
     <div className="datatable">
       <div className="datatableTitle">
-        Help Requests
+        Educational Help Requests
       </div>
       <DataGrid
         className="datagrid"
@@ -84,4 +85,4 @@ const HelpRequestList = () => {
   );
 };
 
-export default HelpRequestList;
+export default EducationalHelpRequestList;
