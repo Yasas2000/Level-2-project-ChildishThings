@@ -155,13 +155,7 @@ If you have authentication routes:
 | POST | `/api/auth/register` | Register a new user |
 | POST | `/api/auth/login` | Login and receive token |
 
-*(You should extend this section with request/response examples and error handling details.)*
 
----
-
-## Screenshots / Demo
-
-_Add some screenshots here to showcase your UI, or link to a live demo if hosted._
 
 ---
 
@@ -175,19 +169,9 @@ _Add some screenshots here to showcase your UI, or link to a live demo if hosted
 - Unit tests / integration tests  
 - Continuous Integration / Deployment  
 
----
-
-## Contributors
-
-- **Yasas2000** – Project lead & full‑stack development  
-- Others (you can list any collaborators)  
 
 ---
 
-## License
-
-Specify your project’s license here (e.g., MIT, Apache 2.0).  
-If it's MIT, something like:
 
 ```
 MIT License
